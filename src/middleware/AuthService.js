@@ -1,6 +1,6 @@
-// Auth setup using: https://hptechblogs.com/using-json-web-token-react/
-
 import decode from "jwt-decode";
+
+// Auth setup using: https://hptechblogs.com/using-json-web-token-react/
 
 export default class AuthService {
   constructor(domain) {
