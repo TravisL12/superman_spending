@@ -25,15 +25,23 @@ class Profile extends Component {
   };
 
   uploadFile = () => {
-    const data = new FormData();
-    data.append("file", this.state.selectedFile);
+    const body = new FormData();
+    body.append("file", this.state.selectedFile);
 
-    this.Auth.fetch("http://0.0.0.0:3000/api/transactions/import", {
+    const headers = {
+      Accept: "application/json",
+      Authorization: this.Auth.getToken()
+    };
+
+    fetch("http://0.0.0.0:3000/api/transactions/import", {
       method: "POST",
-      body: data
-    }).then(response => {
-      console.log(response);
-    });
+      body,
+      headers
+    })
+      .then(response => response.json())
+      .then(response => {
+        console.log(response);
+      });
   };
 
   render() {
