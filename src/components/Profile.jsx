@@ -7,7 +7,8 @@ class Profile extends Component {
     super();
     this.Auth = new AuthService();
     this.state = {
-      user: null
+      user: null,
+      selectedFile: null
     };
   }
 
@@ -18,12 +19,32 @@ class Profile extends Component {
     });
   }
 
+  selectFile = event => {
+    this.setState({
+      selectedFile: event.target.files[0]
+    });
+  };
+
+  uploadFile = () => {
+    const data = new FormData();
+    data.append("file", this.state.selectedFile);
+
+    this.Auth.fetch("http://0.0.0.0:3000/api/transactions/import", {
+      method: "POST",
+      body: data
+    }).then(response => {
+      console.log(response);
+    });
+  };
+
   render() {
     const { user } = this.state;
     const name = user ? user.name : "";
     return (
       <div>
         <h1>{name} is logged in!</h1>
+        <input type="file" onChange={this.selectFile} />
+        <button onClick={this.uploadFile}>Upload</button>
       </div>
     );
   }
