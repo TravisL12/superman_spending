@@ -6,17 +6,16 @@ class Profile extends Component {
   constructor() {
     super();
     this.Auth = new AuthService();
-    this.state = {
-      user: null,
-      selectedFile: null
-    };
+    this.state = { user: null, transactions: [], selectedFile: null };
   }
 
   componentWillMount() {
     const { user_id } = this.Auth.getProfile();
-    this.Auth.fetch(`http://0.0.0.0:3000/api/user/${user_id}`).then(user => {
-      this.setState({ user });
-    });
+    this.Auth.fetch(`http://0.0.0.0:3000/api/user/${user_id}`).then(
+      ({ user, transactions }) => {
+        this.setState({ user, transactions });
+      }
+    );
   }
 
   selectFile = event => {
@@ -38,11 +37,14 @@ class Profile extends Component {
   };
 
   render() {
-    const { user } = this.state;
+    const { user, transactions } = this.state;
     const name = user ? user.name : "";
+
     return (
       <div>
-        <h1>{name} is logged in!</h1>
+        <h1>
+          {name} is logged in! ({transactions.length || 0} count)
+        </h1>
         <input type="file" onChange={this.selectFile} />
         <button onClick={this.uploadFile}>Upload</button>
       </div>
