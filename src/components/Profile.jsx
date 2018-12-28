@@ -6,14 +6,13 @@ class Profile extends Component {
   constructor() {
     super();
     this.Auth = new AuthService();
-    this.state = { user: null, transactions: [], selectedFile: null };
+    this.state = { user: null, recentTransactions: [], selectedFile: null };
   }
 
   componentWillMount() {
-    const { user_id } = this.Auth.getProfile();
-    this.Auth.fetch(`http://0.0.0.0:3000/api/user/${user_id}`).then(
-      ({ user, transactions }) => {
-        this.setState({ user, transactions });
+    this.Auth.fetch(`http://0.0.0.0:3000/api/user/profile`).then(
+      ({ user, recentTransactions }) => {
+        this.setState({ user, recentTransactions });
       }
     );
   }
@@ -45,16 +44,22 @@ class Profile extends Component {
   };
 
   render() {
-    const { user, transactions } = this.state;
+    const { user, recentTransactions } = this.state;
     const name = user ? user.name : "";
 
     return (
       <div>
-        <h1>
-          {name} is logged in! ({transactions.length || 0} count)
-        </h1>
-        <input type="file" onChange={this.selectFile} />
-        <button onClick={this.uploadFile}>Upload</button>
+        <div className="title">
+          <h1>{name} is logged in!</h1>
+          <input type="file" onChange={this.selectFile} />
+          <button onClick={this.uploadFile}>Upload</button>
+        </div>
+
+        <div className="recent-transactions">
+          {recentTransactions.map((trans, idx) => {
+            return <p key={idx}>{trans.description}</p>;
+          })}
+        </div>
       </div>
     );
   }
