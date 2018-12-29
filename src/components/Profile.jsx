@@ -9,7 +9,8 @@ class Profile extends Component {
     this.state = {
       user: null,
       transactions: { recent: [], month: [] },
-      selectedFile: null
+      selectedFile: null,
+      isUploading: false
     };
   }
 
@@ -20,6 +21,11 @@ class Profile extends Component {
       }
     );
   }
+
+  handleLogout = () => {
+    this.Auth.logout();
+    this.props.history.replace("/login");
+  };
 
   selectFile = event => {
     this.setState({
@@ -36,6 +42,8 @@ class Profile extends Component {
       Authorization: this.Auth.getToken()
     };
 
+    this.setState({ isUploading: true });
+
     fetch("http://0.0.0.0:3000/api/transactions/import", {
       method: "POST",
       body,
@@ -44,6 +52,7 @@ class Profile extends Component {
       .then(response => response.json())
       .then(response => {
         console.log(response);
+        this.setState({ isUploading: false });
       });
   };
 
@@ -56,7 +65,16 @@ class Profile extends Component {
         <div className="title">
           <h1>{name} is logged in!</h1>
           <input type="file" onChange={this.selectFile} />
-          <button onClick={this.uploadFile}>Upload</button>
+          <button disabled={this.state.isUploading} onClick={this.uploadFile}>
+            Upload
+          </button>
+          <button
+            type="button"
+            className="form-submit"
+            onClick={this.handleLogout}
+          >
+            Logout
+          </button>
         </div>
 
         <div className="recent-transactions">
