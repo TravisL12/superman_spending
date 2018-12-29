@@ -56,9 +56,11 @@ class Profile extends Component {
         </div>
 
         <div className="recent-transactions">
-          {recentTransactions.map((trans, idx) => {
-            return <p key={idx}>{trans.description}</p>;
-          })}
+          <ul>
+            {recentTransactions.map((trans, idx) => {
+              return <li key={idx}>{trans.description}</li>;
+            })}
+          </ul>
         </div>
       </div>
     );

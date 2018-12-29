@@ -10,7 +10,7 @@ import Profile from "./components/Profile";
 
 ReactDOM.render(
   <Router>
-    <div>
+    <div className="app-container">
       <Route exact path="/" component={withAuth(App)} />
       <Route exact path="/login" component={Login} />
       <Route exact path="/profile" component={withAuth(Profile)} />
