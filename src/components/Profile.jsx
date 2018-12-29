@@ -6,13 +6,17 @@ class Profile extends Component {
   constructor() {
     super();
     this.Auth = new AuthService();
-    this.state = { user: null, recentTransactions: [], selectedFile: null };
+    this.state = {
+      user: null,
+      transactions: { recent: [], month: [] },
+      selectedFile: null
+    };
   }
 
   componentWillMount() {
     this.Auth.fetch(`http://0.0.0.0:3000/api/user/profile`).then(
-      ({ user, recentTransactions }) => {
-        this.setState({ user, recentTransactions });
+      ({ user, transactions }) => {
+        this.setState({ user, transactions });
       }
     );
   }
@@ -44,7 +48,7 @@ class Profile extends Component {
   };
 
   render() {
-    const { user, recentTransactions } = this.state;
+    const { user, transactions } = this.state;
     const name = user ? user.name : "";
 
     return (
@@ -57,7 +61,7 @@ class Profile extends Component {
 
         <div className="recent-transactions">
           <ul>
-            {recentTransactions.map((trans, idx) => {
+            {transactions.recent.map((trans, idx) => {
               return <li key={idx}>{trans.description}</li>;
             })}
           </ul>
