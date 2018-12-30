@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import "./index.css";
 import withAuth from "./middleware/withAuth";
 
-import App from "./App";
 import Login from "./components/Login";
 import Profile from "./components/Profile";
 
@@ -12,9 +11,8 @@ ReactDOM.render(
   <Router>
     <div className="app">
       <div className="app-container">
-        <Route exact path="/" component={withAuth(App)} />
         <Route exact path="/login" component={Login} />
-        <Route exact path="/profile" component={withAuth(Profile)} />
+        <Route exact path="/" component={withAuth(Profile)} />
       </div>
     </div>
   </Router>,

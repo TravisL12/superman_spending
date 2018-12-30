@@ -4,14 +4,14 @@ import decode from "jwt-decode";
 
 export default class AuthService {
   constructor(domain) {
-    this.domain = domain || "http://localhost:3000";
+    this.domain = domain || "http://0.0.0.0:3000";
     this.fetch = this.fetch.bind(this);
     this.login = this.login.bind(this);
     this.getProfile = this.getProfile.bind(this);
   }
 
   login(email, password) {
-    return this.fetch(`${this.domain}/api/login`, {
+    return this.fetch("api/login", {
       method: "POST",
       body: JSON.stringify({
         email,
@@ -63,7 +63,7 @@ export default class AuthService {
       headers["Authorization"] = this.getToken();
     }
 
-    return fetch(url, {
+    return fetch(`${this.domain}/${url}`, {
       headers,
       ...options
     })
