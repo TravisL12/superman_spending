@@ -10,6 +10,7 @@ class Profile extends Component {
     this.state = {
       user: null,
       transactions: { recent: [], month: [] },
+      categories: null,
       selectedFile: null,
       isUploading: false,
       isLoading: true
@@ -17,9 +18,11 @@ class Profile extends Component {
   }
 
   componentWillMount() {
-    this.Auth.fetch("api/user/profile").then(({ user, transactions }) => {
-      this.setState({ user, transactions, isLoading: false });
-    });
+    this.Auth.fetch("api/user/profile").then(
+      ({ user, transactions, categories }) => {
+        this.setState({ user, transactions, categories, isLoading: false });
+      }
+    );
   }
 
   handleLogout = () => {
@@ -57,7 +60,13 @@ class Profile extends Component {
   };
 
   render() {
-    const { user, transactions, isUploading, isLoading } = this.state;
+    const {
+      user,
+      transactions,
+      isUploading,
+      isLoading,
+      categories
+    } = this.state;
 
     if (isLoading) {
       return <h1>Loading...</h1>;
@@ -94,6 +103,21 @@ class Profile extends Component {
             {transactions.recent.length} transactions)
           </p>
           <p>Current Month Sum: {currency(monthSum / 100)}</p>
+        </div>
+
+        <div className="category-transactions">
+          <ul>
+            {categories.map((category, idx) => {
+              const sum = category.Transactions.reduce((sum, i) => {
+                return sum + i.amount;
+              }, 0);
+              return (
+                <li key={idx}>
+                  {category.name} {currency(sum / 100)}
+                </li>
+              );
+            })}
+          </ul>
         </div>
       </div>
     );
