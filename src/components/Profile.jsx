@@ -99,10 +99,10 @@ class Profile extends Component {
 
         <div className="recent-transactions">
           <p>
-            Recent Sum: {currency(recentSum / 100)} (last{" "}
-            {transactions.recent.length} transactions)
+            Recent Sum: {currency(recentSum)} (last {transactions.recent.length}{" "}
+            transactions)
           </p>
-          <p>Current Month Sum: {currency(monthSum / 100)}</p>
+          <p>Current Month Sum: {currency(monthSum)}</p>
         </div>
 
         <div className="category-transactions">
@@ -113,7 +113,7 @@ class Profile extends Component {
               }, 0);
               return (
                 <li key={idx}>
-                  {category.name} {currency(sum / 100)}
+                  {category.name} {currency(sum)}
                 </li>
               );
             })}
