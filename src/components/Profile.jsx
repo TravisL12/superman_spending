@@ -77,8 +77,12 @@ class Profile extends Component {
 
         <div className="recent-transactions">
           <p>
-            Recent Sum: {currency(transactions.recent.sum)} (last{" "}
-            {transactions.recent.length} transactions)
+            Sum of Last {transactions.recent.length}:{" "}
+            {currency(transactions.recent.sum)}
+          </p>
+          <p>
+            Avg.
+            {currency(transactions.recent.sum / transactions.recent.length)}
           </p>
         </div>
 

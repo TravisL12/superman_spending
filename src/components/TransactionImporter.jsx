@@ -44,7 +44,10 @@ class TransactionImporter extends Component {
     return (
       <Fragment>
         <input type="file" onChange={this.selectFile} />
-        <button disabled={this.state.isUploading} onClick={this.uploadFile}>
+        <button
+          disabled={this.state.isUploading || !this.state.selectedFile}
+          onClick={this.uploadFile}
+        >
           Upload
         </button>
       </Fragment>
