@@ -1,16 +1,16 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter as Router, Route } from "react-router-dom";
-import "./index.css";
+import styles from "./index.module.scss";
 import withAuth from "./middleware/withAuth";
 
-import Login from "./components/Login";
-import Profile from "./components/Profile";
+import Login from "./components/Login/";
+import Profile from "./components/Profile/";
 
 ReactDOM.render(
   <Router>
-    <div className="app">
-      <div className="app-container">
+    <div className={styles.app}>
+      <div className={styles.appContainer}>
         <Route exact path="/login" component={Login} />
         <Route exact path="/" component={withAuth(Profile)} />
       </div>

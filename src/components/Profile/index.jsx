@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import AuthService from "../middleware/AuthService";
-import { currency, formatDate } from "../utilities/formatLocales";
-import LogoutButton from "./LogoutButton";
-import TransactionImporter from "./TransactionImporter";
-import "./Profile.css";
+import AuthService from "../../middleware/AuthService";
+import { currency, formatDate } from "../../utilities/formatLocales";
+import LogoutButton from "../LogoutButton";
+import TransactionImporter from "../TransactionImporter";
+import styles from "./Profile.module.scss";
 
 class Profile extends Component {
   constructor() {
@@ -69,13 +69,13 @@ class Profile extends Component {
 
     return (
       <div>
-        <div className="title">
+        <div className={styles.title}>
           <h1>{user.name} is logged in!</h1>
           <TransactionImporter />
           <LogoutButton {...this.props} />
         </div>
 
-        <div className="recent-transactions">
+        <div className={styles.recentTransactions}>
           <p>
             Sum of Last {transactions.recent.length}:{" "}
             {currency(transactions.recent.sum)}
@@ -86,10 +86,10 @@ class Profile extends Component {
           </p>
         </div>
 
-        <div className="category-transactions">
+        <div className={styles.categoryTransactions}>
           {categories.monthData.map((monthData, idx) => {
             return (
-              <div className="month-data" key={`month-${idx}`}>
+              <div className={styles.monthData} key={`month-${idx}`}>
                 {formatDate(monthData.month, monthData.year)}
                 <ul>
                   {this.createCategoryList(

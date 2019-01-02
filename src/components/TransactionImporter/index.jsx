@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import AuthService from "../middleware/AuthService";
+import AuthService from "../../middleware/AuthService";
 
 class TransactionImporter extends Component {
   constructor() {
@@ -18,26 +18,23 @@ class TransactionImporter extends Component {
   };
 
   uploadFile = () => {
+    this.setState({ isUploading: true });
+
+    const isMultiPart = true;
     const body = new FormData();
     body.append("file", this.state.selectedFile);
 
-    const headers = {
-      Accept: "application/json",
-      Authorization: this.Auth.getToken()
-    };
-
-    this.setState({ isUploading: true });
-
-    fetch("http://0.0.0.0:3000/api/transactions/import", {
-      method: "POST",
-      body,
-      headers
-    })
-      .then(response => response.json())
-      .then(response => {
-        console.log(response);
-        this.setState({ isUploading: false });
-      });
+    this.Auth.fetch(
+      "api/transactions/import",
+      {
+        method: "POST",
+        body
+      },
+      isMultiPart
+    ).then(response => {
+      console.log(response.message);
+      this.setState({ selectedFile: null, isUploading: false });
+    });
   };
 
   render() {

@@ -15,16 +15,16 @@ h1 {
   background: lightblue;
 }
 
-.category-transactions {
+.categoryTransactions {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
 }
 
-.month-data {
+.monthData {
   /* padding-right: 10px; */
-}
 
-.month-data li {
-  font-size: 14px;
+  li {
+    font-size: 14px;
+  }
 }

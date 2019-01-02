@@ -1,5 +1,6 @@
 import React from "react";
-import AuthService from "../middleware/AuthService";
+import AuthService from "../../middleware/AuthService";
+import styles from "../Login/Login.module.scss";
 
 function Logout(props) {
   const Auth = new AuthService();
@@ -10,7 +11,7 @@ function Logout(props) {
   };
 
   return (
-    <button type="button" className="form-submit" onClick={handleLogout}>
+    <button type="button" className={styles.formSubmit} onClick={handleLogout}>
       Logout
     </button>
   );

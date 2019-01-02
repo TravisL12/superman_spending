@@ -24,7 +24,7 @@
   margin-bottom: 10px;
 }
 
-.form-item {
+.formItem {
   font-family: "Raleway", sans-serif;
   padding: 5px;
   margin-bottom: 2rem;
@@ -33,7 +33,7 @@
   border: 1px solid grey;
 }
 
-.form-submit {
+.formSubmit {
   font-family: "Raleway", sans-serif;
   height: 35px;
   color: #fff;
@@ -43,6 +43,6 @@
   transition: 0.3s opacity ease;
   cursor: pointer;
 }
-.form-submit:hover {
+.formSubmit:hover {
   opacity: 0.6;
 }

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import AuthService from "../middleware/AuthService";
-import "./Login.css";
+import AuthService from "../../middleware/AuthService";
+import styles from "./Login.module.scss";
 
 class Login extends Component {
   constructor() {
@@ -16,24 +16,24 @@ class Login extends Component {
 
   render() {
     return (
-      <div className="center">
-        <div className="card">
+      <div className={styles.center}>
+        <div className={styles.card}>
           <form onSubmit={this.handleFormSubmit}>
             <input
-              className="form-item"
+              className={styles.formItem}
               placeholder="Email goes here..."
               name="email"
               type="text"
               onChange={this.handleChange}
             />
             <input
-              className="form-item"
+              className={styles.formItem}
               placeholder="Password goes here..."
               name="password"
               type="password"
               onChange={this.handleChange}
             />
-            <input className="form-submit" value="SUBMIT" type="submit" />
+            <input className={styles.formSubmit} value="SUBMIT" type="submit" />
           </form>
         </div>
       </div>

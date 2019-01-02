@@ -53,11 +53,14 @@ export default class AuthService {
     return decode(this.getToken());
   }
 
-  fetch(url, options) {
+  fetch(url, options, isMultiPart = false) {
     const headers = {
-      Accept: "application/json",
-      "Content-Type": "application/json"
+      Accept: "application/json"
     };
+
+    if (!isMultiPart) {
+      headers["Content-Type"] = "application/json";
+    }
 
     if (this.loggedIn()) {
       headers["Authorization"] = this.getToken();
