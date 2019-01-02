@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import AuthService from "../middleware/AuthService";
 import { currency, formatDate } from "../utilities/formatLocales";
+import LogoutButton from "./LogoutButton";
+import TransactionImporter from "./TransactionImporter";
 import "./Profile.css";
 
 class Profile extends Component {
@@ -11,8 +13,6 @@ class Profile extends Component {
       user: null,
       transactions: { recent: [], month: [] },
       categories: null,
-      selectedFile: null,
-      isUploading: false,
       isLoading: true
     };
   }
@@ -25,72 +25,45 @@ class Profile extends Component {
     );
   }
 
-  handleLogout = () => {
-    this.Auth.logout();
-    this.props.history.replace("/login");
+  calculateCategoryTotal = categories => {
+    const total = Object.keys(categories).reduce((sum, id) => {
+      return (
+        sum +
+        categories[id].Transactions.reduce((sum, i) => {
+          return sum + i.amount;
+        }, 0)
+      );
+    }, 0);
+    return currency(total);
   };
 
-  selectFile = event => {
-    this.setState({
-      selectedFile: event.target.files[0]
-    });
-  };
+  createCategoryList = (idGroup, categories) => {
+    return Object.keys(idGroup).map(id => {
+      const name = idGroup[id];
+      const category = categories[id];
 
-  uploadFile = () => {
-    const body = new FormData();
-    body.append("file", this.state.selectedFile);
-
-    const headers = {
-      Accept: "application/json",
-      Authorization: this.Auth.getToken()
-    };
-
-    this.setState({ isUploading: true });
-
-    fetch("api/transactions/import", {
-      method: "POST",
-      body,
-      headers
-    })
-      .then(response => response.json())
-      .then(response => {
-        console.log(response);
-        this.setState({ isUploading: false });
-      });
-  };
-
-  createCategoryList = month => {
-    return month.map((category, idx) => {
-      const sum = category.Transactions.reduce((sum, i) => {
-        return sum + i.amount;
-      }, 0);
+      const sum = category
+        ? category.Transactions.reduce((sum, i) => {
+            return sum + i.amount;
+          }, 0)
+        : 0;
 
       return (
-        <li key={idx}>
-          {category.name} {currency(sum)}
+        <li key={`group-${id}`}>
+          {name} {currency(sum)}
         </li>
       );
     });
   };
 
   render() {
-    const {
-      user,
-      transactions,
-      isUploading,
-      isLoading,
-      categories
-    } = this.state;
+    const { user, transactions, isLoading, categories } = this.state;
 
     if (isLoading) {
       return <h1>Loading...</h1>;
     }
 
-    const recentSum = transactions.recent.reduce((sum, i) => {
-      return sum + i.amount;
-    }, 0);
-
-    const monthSum = transactions.month.reduce((sum, i) => {
+    transactions.recent.sum = transactions.recent.reduce((sum, i) => {
       return sum + i.amount;
     }, 0);
 
@@ -98,33 +71,31 @@ class Profile extends Component {
       <div>
         <div className="title">
           <h1>{user.name} is logged in!</h1>
-          <input type="file" onChange={this.selectFile} />
-          <button disabled={isUploading} onClick={this.uploadFile}>
-            Upload
-          </button>
-          <button
-            type="button"
-            className="form-submit"
-            onClick={this.handleLogout}
-          >
-            Logout
-          </button>
+          <TransactionImporter />
+          <LogoutButton {...this.props} />
         </div>
 
         <div className="recent-transactions">
           <p>
-            Recent Sum: {currency(recentSum)} (last {transactions.recent.length}{" "}
-            transactions)
+            Recent Sum: {currency(transactions.recent.sum)} (last{" "}
+            {transactions.recent.length} transactions)
           </p>
-          <p>Current Month Sum: {currency(monthSum)}</p>
         </div>
 
         <div className="category-transactions">
-          {categories.map((monthData, idx) => {
+          {categories.monthData.map((monthData, idx) => {
             return (
               <div className="month-data" key={`month-${idx}`}>
                 {formatDate(monthData.month, monthData.year)}
-                <ul>{this.createCategoryList(monthData.categories)}</ul>
+                <ul>
+                  {this.createCategoryList(
+                    categories.idGroup,
+                    monthData.categories
+                  )}
+                  <li>
+                    Total: {this.calculateCategoryTotal(monthData.categories)}
+                  </li>
+                </ul>
               </div>
             );
           })}
