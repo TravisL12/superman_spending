@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import AuthService from "../middleware/AuthService";
+import { currency, formatDate } from "../utilities/formatLocales";
 import "./Profile.css";
 
 class Profile extends Component {
@@ -9,15 +10,17 @@ class Profile extends Component {
     this.state = {
       user: null,
       transactions: { recent: [], month: [] },
+      categories: null,
       selectedFile: null,
-      isUploading: false
+      isUploading: false,
+      isLoading: true
     };
   }
 
   componentWillMount() {
-    this.Auth.fetch(`http://0.0.0.0:3000/api/user/profile`).then(
-      ({ user, transactions }) => {
-        this.setState({ user, transactions });
+    this.Auth.fetch("api/user/profile").then(
+      ({ user, transactions, categories }) => {
+        this.setState({ user, transactions, categories, isLoading: false });
       }
     );
   }
@@ -44,7 +47,7 @@ class Profile extends Component {
 
     this.setState({ isUploading: true });
 
-    fetch("http://0.0.0.0:3000/api/transactions/import", {
+    fetch("api/transactions/import", {
       method: "POST",
       body,
       headers
@@ -56,16 +59,47 @@ class Profile extends Component {
       });
   };
 
+  createCategoryList = month => {
+    return month.map((category, idx) => {
+      const sum = category.Transactions.reduce((sum, i) => {
+        return sum + i.amount;
+      }, 0);
+
+      return (
+        <li key={idx}>
+          {category.name} {currency(sum)}
+        </li>
+      );
+    });
+  };
+
   render() {
-    const { user, transactions } = this.state;
-    const name = user ? user.name : "";
+    const {
+      user,
+      transactions,
+      isUploading,
+      isLoading,
+      categories
+    } = this.state;
+
+    if (isLoading) {
+      return <h1>Loading...</h1>;
+    }
+
+    const recentSum = transactions.recent.reduce((sum, i) => {
+      return sum + i.amount;
+    }, 0);
+
+    const monthSum = transactions.month.reduce((sum, i) => {
+      return sum + i.amount;
+    }, 0);
 
     return (
       <div>
         <div className="title">
-          <h1>{name} is logged in!</h1>
+          <h1>{user.name} is logged in!</h1>
           <input type="file" onChange={this.selectFile} />
-          <button disabled={this.state.isUploading} onClick={this.uploadFile}>
+          <button disabled={isUploading} onClick={this.uploadFile}>
             Upload
           </button>
           <button
@@ -78,11 +112,22 @@ class Profile extends Component {
         </div>
 
         <div className="recent-transactions">
-          <ul>
-            {transactions.recent.map((trans, idx) => {
-              return <li key={idx}>{trans.description}</li>;
-            })}
-          </ul>
+          <p>
+            Recent Sum: {currency(recentSum)} (last {transactions.recent.length}{" "}
+            transactions)
+          </p>
+          <p>Current Month Sum: {currency(monthSum)}</p>
+        </div>
+
+        <div className="category-transactions">
+          {categories.map((monthData, idx) => {
+            return (
+              <div className="month-data" key={`month-${idx}`}>
+                {formatDate(monthData.month, monthData.year)}
+                <ul>{this.createCategoryList(monthData.categories)}</ul>
+              </div>
+            );
+          })}
         </div>
       </div>
     );

@@ -11,7 +11,7 @@ class Login extends Component {
   }
 
   componentWillMount() {
-    if (this.Auth.loggedIn()) this.props.history.replace("/profile");
+    if (this.Auth.loggedIn()) this.props.history.replace("/");
   }
 
   render() {
@@ -51,7 +51,7 @@ class Login extends Component {
 
     this.Auth.login(this.state.email, this.state.password)
       .then(res => {
-        this.props.history.replace("/profile");
+        this.props.history.replace("/");
       })
       .catch(err => {
         alert(err);

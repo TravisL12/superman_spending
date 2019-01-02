@@ -14,3 +14,16 @@ h1 {
 .fileInput {
   background: lightblue;
 }
+
+.category-transactions {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.month-data {
+  padding-right: 10px;
+}
+
+.month-data li {
+  font-size: 14px;
+}
