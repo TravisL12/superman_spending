@@ -17,10 +17,8 @@ export default function withAuth(AuthComponent) {
         this.props.history.replace("/login");
       } else {
         try {
-          const profile = Auth.getProfile();
-          this.setState({
-            user: profile
-          });
+          const user = Auth.getProfile();
+          this.setState({ user });
         } catch (err) {
           Auth.logout();
           this.props.history.replace("/login");
@@ -29,13 +27,9 @@ export default function withAuth(AuthComponent) {
     }
 
     render() {
-      if (this.state.user) {
-        return (
-          <AuthComponent history={this.props.history} user={this.state.user} />
-        );
-      } else {
-        return null;
-      }
+      return this.state.user ? (
+        <AuthComponent history={this.props.history} user={this.state.user} />
+      ) : null;
     }
   };
 }
