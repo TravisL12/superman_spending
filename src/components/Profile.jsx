@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import AuthService from "../middleware/AuthService";
-import currency from "../utilities/formatCurrency";
+import { currency, formatDate } from "../utilities/formatLocales";
 import "./Profile.css";
 
 class Profile extends Component {
@@ -123,7 +123,7 @@ class Profile extends Component {
           {categories.map((monthData, idx) => {
             return (
               <div className="month-data" key={`month-${idx}`}>
-                {monthData.month} / {monthData.year}
+                {formatDate(monthData.month, monthData.year)}
                 <ul>{this.createCategoryList(monthData.categories)}</ul>
               </div>
             );

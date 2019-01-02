@@ -17,8 +17,13 @@ h1 {
 
 .category-transactions {
   display: flex;
+  flex-wrap: wrap;
 }
 
 .month-data {
-  padding: 0 10px;
+  padding-right: 10px;
+}
+
+.month-data li {
+  font-size: 14px;
 }
