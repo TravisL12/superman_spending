@@ -59,6 +59,20 @@ class Profile extends Component {
       });
   };
 
+  createCategoryList = month => {
+    return month.map((category, idx) => {
+      const sum = category.Transactions.reduce((sum, i) => {
+        return sum + i.amount;
+      }, 0);
+
+      return (
+        <li key={idx}>
+          {category.name} {currency(sum)}
+        </li>
+      );
+    });
+  };
+
   render() {
     const {
       user,
@@ -106,18 +120,14 @@ class Profile extends Component {
         </div>
 
         <div className="category-transactions">
-          <ul>
-            {categories.map((category, idx) => {
-              const sum = category.Transactions.reduce((sum, i) => {
-                return sum + i.amount;
-              }, 0);
-              return (
-                <li key={idx}>
-                  {category.name} {currency(sum)}
-                </li>
-              );
-            })}
-          </ul>
+          {categories.map((monthData, idx) => {
+            return (
+              <div className="month-data" key={`month-${idx}`}>
+                {monthData.month} / {monthData.year}
+                <ul>{this.createCategoryList(monthData.categories)}</ul>
+              </div>
+            );
+          })}
         </div>
       </div>
     );
