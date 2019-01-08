@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import AuthService from "../../middleware/AuthService";
 import { sumBy } from "lodash";
 import { currency, formatDate } from "../../utilities/formatLocales";
+import style from "./Spending.module.scss";
 
 class Spending extends Component {
   constructor(props) {
@@ -38,16 +39,16 @@ class Spending extends Component {
     return (
       <div>
         <h1>{formatDate(month - 1, year)}</h1>
-        <div>
+        <div className={style.monthGrid}>
           {days.map(day => {
             const spentDay = spending[day];
             const count = spentDay ? spentDay.length : 0;
             const sum = spentDay ? sumBy(spentDay, "amount") : 0;
 
             return (
-              <p key={`spending-${day}`}>
+              <div className={style.day} key={`spending-${day}`}>
                 {day} - {currency(sum)} ({count})
-              </p>
+              </div>
             );
           })}
         </div>
