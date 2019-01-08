@@ -1,0 +1,28 @@
+ul,
+li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  display: block;
+  margin: 0;
+  padding: 15px 0;
+}
+
+.fileInput {
+  background: lightblue;
+}
+
+.categoryTransactions {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.monthData {
+  li {
+    font-size: 14px;
+  }
+}

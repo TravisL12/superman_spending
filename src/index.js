@@ -7,6 +7,7 @@ import withAuth from "./middleware/withAuth";
 import Header from "./components/Header/";
 import Login from "./components/Login/";
 import Profile from "./components/Profile/";
+import Categories from "./components/Categories/";
 
 const WrappedHeader = withRouter(Header);
 
@@ -15,8 +16,9 @@ ReactDOM.render(
     <div className={styles.app}>
       <Route path="/" component={WrappedHeader} />
       <div className={styles.appContainer}>
-        <Route exact path="/login" component={Login} />
         <Route exact path="/" component={withAuth(Profile)} />
+        <Route exact path="/categories" component={withAuth(Categories)} />
+        <Route exact path="/login" component={Login} />
       </div>
     </div>
   </BrowserRouter>,
