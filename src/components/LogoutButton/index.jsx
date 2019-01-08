@@ -3,10 +3,8 @@ import AuthService from "../../middleware/AuthService";
 import styles from "../Login/Login.module.scss";
 
 function Logout(props) {
-  const Auth = new AuthService();
-
   const handleLogout = () => {
-    Auth.logout();
+    AuthService.logout();
     props.history.replace("/login");
   };
 

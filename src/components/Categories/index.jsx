@@ -6,7 +6,6 @@ import styles from "./Categories.module.scss";
 class Categories extends Component {
   constructor() {
     super();
-    this.Auth = new AuthService();
     this.state = {
       categories: null,
       isLoading: true
@@ -14,7 +13,7 @@ class Categories extends Component {
   }
 
   componentWillMount() {
-    this.Auth.fetch("api/categories/compare").then(({ categories }) => {
+    AuthService.fetch("api/categories/compare").then(({ categories }) => {
       this.setState({ categories, isLoading: false });
     });
   }

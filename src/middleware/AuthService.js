@@ -2,7 +2,7 @@ import decode from "jwt-decode";
 
 // Auth setup using: https://hptechblogs.com/using-json-web-token-react/
 
-export default class AuthService {
+class AuthService {
   constructor(domain) {
     this.domain = "http://0.0.0.0:3131";
     this.fetch = this.fetch.bind(this);
@@ -84,3 +84,5 @@ export default class AuthService {
     }
   }
 }
+
+export default new AuthService();

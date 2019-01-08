@@ -6,14 +6,13 @@ import AuthService from "../../middleware/AuthService";
 class Header extends Component {
   constructor() {
     super();
-    this.Auth = new AuthService();
     this.state = {
-      isLoggedIn: this.Auth.loggedIn()
+      isLoggedIn: AuthService.loggedIn()
     };
   }
 
   componentWillReceiveProps() {
-    this.setState({ isLoggedIn: this.Auth.loggedIn() });
+    this.setState({ isLoggedIn: AuthService.loggedIn() });
   }
 
   render() {

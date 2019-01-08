@@ -6,7 +6,6 @@ import styles from "./Profile.module.scss";
 class Profile extends Component {
   constructor() {
     super();
-    this.Auth = new AuthService();
     this.state = {
       user: null,
       transactions: { recent: [], month: [] },
@@ -15,7 +14,7 @@ class Profile extends Component {
   }
 
   componentWillMount() {
-    this.Auth.fetch("api/user/profile").then(({ user, transactions }) => {
+    AuthService.fetch("api/user/profile").then(({ user, transactions }) => {
       this.setState({ user, transactions, isLoading: false });
     });
   }

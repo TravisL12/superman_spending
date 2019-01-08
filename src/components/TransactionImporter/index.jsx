@@ -4,7 +4,6 @@ import AuthService from "../../middleware/AuthService";
 class TransactionImporter extends Component {
   constructor() {
     super();
-    this.Auth = new AuthService();
     this.state = {
       selectedFile: null,
       isUploading: false
@@ -24,7 +23,7 @@ class TransactionImporter extends Component {
     const body = new FormData();
     body.append("file", this.state.selectedFile);
 
-    this.Auth.fetch(
+    AuthService.fetch(
       "api/transactions/import",
       {
         method: "POST",
