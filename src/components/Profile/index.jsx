@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import AuthService from "../../middleware/AuthService";
 import { currency, formatDate } from "../../utilities/formatLocales";
-import LogoutButton from "../LogoutButton";
-import TransactionImporter from "../TransactionImporter";
 import styles from "./Profile.module.scss";
 
 class Profile extends Component {
@@ -56,8 +54,13 @@ class Profile extends Component {
     });
   };
 
+  // for quick test
+  // render() {
+  //   return <h1>Hi!</h1>;
+  // }
+
   render() {
-    const { user, transactions, isLoading, categories } = this.state;
+    const { transactions, isLoading, categories } = this.state;
 
     if (isLoading) {
       return <h1>Loading...</h1>;
@@ -69,12 +72,6 @@ class Profile extends Component {
 
     return (
       <div>
-        <div className={styles.title}>
-          <h1>{user.name} is logged in!</h1>
-          <TransactionImporter />
-          <LogoutButton {...this.props} />
-        </div>
-
         <div className={styles.recentTransactions}>
           <p>
             Sum of Last {transactions.recent.length}:{" "}

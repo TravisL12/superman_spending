@@ -1,21 +1,25 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter, Route, withRouter } from "react-router-dom";
 import styles from "./index.module.scss";
 import withAuth from "./middleware/withAuth";
 
+import Header from "./components/Header/";
 import Login from "./components/Login/";
 import Profile from "./components/Profile/";
 
+const WrappedHeader = withRouter(Header);
+
 ReactDOM.render(
-  <Router>
+  <BrowserRouter>
     <div className={styles.app}>
+      <Route path="/" component={WrappedHeader} />
       <div className={styles.appContainer}>
         <Route exact path="/login" component={Login} />
         <Route exact path="/" component={withAuth(Profile)} />
       </div>
     </div>
-  </Router>,
+  </BrowserRouter>,
   document.getElementById("root")
 );
 
