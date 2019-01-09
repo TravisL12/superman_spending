@@ -1,25 +1,24 @@
 import React, { Component } from "react";
 import AuthService from "../../middleware/AuthService";
-import { currency } from "../../utilities/formatLocales";
-import styles from "./Profile.module.scss";
 
 class Profile extends Component {
   constructor() {
     super();
     this.state = {
-      transactions: { recent: [], month: [] },
+      user: null,
+      years: [],
       isLoading: true
     };
   }
 
   componentWillMount() {
-    AuthService.fetch("api/user/profile").then(({ transactions }) => {
-      this.setState({ transactions, isLoading: false });
+    AuthService.fetch("api/user/profile").then(({ user, years }) => {
+      this.setState({ user, years, isLoading: false });
     });
   }
 
   render() {
-    const { transactions, isLoading } = this.state;
+    const { user, years, isLoading } = this.state;
 
     if (isLoading) {
       return <h1>Loading...</h1>;
@@ -27,7 +26,10 @@ class Profile extends Component {
 
     return (
       <div>
-        <div className={styles.recentTransactions} />
+        <div>{user.name}</div>
+        {years.map(year => {
+          return <h3 key={year}>{year}</h3>;
+        })}
       </div>
     );
   }
