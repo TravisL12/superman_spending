@@ -20,9 +20,12 @@ class Spending extends Component {
   }
 
   componentWillMount() {
-    AuthService.fetch("api/user/profile").then(({ transactions }) => {
-      this.setState({ transactions, isLoading: false });
-    });
+    const { year, month } = this.state;
+    AuthService.fetch(`api/transactions/monthly/${year}/${month}`).then(
+      ({ transactions }) => {
+        this.setState({ transactions, isLoading: false });
+      }
+    );
   }
 
   render() {
