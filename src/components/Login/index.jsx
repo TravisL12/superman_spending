@@ -10,7 +10,7 @@ class Login extends Component {
   }
 
   componentWillMount() {
-    if (AuthService.loggedIn()) this.props.history.replace("/");
+    if (AuthService.loggedIn()) this.props.history.replace("/calendar");
   }
 
   render() {
@@ -50,7 +50,7 @@ class Login extends Component {
 
     AuthService.login(this.state.email, this.state.password)
       .then(res => {
-        this.props.history.replace("/");
+        this.props.history.replace("/calendar");
       })
       .catch(err => {
         alert(err);

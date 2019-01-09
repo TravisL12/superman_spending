@@ -6,8 +6,7 @@ import withAuth from "./middleware/withAuth";
 
 import Header from "./components/Header/";
 import Login from "./components/Login/";
-import Profile from "./components/Profile/";
-import Spending from "./components/Spending/";
+import YearSelector from "./components/YearSelector/";
 import Categories from "./components/Categories/";
 
 const WrappedHeader = withRouter(Header);
@@ -15,10 +14,9 @@ const WrappedHeader = withRouter(Header);
 ReactDOM.render(
   <BrowserRouter>
     <div className={styles.app}>
-      <Route path="/" component={WrappedHeader} />
       <div className={styles.appContainer}>
-        <Route exact path="/" component={withAuth(Profile)} />
-        <Route path="/spending/:year?/:month?" component={withAuth(Spending)} />
+        <Route path="/" component={WrappedHeader} />
+        <Route path="/calendar" component={withAuth(YearSelector)} />
         <Route exact path="/categories" component={withAuth(Categories)} />
         <Route exact path="/login" component={Login} />
       </div>

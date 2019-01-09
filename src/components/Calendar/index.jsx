@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import AuthService from "../../middleware/AuthService";
 import { sumBy } from "lodash";
 import { currency, formatDate } from "../../utilities/formatLocales";
-import style from "./Spending.module.scss";
+import style from "./Calendar.module.scss";
 
-class Spending extends Component {
+class Calendar extends Component {
   constructor(props) {
     super();
     const date = new Date();
@@ -19,13 +19,30 @@ class Spending extends Component {
     };
   }
 
+  componentWillReceiveProps(newProps) {
+    const { year, month } = newProps.match.params;
+    this.fetch(year, month);
+  }
+
   componentWillMount() {
     const { year, month } = this.state;
+    this.fetch(year, month);
+  }
+
+  fetch(year, month) {
     AuthService.fetch(`api/transactions/monthly/${year}/${month}`).then(
       ({ transactions }) => {
-        this.setState({ transactions, isLoading: false });
+        this.setState({ transactions, isLoading: false, year, month });
       }
     );
+  }
+
+  buildDays(year, month) {
+    const totalDays = new Date(year, month - 1, 0).getDate();
+    const startDow = new Date(year, month - 1, 1).getDay();
+    const days = Array.from({ length: totalDays }, (v, k) => k + 1);
+    const dayPadding = new Array(startDow).fill(null);
+    return dayPadding.concat(days);
   }
 
   render() {
@@ -35,15 +52,19 @@ class Spending extends Component {
       return <h1>Loading...</h1>;
     }
 
-    const totalDays = new Date(year, month - 1, 0).getDate();
-    const days = Array.from({ length: totalDays }, (v, k) => k + 1);
+    const days = this.buildDays(year, month);
     const spending = transactions[year][month];
 
     return (
       <div>
         <h1>{formatDate(month - 1, year)}</h1>
         <div className={style.monthGrid}>
-          {days.map(day => {
+          {days.map((day, idx) => {
+            if (!day) {
+              // padded days to start month
+              return <div key={`null-${idx}`} />;
+            }
+
             const spentDay = spending[day];
             const count = spentDay ? spentDay.length : 0;
             const sum = spentDay ? sumBy(spentDay, "amount") : 0;
@@ -60,4 +81,4 @@ class Spending extends Component {
   }
 }
 
-export default Spending;
+export default Calendar;

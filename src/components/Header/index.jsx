@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import LogoutButton from "../LogoutButton";
 import TransactionImporter from "../TransactionImporter";
 import AuthService from "../../middleware/AuthService";
+import styles from "./Header.module.scss";
 
 class Header extends Component {
   constructor() {
@@ -18,10 +19,12 @@ class Header extends Component {
   render() {
     if (this.state.isLoggedIn) {
       return (
-        <div>
+        <div className={styles.container}>
           <h1>You're logged in!</h1>
-          <TransactionImporter />
-          <LogoutButton {...this.props} />
+          <div>
+            <TransactionImporter />
+            <LogoutButton {...this.props} />
+          </div>
         </div>
       );
     } else {
