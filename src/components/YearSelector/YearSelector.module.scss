@@ -7,7 +7,7 @@ $monthColor: #ff9f9f;
   flex-wrap: wrap;
   background: white;
 
-  a {
+  .itemContainer {
     flex: 1;
     color: black;
     text-decoration: none;
@@ -18,8 +18,13 @@ $monthColor: #ff9f9f;
   }
 
   .singleItem {
+    flex: 1;
     text-align: center;
     padding: 10px 20px;
+  }
+
+  .noData {
+    background: lightgray;
   }
 }
 

@@ -65,7 +65,11 @@ class Calendar extends Component {
           <h1>{formatDate(month - 1, year)}</h1>
           <div className={style.monthGrid}>
             {daysOfWeek.map(dow => {
-              return <span className={style.dow}>{dow}</span>;
+              return (
+                <span key={dow} className={style.dow}>
+                  {dow}
+                </span>
+              );
             })}
 
             {days.map((day, idx) => {

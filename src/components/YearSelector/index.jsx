@@ -33,6 +33,7 @@ class YearSelector extends Component {
           {years.map(year => {
             return (
               <NavLink
+                className={styles.itemContainer}
                 activeClassName={styles.active}
                 to={`/calendar/${year}`}
                 key={year}
