@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import AuthService from "../../middleware/AuthService";
 import { formatDate } from "../../utilities/formatLocales";
-import styles from "../YearSelector/YearSelector.module.scss"; // just share the styles for now
+import styles from "../YearSelector/YearSelector.module.scss";
 import { NavLink } from "react-router-dom";
 
 class MonthSelector extends Component {

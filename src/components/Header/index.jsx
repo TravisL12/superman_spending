@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import LogoutButton from "../LogoutButton";
 import TransactionImporter from "../TransactionImporter";
 import AuthService from "../../middleware/AuthService";
+import { NavLink } from "react-router-dom";
 import styles from "./Header.module.scss";
 
 class Header extends Component {
@@ -20,8 +21,16 @@ class Header extends Component {
     if (this.state.isLoggedIn) {
       return (
         <div className={styles.container}>
-          <h1>You're logged in!</h1>
-          <div>
+          <div className={styles.greeting}>
+            <h1>Batman!</h1>
+          </div>
+
+          <div className={styles.navLinks}>
+            <NavLink to="/calendar">Calendar</NavLink>
+            <NavLink to="/categories">Categories</NavLink>
+          </div>
+
+          <div className={styles.logout}>
             <TransactionImporter />
             <LogoutButton {...this.props} />
           </div>

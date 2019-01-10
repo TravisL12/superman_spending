@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import AuthService from "../../middleware/AuthService";
-import Calendar from "../Calendar";
+import CalendarGrid from "../CalendarGrid";
 import MonthSelector from "../MonthSelector";
 import styles from "./YearSelector.module.scss";
 import { Route, NavLink } from "react-router-dom";
@@ -47,7 +47,7 @@ class YearSelector extends Component {
         </div>
 
         <Route path="/calendar/:year" component={MonthSelector} />
-        <Route exact path="/calendar/:year/:month" component={Calendar} />
+        <Route exact path="/calendar/:year/:month" component={CalendarGrid} />
       </div>
     );
   }

@@ -1,13 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter, Route, withRouter } from "react-router-dom";
-import styles from "./index.module.scss";
 import withAuth from "./middleware/withAuth";
 
 import Header from "./components/Header/";
 import Login from "./components/Login/";
 import YearSelector from "./components/YearSelector/";
 import Categories from "./components/Categories/";
+
+import styles from "./index.module.scss";
 
 const WrappedHeader = withRouter(Header);
 

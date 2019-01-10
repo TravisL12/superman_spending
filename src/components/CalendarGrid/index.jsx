@@ -6,9 +6,9 @@ import {
   formatDate,
   daysOfWeek
 } from "../../utilities/formatLocales";
-import style from "./Calendar.module.scss";
+import style from "./CalendarGrid.module.scss";
 
-class Calendar extends Component {
+class CalendarGrid extends Component {
   constructor(props) {
     super();
     const date = new Date();
@@ -95,4 +95,4 @@ class Calendar extends Component {
   }
 }
 
-export default Calendar;
+export default CalendarGrid;
