@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { formatDate } from "../../utilities/formatLocales";
-// import styles from "./MonthSelector.module.scss";
-import { Link } from "react-router-dom";
+import styles from "../YearSelector/YearSelector.module.scss"; // just share the styles for now
+import { NavLink } from "react-router-dom";
 
 class MonthSelector extends Component {
   constructor(props) {
@@ -19,15 +19,23 @@ class MonthSelector extends Component {
     const months = Array.from({ length: 12 }, (v, k) => k + 1);
     const { year } = this.state;
 
-    return months.map(num => {
-      return (
-        <span key={`month-${num}`}>
-          <Link to={`/calendar/${year}/${num}`}>
-            {formatDate(num - 1, year, { month: "long" })}
-          </Link>
-        </span>
-      );
-    });
+    return (
+      <div className={styles.months}>
+        {months.map(num => {
+          return (
+            <NavLink
+              activeClassName={styles.active}
+              to={`/calendar/${year}/${num}`}
+              key={`month-${num}`}
+            >
+              <div className={styles.singleItem}>
+                {formatDate(num - 1, year, { month: "long" })}
+              </div>
+            </NavLink>
+          );
+        })}
+      </div>
+    );
   }
 }
 

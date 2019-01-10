@@ -56,25 +56,27 @@ class Calendar extends Component {
     const spending = transactions[year][month];
 
     return (
-      <div>
-        <h1>{formatDate(month - 1, year)}</h1>
-        <div className={style.monthGrid}>
-          {days.map((day, idx) => {
-            if (!day) {
-              // padded days to start month
-              return <div key={`null-${idx}`} />;
-            }
+      <div className={style.calendar}>
+        <div>
+          <h1>{formatDate(month - 1, year)}</h1>
+          <div className={style.monthGrid}>
+            {days.map((day, idx) => {
+              if (!day) {
+                // padded days to start month
+                return <div key={`null-${idx}`} />;
+              }
 
-            const spentDay = spending[day];
-            const count = spentDay ? spentDay.length : 0;
-            const sum = spentDay ? sumBy(spentDay, "amount") : 0;
+              const spentDay = spending[day];
+              const count = spentDay ? spentDay.length : 0;
+              const sum = spentDay ? sumBy(spentDay, "amount") : 0;
 
-            return (
-              <div className={style.day} key={`spending-${day}`}>
-                {day} - {currency(sum)} ({count})
-              </div>
-            );
-          })}
+              return (
+                <div className={style.day} key={`spending-${day}`}>
+                  {day} - {currency(sum)} ({count})
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     );

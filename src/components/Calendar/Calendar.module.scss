@@ -1,3 +1,11 @@
+.calendar {
+  display: flex;
+  justify-content: center;
+  padding-top: 10px;
+  padding-bottom: 50px;
+  background: #ff9f9f;
+}
+
 .monthGrid {
   display: grid;
   grid-template-columns: repeat(7, 150px);

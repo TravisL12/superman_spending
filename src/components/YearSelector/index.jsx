@@ -3,7 +3,7 @@ import AuthService from "../../middleware/AuthService";
 import Calendar from "../Calendar";
 import MonthSelector from "../MonthSelector";
 import styles from "./YearSelector.module.scss";
-import { Route, Link } from "react-router-dom";
+import { Route, NavLink } from "react-router-dom";
 
 class YearSelector extends Component {
   constructor() {
@@ -32,20 +32,21 @@ class YearSelector extends Component {
         <div className={styles.years}>
           {years.map(year => {
             return (
-              <span key={year}>
-                <Link to={`/calendar/${year}`}>{year}</Link>
-              </span>
+              <NavLink
+                activeClassName={styles.active}
+                to={`/calendar/${year}`}
+                key={year}
+              >
+                <div className={styles.singleItem} key={year}>
+                  {year}
+                </div>
+              </NavLink>
             );
           })}
         </div>
 
-        <div className={styles.months}>
-          <Route path="/calendar/:year" component={MonthSelector} />
-        </div>
-
-        <div className={styles.calendar}>
-          <Route exact path="/calendar/:year/:month" component={Calendar} />
-        </div>
+        <Route path="/calendar/:year" component={MonthSelector} />
+        <Route exact path="/calendar/:year/:month" component={Calendar} />
       </div>
     );
   }

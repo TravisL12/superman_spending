@@ -1,11 +1,37 @@
-.years,
-.months {
+$yearColor: #ffe1e1;
+$monthColor: #ff9f9f;
+
+%selector {
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
+  background: white;
+
+  a {
+    flex: 1;
+    color: black;
+    text-decoration: none;
+  }
+
+  .active {
+    background: $yearColor;
+  }
+
+  .singleItem {
+    text-align: center;
+    padding: 10px 20px;
+  }
 }
 
-.calendar {
-  display: flex;
-  justify-content: center;
+.years {
+  @extend %selector;
+}
+
+.months {
+  @extend %selector;
+  background: $yearColor;
+
+  .active {
+    background: $monthColor;
+  }
 }
