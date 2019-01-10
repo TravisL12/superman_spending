@@ -1,7 +1,11 @@
 import React, { Component } from "react";
 import AuthService from "../../middleware/AuthService";
 import { sumBy } from "lodash";
-import { currency, formatDate } from "../../utilities/formatLocales";
+import {
+  currency,
+  formatDate,
+  daysOfWeek
+} from "../../utilities/formatLocales";
 import style from "./Calendar.module.scss";
 
 class Calendar extends Component {
@@ -60,6 +64,10 @@ class Calendar extends Component {
         <div>
           <h1>{formatDate(month - 1, year)}</h1>
           <div className={style.monthGrid}>
+            {daysOfWeek.map(dow => {
+              return <span className={style.dow}>{dow}</span>;
+            })}
+
             {days.map((day, idx) => {
               if (!day) {
                 // padded days to start month

@@ -18,3 +18,13 @@ export function formatDate(
   const date = new Date(Date.UTC(year, month));
   return date.toLocaleDateString("en-US", options);
 }
+
+export const daysOfWeek = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday"
+];
