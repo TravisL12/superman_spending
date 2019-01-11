@@ -4,7 +4,7 @@ import {
   currency,
   formatDate,
   daysOfWeek
-} from "../../utilities/formatLocales";
+} from "../../../utilities/formatLocales";
 import style from "./CalendarGrid.module.scss";
 
 function CalendarGrid(props) {
@@ -14,6 +14,19 @@ function CalendarGrid(props) {
     const days = Array.from({ length: totalDays }, (v, k) => k + 1);
     const dayPadding = new Array(startDow).fill(null);
     return dayPadding.concat(days);
+  };
+
+  const calcColor = sum => {
+    switch (true) {
+      case sum > 3000:
+        return style.amount3000;
+      case sum > 2000:
+        return style.amount2000;
+      case sum > 1000:
+        return style.amount1000;
+      default:
+        return style.amount;
+    }
   };
 
   const { year, month } = props.match.params;
@@ -41,8 +54,15 @@ function CalendarGrid(props) {
             const sum = spentDay ? sumBy(spentDay, "amount") : 0;
 
             return (
-              <div className={style.day} key={`spending-${day}`}>
-                {day} - {currency(sum)} ({count})
+              <div
+                className={`${style.day} ${calcColor(sum / 100)}`}
+                key={`spending-${day}`}
+              >
+                <div className={style.date}>{day}</div>
+                <div>
+                  <div className={style.total}>{currency(sum)}</div>
+                  <div className={style.count}>Count: {count}</div>
+                </div>
               </div>
             );
           })}

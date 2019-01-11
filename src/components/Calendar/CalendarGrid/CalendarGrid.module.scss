@@ -3,7 +3,7 @@
   justify-content: center;
   padding-top: 10px;
   padding-bottom: 50px;
-  background: #ff9f9f;
+  background: whitesmoke;
 }
 
 .monthGrid {
@@ -16,8 +16,32 @@
   }
 
   .day {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
     background: white;
     padding: 10px;
     border-radius: 5px;
+    color: #444;
+
+    &.amount1000 {
+      background: rgba(255, 50, 0, 0.1);
+    }
+    &.amount2000 {
+      background: rgba(255, 50, 0, 0.4);
+    }
+    &.amount3000 {
+      background: rgba(255, 50, 0, 0.6);
+    }
   }
+}
+
+.date {
+  top: 0;
+  left: 0;
+  font-size: 45px;
+}
+.total,
+.count {
+  font-size: 14px;
 }
