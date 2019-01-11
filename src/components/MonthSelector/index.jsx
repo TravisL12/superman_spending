@@ -1,21 +1,23 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import AuthService from "../../middleware/AuthService";
 import { formatDate } from "../../utilities/formatLocales";
+import CalendarGrid from "../CalendarGrid";
 import styles from "../YearSelector/YearSelector.module.scss";
-import { NavLink } from "react-router-dom";
+import { Route, NavLink } from "react-router-dom";
 
 class MonthSelector extends Component {
   constructor(props) {
     super();
-    console.log(props);
     this.state = {
       year: props.match.params.year,
-      months: {}
+      monthsData: null
     };
   }
 
   componentWillReceiveProps(newProps) {
-    this.fetch(newProps.match.params);
+    if (newProps.match.params.year !== this.state.year) {
+      this.fetch(newProps.match.params);
+    }
   }
 
   componentWillMount() {
@@ -25,44 +27,55 @@ class MonthSelector extends Component {
   fetch({ year }) {
     AuthService.fetch(`api/transactions/yearly/${year}`).then(
       ({ transactions }) => {
-        const yearData = transactions[year];
-        this.props.updateMonths(yearData);
-        this.setState({ isLoading: false, year, months: yearData });
+        this.setState({ year, monthsData: transactions[year] });
       }
     );
   }
 
   render() {
-    const monthNums = Array.from({ length: 12 }, (v, k) => k + 1);
-    const { year, months } = this.state;
+    const monthInts = Array.from({ length: 12 }, (v, k) => k + 1);
+    const { year, monthsData } = this.state;
+
+    if (!monthsData) {
+      return <p />;
+    }
 
     return (
-      <div className={styles.months}>
-        {monthNums.map(num => {
-          if (!months[num]) {
+      <Fragment>
+        <div className={styles.months}>
+          {monthInts.map(num => {
+            if (!monthsData[num]) {
+              return (
+                <div className={styles.itemContainer} key={`month-${num}`}>
+                  <div className={`${styles.singleItem} ${styles.noData}`}>
+                    {formatDate(num - 1, year, { month: "long" })}
+                  </div>
+                </div>
+              );
+            }
+
             return (
-              <div className={styles.itemContainer} key={`month-${num}`}>
-                <div className={`${styles.singleItem} ${styles.noData}`}>
+              <NavLink
+                className={styles.itemContainer}
+                activeClassName={styles.active}
+                to={`/calendar/${year}/${num}`}
+                key={`month-${num}`}
+              >
+                <div className={styles.singleItem}>
                   {formatDate(num - 1, year, { month: "long" })}
                 </div>
-              </div>
+              </NavLink>
             );
-          }
-
-          return (
-            <NavLink
-              className={styles.itemContainer}
-              activeClassName={styles.active}
-              to={`/calendar/${year}/${num}`}
-              key={`month-${num}`}
-            >
-              <div className={styles.singleItem}>
-                {formatDate(num - 1, year, { month: "long" })}
-              </div>
-            </NavLink>
-          );
-        })}
-      </div>
+          })}
+        </div>
+        <Route
+          exact
+          path="/calendar/:year/:month"
+          render={props => {
+            return <CalendarGrid {...props} monthsData={monthsData} />;
+          }}
+        />
+      </Fragment>
     );
   }
 }

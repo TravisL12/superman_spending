@@ -8,38 +8,6 @@ import {
 import style from "./CalendarGrid.module.scss";
 
 class CalendarGrid extends Component {
-  constructor(props) {
-    super();
-    const date = new Date();
-    const year = +props.match.params.year || date.getFullYear();
-    const month = +props.match.params.month || date.getMonth() + 1;
-
-    this.state = {
-      transactions: {},
-      isLoading: true,
-      year,
-      month
-    };
-  }
-
-  // componentWillReceiveProps(newProps) {
-  //   const { year, month } = newProps.match.params;
-  //   this.fetch(year, month);
-  // }
-
-  // componentWillMount() {
-  //   const { year, month } = this.state;
-  //   this.fetch(year, month);
-  // }
-
-  // fetch(year, month) {
-  //   AuthService.fetch(`api/transactions/monthly/${year}/${month}`).then(
-  //     ({ transactions }) => {
-  //       this.setState({ transactions, isLoading: false, year, month });
-  //     }
-  //   );
-  // }
-
   buildDays(year, month) {
     const totalDays = new Date(year, month - 1, 0).getDate();
     const startDow = new Date(year, month - 1, 1).getDay();
@@ -49,11 +17,9 @@ class CalendarGrid extends Component {
   }
 
   render() {
-    const { transactions } = this.props.yearData;
     const { year, month } = this.props.match.params;
-
+    const { monthsData } = this.props;
     const days = this.buildDays(year, month);
-    const spending = transactions[year][month];
 
     return (
       <div className={style.calendar}>
@@ -70,11 +36,10 @@ class CalendarGrid extends Component {
 
             {days.map((day, idx) => {
               if (!day) {
-                // padded days to start month
-                return <div key={`null-${idx}`} />;
+                return <div key={`week-pad-${idx}`} />;
               }
 
-              const spentDay = spending[day];
+              const spentDay = monthsData[month][day];
               const count = spentDay ? spentDay.length : 0;
               const sum = spentDay ? sumBy(spentDay, "amount") : 0;
 
