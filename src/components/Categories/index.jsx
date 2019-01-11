@@ -35,7 +35,7 @@ class Categories extends Component {
     return Object.keys(idGroup).map(id => {
       const name = idGroup[id];
       const category = find(categories, o => {
-        return o.id == id;
+        return o.id === parseInt(id);
       });
 
       const sum = category
