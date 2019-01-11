@@ -1,53 +1,27 @@
 import React, { Component } from "react";
-import AuthService from "../../middleware/AuthService";
-import CalendarGrid from "../CalendarGrid";
-import MonthSelector from "../MonthSelector";
 import styles from "./YearSelector.module.scss";
-import { Route, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 class YearSelector extends Component {
-  constructor() {
-    super();
-    this.state = {
-      years: [],
-      isLoading: true
-    };
-  }
-
-  componentWillMount() {
-    AuthService.fetch("api/user/profile").then(({ years }) => {
-      this.setState({ years, isLoading: false });
-    });
-  }
-
   render() {
-    const { years, isLoading } = this.state;
-
-    if (isLoading) {
-      return <h1>Loading...</h1>;
-    }
+    const { years } = this.props;
 
     return (
-      <div>
-        <div className={styles.years}>
-          {years.map(year => {
-            return (
-              <NavLink
-                className={styles.itemContainer}
-                activeClassName={styles.active}
-                to={`/calendar/${year}`}
-                key={year}
-              >
-                <div className={styles.singleItem} key={year}>
-                  {year}
-                </div>
-              </NavLink>
-            );
-          })}
-        </div>
-
-        <Route path="/calendar/:year" component={MonthSelector} />
-        <Route exact path="/calendar/:year/:month" component={CalendarGrid} />
+      <div className={styles.years}>
+        {years.map(year => {
+          return (
+            <NavLink
+              className={styles.itemContainer}
+              activeClassName={styles.active}
+              to={`/calendar/${year}`}
+              key={year}
+            >
+              <div className={styles.singleItem} key={year}>
+                {year}
+              </div>
+            </NavLink>
+          );
+        })}
       </div>
     );
   }

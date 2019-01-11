@@ -5,7 +5,7 @@ import withAuth from "./middleware/withAuth";
 
 import Header from "./components/Header/";
 import Login from "./components/Login/";
-import YearSelector from "./components/YearSelector/";
+import Calendar from "./components/Calendar/";
 import Categories from "./components/Categories/";
 
 import styles from "./index.module.scss";
@@ -17,7 +17,7 @@ ReactDOM.render(
     <div className={styles.app}>
       <div className={styles.appContainer}>
         <Route path="/" component={WrappedHeader} />
-        <Route path="/calendar" component={withAuth(YearSelector)} />
+        <Route path="/calendar" component={withAuth(Calendar)} />
         <Route exact path="/categories" component={withAuth(Categories)} />
         <Route exact path="/login" component={Login} />
       </div>

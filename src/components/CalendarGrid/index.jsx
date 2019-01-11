@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import AuthService from "../../middleware/AuthService";
 import { sumBy } from "lodash";
 import {
   currency,
@@ -23,23 +22,23 @@ class CalendarGrid extends Component {
     };
   }
 
-  componentWillReceiveProps(newProps) {
-    const { year, month } = newProps.match.params;
-    this.fetch(year, month);
-  }
+  // componentWillReceiveProps(newProps) {
+  //   const { year, month } = newProps.match.params;
+  //   this.fetch(year, month);
+  // }
 
-  componentWillMount() {
-    const { year, month } = this.state;
-    this.fetch(year, month);
-  }
+  // componentWillMount() {
+  //   const { year, month } = this.state;
+  //   this.fetch(year, month);
+  // }
 
-  fetch(year, month) {
-    AuthService.fetch(`api/transactions/monthly/${year}/${month}`).then(
-      ({ transactions }) => {
-        this.setState({ transactions, isLoading: false, year, month });
-      }
-    );
-  }
+  // fetch(year, month) {
+  //   AuthService.fetch(`api/transactions/monthly/${year}/${month}`).then(
+  //     ({ transactions }) => {
+  //       this.setState({ transactions, isLoading: false, year, month });
+  //     }
+  //   );
+  // }
 
   buildDays(year, month) {
     const totalDays = new Date(year, month - 1, 0).getDate();
@@ -50,11 +49,8 @@ class CalendarGrid extends Component {
   }
 
   render() {
-    const { transactions, isLoading, year, month } = this.state;
-
-    if (isLoading) {
-      return <h1>Loading...</h1>;
-    }
+    const { transactions } = this.props.yearData;
+    const { year, month } = this.props.match.params;
 
     const days = this.buildDays(year, month);
     const spending = transactions[year][month];

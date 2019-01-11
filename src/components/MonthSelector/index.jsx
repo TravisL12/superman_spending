@@ -7,6 +7,7 @@ import { NavLink } from "react-router-dom";
 class MonthSelector extends Component {
   constructor(props) {
     super();
+    console.log(props);
     this.state = {
       year: props.match.params.year,
       months: {}
@@ -24,7 +25,9 @@ class MonthSelector extends Component {
   fetch({ year }) {
     AuthService.fetch(`api/transactions/yearly/${year}`).then(
       ({ transactions }) => {
-        this.setState({ isLoading: false, year, months: transactions[year] });
+        const yearData = transactions[year];
+        this.props.updateMonths(yearData);
+        this.setState({ isLoading: false, year, months: yearData });
       }
     );
   }
