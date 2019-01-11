@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import AuthService from "../../middleware/AuthService";
 import { currency, formatDate } from "../../utilities/formatLocales";
 import styles from "./Categories.module.scss";
+import { find } from "lodash";
 
 class Categories extends Component {
   constructor() {
@@ -33,7 +34,9 @@ class Categories extends Component {
   createCategoryList = (idGroup, categories) => {
     return Object.keys(idGroup).map(id => {
       const name = idGroup[id];
-      const category = categories[id];
+      const category = find(categories, o => {
+        return o.id == id;
+      });
 
       const sum = category
         ? category.Transactions.reduce((sum, i) => {
