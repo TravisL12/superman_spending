@@ -6,11 +6,15 @@ import { NavLink } from "react-router-dom";
 import styles from "./Header.module.scss";
 
 class Header extends Component {
-  constructor() {
+  constructor(props) {
     super();
-    this.state = {
-      isLoggedIn: AuthService.loggedIn()
-    };
+    const isLoggedIn = AuthService.loggedIn();
+
+    if (!isLoggedIn) {
+      props.history.replace("/login");
+    }
+
+    this.state = { isLoggedIn };
   }
 
   componentWillReceiveProps() {
@@ -18,27 +22,33 @@ class Header extends Component {
   }
 
   render() {
-    if (this.state.isLoggedIn) {
+    if (!this.state.isLoggedIn) {
       return (
         <div className={styles.container}>
           <div className={styles.greeting}>
-            <h1>Batman!</h1>
-          </div>
-
-          <div className={styles.navLinks}>
-            <NavLink to="/calendar">Calendar</NavLink>
-            <NavLink to="/categories">Categories</NavLink>
-          </div>
-
-          <div className={styles.logout}>
-            <TransactionImporter />
-            <LogoutButton {...this.props} />
+            <h1>Not logged in.</h1>
           </div>
         </div>
       );
-    } else {
-      return <h1>Not logged in.</h1>;
     }
+
+    return (
+      <div className={styles.container}>
+        <div className={styles.greeting}>
+          <h1>Batman!</h1>
+        </div>
+
+        <div className={styles.navLinks}>
+          <NavLink to="/calendar">Calendar</NavLink>
+          <NavLink to="/categories">Categories</NavLink>
+        </div>
+
+        <div className={styles.logout}>
+          <TransactionImporter />
+          <LogoutButton {...this.props} />
+        </div>
+      </div>
+    );
   }
 }
 

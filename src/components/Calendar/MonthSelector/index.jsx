@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 import AuthService from "../../middleware/AuthService";
 import { formatDate } from "../../utilities/formatLocales";
 import CalendarGrid from "../CalendarGrid";
-import styles from "../YearSelector/YearSelector.module.scss";
+import styles from "../Selector.module.scss";
 import { Route, NavLink } from "react-router-dom";
 
 class MonthSelector extends Component {

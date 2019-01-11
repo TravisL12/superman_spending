@@ -9,14 +9,21 @@ class Categories extends Component {
     super();
     this.state = {
       categories: null,
+      categoryIds: null,
       isLoading: true
     };
   }
 
   componentWillMount() {
-    AuthService.fetch("api/categories/compare").then(({ categories }) => {
-      this.setState({ categories, isLoading: false });
-    });
+    AuthService.fetch("api/categories/compare").then(
+      ({ categories, category_ids }) => {
+        this.setState({
+          categories,
+          categoryIds: category_ids,
+          isLoading: false
+        });
+      }
+    );
   }
 
   calculateCategoryTotal = categories => {
@@ -53,7 +60,7 @@ class Categories extends Component {
   };
 
   render() {
-    const { isLoading, categories } = this.state;
+    const { isLoading, categories, categoryIds } = this.state;
 
     if (isLoading) {
       return <h1>Loading...</h1>;
@@ -62,17 +69,14 @@ class Categories extends Component {
     return (
       <div>
         <div className={styles.categoryTransactions}>
-          {categories.monthData.map((monthData, idx) => {
+          {categories.map((monthData, idx) => {
             return (
               <div className={styles.monthData} key={`month-${idx}`}>
                 {formatDate(monthData.month, monthData.year)}
                 <ul>
-                  {this.createCategoryList(
-                    categories.idGroup,
-                    monthData.categories
-                  )}
+                  {this.createCategoryList(categoryIds, monthData.categoryData)}
                   <li>
-                    Total: {this.calculateCategoryTotal(monthData.categories)}
+                    Total: {this.calculateCategoryTotal(monthData.categoryData)}
                   </li>
                 </ul>
               </div>
