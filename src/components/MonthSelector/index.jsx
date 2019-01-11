@@ -10,34 +10,40 @@ class MonthSelector extends Component {
     super();
     this.state = {
       year: props.match.params.year,
-      monthsData: null
+      monthsData: null,
+      isLoading: true
     };
   }
 
   componentWillReceiveProps(newProps) {
-    if (newProps.match.params.year !== this.state.year) {
-      this.fetch(newProps.match.params);
+    const { year } = newProps.match.params;
+    if (year !== this.state.year) {
+      this.fetch(year);
     }
   }
 
   componentWillMount() {
-    this.fetch(this.state);
+    this.fetch(this.state.year);
   }
 
-  fetch({ year }) {
+  fetch(year) {
     AuthService.fetch(`api/transactions/yearly/${year}`).then(
       ({ transactions }) => {
-        this.setState({ year, monthsData: transactions[year] });
+        this.setState({
+          year,
+          monthsData: transactions[year],
+          isLoading: false
+        });
       }
     );
   }
 
   render() {
     const monthInts = Array.from({ length: 12 }, (v, k) => k + 1);
-    const { year, monthsData } = this.state;
+    const { year, monthsData, isLoading } = this.state;
 
-    if (!monthsData) {
-      return <p />;
+    if (isLoading) {
+      return <div />;
     }
 
     return (
@@ -72,7 +78,10 @@ class MonthSelector extends Component {
           exact
           path="/calendar/:year/:month"
           render={props => {
-            return <CalendarGrid {...props} monthsData={monthsData} />;
+            const propMonth = props.match.params.month;
+            return (
+              <CalendarGrid {...props} monthsData={monthsData[propMonth]} />
+            );
           }}
         />
       </Fragment>

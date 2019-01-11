@@ -7,22 +7,22 @@ class Calendar extends Component {
   constructor() {
     super();
     this.state = {
-      years: [],
+      yearsList: [],
       isLoading: true
     };
   }
 
   componentWillMount() {
     AuthService.fetch("api/user/profile").then(({ years }) => {
-      this.setState({ years, isLoading: false });
+      this.setState({ yearsList: years, isLoading: false });
     });
   }
 
   render() {
-    const { years, isLoading } = this.state;
+    const { yearsList, isLoading } = this.state;
 
     if (isLoading) {
-      return <p />;
+      return <div />;
     }
 
     return (
@@ -30,7 +30,7 @@ class Calendar extends Component {
         <Route
           path="/calendar"
           render={props => {
-            return <YearSelector {...props} years={years} />;
+            return <YearSelector {...props} years={yearsList} />;
           }}
         />
       </div>
