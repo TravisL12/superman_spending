@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import AuthService from "../../middleware/AuthService";
 
 class TransactionImporter extends Component {
@@ -6,13 +6,15 @@ class TransactionImporter extends Component {
     super();
     this.state = {
       selectedFile: null,
-      isUploading: false
+      isUploading: false,
+      uploadComplete: false
     };
   }
 
   selectFile = event => {
     this.setState({
-      selectedFile: event.target.files[0]
+      selectedFile: event.target.files[0],
+      uploadComplete: false
     });
   };
 
@@ -32,13 +34,20 @@ class TransactionImporter extends Component {
       isMultiPart
     ).then(response => {
       console.log(response.message);
-      this.setState({ selectedFile: null, isUploading: false });
+      this.setState({
+        selectedFile: null,
+        isUploading: false,
+        uploadComplete: true
+      });
     });
   };
 
   render() {
+    const isUploading = this.state.isUploading && <p>Upload in Progress!</p>;
+    const uploadComplete = this.state.uploadComplete && <p>Upload Complete!</p>;
+
     return (
-      <Fragment>
+      <div>
         <input type="file" onChange={this.selectFile} />
         <button
           disabled={this.state.isUploading || !this.state.selectedFile}
@@ -46,7 +55,9 @@ class TransactionImporter extends Component {
         >
           Upload
         </button>
-      </Fragment>
+        {isUploading}
+        {uploadComplete}
+      </div>
     );
   }
 }
