@@ -20,7 +20,11 @@ ReactDOM.render(
         <Route path="/" component={WrappedHeader} />
         <Route path="/calendar" component={withAuth(Calendar)} />
         <Route exact path="/categories" component={withAuth(Categories)} />
-        <Route exact path="/transactions" component={withAuth(Transactions)} />
+        <Route
+          exact
+          path="/transactions/:page?"
+          component={withAuth(Transactions)}
+        />
         <Route exact path="/login" component={Login} />
       </div>
     </div>

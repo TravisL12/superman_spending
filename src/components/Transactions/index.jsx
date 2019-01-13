@@ -4,8 +4,8 @@ import { currency, formatFullDate } from "../../utilities/formatLocales";
 import style from "./Transactions.module.scss";
 
 class Transactions extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       transactions: [],
       isLoading: true
@@ -13,9 +13,12 @@ class Transactions extends Component {
   }
 
   componentWillMount() {
-    AuthService.fetch("api/transactions").then(({ transactions }) => {
-      this.setState({ transactions, isLoading: false });
-    });
+    const page = this.props.match.params.page || 0;
+    AuthService.fetch(`api/transactions/list/${page}`).then(
+      ({ transactions }) => {
+        this.setState({ transactions, isLoading: false });
+      }
+    );
   }
 
   cleanDesc(description) {
