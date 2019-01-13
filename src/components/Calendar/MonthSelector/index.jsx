@@ -10,7 +10,8 @@ class MonthSelector extends Component {
     super();
     this.state = {
       year: props.match.params.year,
-      monthsData: null,
+      transactionData: null,
+      categoryData: null,
       isLoading: true
     };
   }
@@ -28,10 +29,11 @@ class MonthSelector extends Component {
 
   fetch(year) {
     AuthService.fetch(`api/transactions/yearly/${year}`).then(
-      ({ transactions }) => {
+      ({ transactions, categories }) => {
         this.setState({
           year,
-          monthsData: transactions[year],
+          transactionData: transactions[year],
+          categoryData: categories[year],
           isLoading: false
         });
       }
@@ -40,7 +42,7 @@ class MonthSelector extends Component {
 
   render() {
     const monthInts = Array.from({ length: 12 }, (v, k) => k + 1);
-    const { year, monthsData, isLoading } = this.state;
+    const { year, transactionData, categoryData, isLoading } = this.state;
 
     if (isLoading) {
       return <div />;
@@ -50,7 +52,7 @@ class MonthSelector extends Component {
       <Fragment>
         <div className={styles.months}>
           {monthInts.map(num => {
-            if (!monthsData[num]) {
+            if (!transactionData[num]) {
               return (
                 <div className={styles.itemContainer} key={`month-${num}`}>
                   <div className={`${styles.singleItem} ${styles.noData}`}>
@@ -79,8 +81,13 @@ class MonthSelector extends Component {
           path="/calendar/:year/:month"
           render={props => {
             const propMonth = props.match.params.month;
+            console.log(propMonth, "data");
             return (
-              <CalendarGrid {...props} monthsData={monthsData[propMonth]} />
+              <CalendarGrid
+                {...props}
+                transactionData={transactionData[propMonth]}
+                categoryData={categoryData[propMonth]}
+              />
             );
           }}
         />

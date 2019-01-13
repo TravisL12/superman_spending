@@ -30,7 +30,7 @@ function CalendarGrid(props) {
   };
 
   const { year, month } = props.match.params;
-  const { monthsData } = props;
+  const { transactionData, categoryData } = props;
   const days = buildDays(year, month);
 
   return (
@@ -46,10 +46,18 @@ function CalendarGrid(props) {
             );
           })}
 
+          {/* {categoryData.map(data => {
+            return (
+              <p>
+                {data.name} {currency(data.transactionSum)}
+              </p>
+            );
+          })}
+ */}
           {days.map((day, idx) => {
             if (!day) return <div key={`week-pad-${idx}`} />;
 
-            const spentDay = monthsData[day];
+            const spentDay = transactionData[day];
             const count = spentDay ? spentDay.length : 0;
             const sum = spentDay ? sumBy(spentDay, "amount") : 0;
 
