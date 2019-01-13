@@ -6,6 +6,19 @@ export function currency(amount) {
   });
 }
 
+export function formatFullDate(
+  date,
+  options = {
+    month: "numeric",
+    year: "numeric",
+    day: "numeric"
+  }
+) {
+  options.timeZone = "UTC";
+  const utcDate = new Date(date);
+  return utcDate.toLocaleDateString("en-US", options);
+}
+
 export function formatDate(
   month,
   year,

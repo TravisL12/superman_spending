@@ -9,8 +9,8 @@ import style from "./CalendarGrid.module.scss";
 
 function CalendarGrid(props) {
   const buildDays = (year, month) => {
-    const totalDays = new Date(year, month, 0).getDate();
-    const startDow = new Date(year, month - 1, 1).getDay();
+    const totalDays = new Date(Date.UTC(year, month, 0)).getDate();
+    const startDow = new Date(Date.UTC(year, month - 1, 1)).getDay();
     const days = Array.from({ length: totalDays }, (v, k) => k + 1);
     const dayPadding = new Array(startDow).fill(null);
     return dayPadding.concat(days);

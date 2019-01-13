@@ -7,6 +7,7 @@ import Header from "./components/Header/";
 import Login from "./components/Login/";
 import Calendar from "./components/Calendar/";
 import Categories from "./components/Categories/";
+import Transactions from "./components/Transactions/";
 
 import styles from "./index.module.scss";
 
@@ -19,6 +20,7 @@ ReactDOM.render(
         <Route path="/" component={WrappedHeader} />
         <Route path="/calendar" component={withAuth(Calendar)} />
         <Route exact path="/categories" component={withAuth(Categories)} />
+        <Route exact path="/transactions" component={withAuth(Transactions)} />
         <Route exact path="/login" component={Login} />
       </div>
     </div>

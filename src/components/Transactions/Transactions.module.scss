@@ -1,0 +1,16 @@
+.transactionsList {
+  font-size: 14px;
+}
+
+.transactionTable {
+  border-spacing: 0;
+  tbody {
+    td {
+      padding: 4px 0;
+    }
+
+    tr:nth-child(odd) td {
+      background: lightgrey;
+    }
+  }
+}

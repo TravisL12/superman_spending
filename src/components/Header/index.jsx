@@ -39,8 +39,15 @@ class Header extends Component {
         </div>
 
         <div className={styles.navLinks}>
-          <NavLink to="/calendar">Calendar</NavLink>
-          <NavLink to="/categories">Categories</NavLink>
+          <NavLink activeClassName={styles.active} to="/calendar">
+            Calendar
+          </NavLink>
+          <NavLink activeClassName={styles.active} to="/categories">
+            Categories
+          </NavLink>
+          <NavLink activeClassName={styles.active} to="/transactions">
+            Transactions
+          </NavLink>
         </div>
 
         <div className={styles.logout}>

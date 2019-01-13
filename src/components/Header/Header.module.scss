@@ -17,6 +17,17 @@
   align-items: center;
   max-width: 500px;
   flex: 1;
+
+  a {
+    padding: 5px;
+    color: black;
+  }
+
+  .active {
+    background: lightcyan;
+    font-weight: bold;
+    border-radius: 2px;
+  }
 }
 
 .logout {
