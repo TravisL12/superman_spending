@@ -32,6 +32,10 @@ function CalendarGrid(props) {
   const { year, month } = props.match.params;
   const { transactionData } = props;
   const categoryData = orderBy(values(props.categoryData), ["sum"], ["desc"]);
+  const categoryTotal = categoryData.reduce((sum, data) => {
+    sum += data.sum;
+    return sum;
+  }, 0);
   const days = buildDays(year, month);
 
   return (
@@ -41,10 +45,25 @@ function CalendarGrid(props) {
           {categoryData.map((data, idx) => {
             return (
               <li key={idx}>
-                {data.name} {currency(data.sum)}
+                <span className={style.name}>{data.name}</span>
+                <span className={style.sum}>
+                  {currency(data.sum, {
+                    minimumFractionDigits: 0,
+                    rounded: true
+                  })}
+                </span>
               </li>
             );
           })}
+          <li className={style.categoryTotal}>
+            <span className={style.name}>Total</span>
+            <span className={style.sum}>
+              {currency(categoryTotal, {
+                minimumFractionDigits: 0,
+                rounded: true
+              })}
+            </span>
+          </li>
         </ul>
       </div>
 

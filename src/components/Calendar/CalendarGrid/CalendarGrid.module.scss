@@ -10,6 +10,20 @@
 .categories {
   grid-area: categories;
   font-size: 14px;
+
+  ul li {
+    display: flex;
+    padding: 3px 0;
+    .name {
+      flex: 1;
+    }
+    .sum {
+      width: 100px;
+    }
+    &.categoryTotal {
+      font-weight: bold;
+    }
+  }
 }
 
 .monthName {

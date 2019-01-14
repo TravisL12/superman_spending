@@ -1,9 +1,17 @@
-export function currency(amount) {
-  return (amount / 100).toLocaleString("en-US", {
-    style: "currency",
-    currency: "USD",
-    minimumFractionDigits: 2
-  });
+export function currency(amount, options = {}) {
+  const localeOptions = Object.assign(
+    {
+      style: "currency",
+      currency: "USD",
+      minimumFractionDigits: 2
+    },
+    options
+  );
+
+  const localeAmount = options.rounded
+    ? Math.round(amount / 100)
+    : amount / 100;
+  return localeAmount.toLocaleString("en-US", localeOptions);
 }
 
 export function formatFullDate(
