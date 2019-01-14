@@ -1,6 +1,10 @@
 import React, { Component } from "react";
 import AuthService from "../../middleware/AuthService";
-import { currency, formatFullDate } from "../../utilities/formatLocales";
+import {
+  currency,
+  formatFullDate,
+  titleCase
+} from "../../utilities/formatLocales";
 import style from "./Transactions.module.scss";
 
 class Transactions extends Component {
@@ -36,8 +40,7 @@ class Transactions extends Component {
       "Amount",
       "Date",
       "Category",
-      "Subcategory",
-      "Payee"
+      "Subcategory"
     ];
 
     if (isLoading) {
@@ -58,12 +61,13 @@ class Transactions extends Component {
             {transactions.map((t, idx) => {
               return (
                 <tr key={idx}>
-                  <td>{this.cleanDesc(t["description"])}</td>
+                  <td>
+                    {titleCase(t["payee"]) || this.cleanDesc(t["description"])}
+                  </td>
                   <td>{currency(t["amount"])}</td>
                   <td>{formatFullDate(new Date(t["date"]))}</td>
                   <td>{t["category_id"]}</td>
                   <td>{t["subcategory_id"]}</td>
-                  <td>{t["payee"]}</td>
                 </tr>
               );
             })}

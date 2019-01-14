@@ -1,3 +1,5 @@
+import { startCase, toLower } from "lodash";
+
 export function currency(amount, options = {}) {
   const localeOptions = Object.assign(
     {
@@ -49,3 +51,10 @@ export const daysOfWeek = [
   "Friday",
   "Saturday"
 ];
+
+export function titleCase(string) {
+  if (string) {
+    return startCase(toLower(string));
+  }
+  return string;
+}
