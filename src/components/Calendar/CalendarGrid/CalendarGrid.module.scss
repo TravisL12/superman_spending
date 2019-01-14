@@ -1,20 +1,27 @@
 .calendar {
-  display: flex;
-  justify-content: center;
-  padding-top: 10px;
-  padding-bottom: 50px;
+  display: grid;
+  grid-template-areas:
+    "... title"
+    "categories grid";
+  padding: 10px 10px 50px;
   background: whitesmoke;
 }
 
 .categories {
-  margin-top: 38px;
+  grid-area: categories;
   font-size: 14px;
 }
 
+.monthName {
+  grid-area: title;
+}
+
 .monthGrid {
+  grid-area: grid;
   display: grid;
-  grid-template-columns: repeat(7, 150px);
-  grid-gap: 20px;
+  grid-template-columns: repeat(7, 1fr);
+  grid-gap: 10px;
+  padding: 0 10px;
 
   .dow {
     text-align: center;

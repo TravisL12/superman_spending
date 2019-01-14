@@ -47,7 +47,7 @@ class MonthSelector extends Component {
     if (isLoading) {
       return <div />;
     }
-    console.log(categoryData);
+
     return (
       <Fragment>
         <div className={styles.months}>

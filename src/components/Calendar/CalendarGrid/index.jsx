@@ -9,8 +9,8 @@ import style from "./CalendarGrid.module.scss";
 
 function CalendarGrid(props) {
   const buildDays = (year, month) => {
-    const totalDays = new Date(Date.UTC(year, month, 0)).getDate();
-    const startDow = new Date(Date.UTC(year, month - 1, 1)).getDay();
+    const totalDays = new Date(year, month, 0).getDate();
+    const startDow = new Date(year, month - 1, 1).getDay(); // not sure I totally understand the month-1 but whatever
     const days = Array.from({ length: totalDays }, (v, k) => k + 1);
     const dayPadding = new Array(startDow).fill(null);
     return dayPadding.concat(days);
@@ -32,7 +32,6 @@ function CalendarGrid(props) {
   const { year, month } = props.match.params;
   const { transactionData } = props;
   const categoryData = orderBy(values(props.categoryData), ["sum"], ["desc"]);
-
   const days = buildDays(year, month);
 
   return (
@@ -48,38 +47,40 @@ function CalendarGrid(props) {
           })}
         </ul>
       </div>
-      <div>
+
+      <div className={style.monthName}>
         <h1>{formatDate(month - 1, year)}</h1>
-        <div className={style.monthGrid}>
-          {daysOfWeek.map(dow => {
-            return (
-              <span key={dow} className={style.dow}>
-                {dow}
-              </span>
-            );
-          })}
+      </div>
 
-          {days.map((day, idx) => {
-            if (!day) return <div key={`week-pad-${idx}`} />;
+      <div className={style.monthGrid}>
+        {daysOfWeek.map(dow => {
+          return (
+            <span key={dow} className={style.dow}>
+              {dow}
+            </span>
+          );
+        })}
 
-            const spentDay = transactionData[day];
-            const count = spentDay ? spentDay.length : 0;
-            const sum = spentDay ? sumBy(spentDay, "amount") : 0;
+        {days.map((day, idx) => {
+          if (!day) return <div key={`week-pad-${idx}`} />;
 
-            return (
-              <div
-                className={`${style.day} ${calcColor(sum / 100)}`}
-                key={`spending-${day}`}
-              >
-                <div className={style.date}>{day}</div>
-                <div>
-                  <div className={style.total}>{currency(sum)}</div>
-                  <div className={style.count}>Count: {count}</div>
-                </div>
+          const spentDay = transactionData[day];
+          const count = spentDay ? spentDay.length : 0;
+          const sum = spentDay ? sumBy(spentDay, "amount") : 0;
+
+          return (
+            <div
+              className={`${style.day} ${calcColor(sum / 100)}`}
+              key={`spending-${day}`}
+            >
+              <div className={style.date}>{day}</div>
+              <div>
+                <div className={style.total}>{currency(sum)}</div>
+                <div className={style.count}>Count: {count}</div>
               </div>
-            );
-          })}
-        </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

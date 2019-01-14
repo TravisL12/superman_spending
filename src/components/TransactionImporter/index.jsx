@@ -33,7 +33,6 @@ class TransactionImporter extends Component {
       },
       isMultiPart
     ).then(response => {
-      console.log(response.message);
       this.setState({
         selectedFile: null,
         isUploading: false,
