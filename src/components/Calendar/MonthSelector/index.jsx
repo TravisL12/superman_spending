@@ -47,7 +47,7 @@ class MonthSelector extends Component {
     if (isLoading) {
       return <div />;
     }
-
+    console.log(categoryData);
     return (
       <Fragment>
         <div className={styles.months}>
@@ -81,7 +81,6 @@ class MonthSelector extends Component {
           path="/calendar/:year/:month"
           render={props => {
             const propMonth = props.match.params.month;
-            console.log(propMonth, "data");
             return (
               <CalendarGrid
                 {...props}

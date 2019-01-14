@@ -6,6 +6,11 @@
   background: whitesmoke;
 }
 
+.categories {
+  margin-top: 38px;
+  font-size: 14px;
+}
+
 .monthGrid {
   display: grid;
   grid-template-columns: repeat(7, 150px);
@@ -41,6 +46,7 @@
   left: 0;
   font-size: 45px;
 }
+
 .total,
 .count {
   font-size: 14px;

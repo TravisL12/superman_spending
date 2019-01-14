@@ -1,5 +1,5 @@
 import React from "react";
-import { sumBy } from "lodash";
+import { sumBy, values, orderBy } from "lodash";
 import {
   currency,
   formatDate,
@@ -30,11 +30,24 @@ function CalendarGrid(props) {
   };
 
   const { year, month } = props.match.params;
-  const { transactionData, categoryData } = props;
+  const { transactionData } = props;
+  const categoryData = orderBy(values(props.categoryData), ["sum"], ["desc"]);
+
   const days = buildDays(year, month);
 
   return (
     <div className={style.calendar}>
+      <div className={style.categories}>
+        <ul>
+          {categoryData.map((data, idx) => {
+            return (
+              <li key={idx}>
+                {data.name} {currency(data.sum)}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
       <div>
         <h1>{formatDate(month - 1, year)}</h1>
         <div className={style.monthGrid}>
@@ -46,14 +59,6 @@ function CalendarGrid(props) {
             );
           })}
 
-          {/* {categoryData.map(data => {
-            return (
-              <p>
-                {data.name} {currency(data.transactionSum)}
-              </p>
-            );
-          })}
- */}
           {days.map((day, idx) => {
             if (!day) return <div key={`week-pad-${idx}`} />;
 
