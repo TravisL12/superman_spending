@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import AuthService from "../../middleware/AuthService";
 import { currency, formatDate } from "../../utilities/formatLocales";
-import styles from "./Categories.module.scss";
+import style from "./Categories.module.scss";
 import { find } from "lodash";
 
 class Categories extends Component {
@@ -35,7 +35,10 @@ class Categories extends Component {
         }, 0)
       );
     }, 0);
-    return currency(total);
+    return currency(total, {
+      minimumFractionDigits: 0,
+      rounded: true
+    });
   };
 
   createCategoryList = (idGroup, categories) => {
@@ -53,7 +56,8 @@ class Categories extends Component {
 
       return (
         <li key={`group-${id}`}>
-          {name} {currency(sum)}
+          <span className={style.name}>{name}</span>
+          <span className={style.sum}>{currency(sum)}</span>
         </li>
       );
     });
@@ -68,15 +72,20 @@ class Categories extends Component {
 
     return (
       <div>
-        <div className={styles.categoryTransactions}>
+        <div className={style.categoryTransactions}>
           {categories.map((monthData, idx) => {
             return (
-              <div className={styles.monthData} key={`month-${idx}`}>
-                {formatDate(monthData.month, monthData.year)}
+              <div className={style.monthData} key={`month-${idx}`}>
+                <span className={style.monthName}>
+                  {formatDate(monthData.month, monthData.year)}
+                </span>
                 <ul>
                   {this.createCategoryList(categoryIds, monthData.categoryData)}
-                  <li>
-                    Total: {this.calculateCategoryTotal(monthData.categoryData)}
+                  <li className={style.categoryTotal}>
+                    <span className={style.name}>Total</span>
+                    <span className={style.sum}>
+                      {this.calculateCategoryTotal(monthData.categoryData)}
+                    </span>
                   </li>
                 </ul>
               </div>

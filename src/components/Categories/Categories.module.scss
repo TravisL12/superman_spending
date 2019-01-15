@@ -5,19 +5,37 @@ li {
   padding: 0;
 }
 
-.fileInput {
-  background: lightblue;
-}
-
 .categoryTransactions {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   flex-wrap: wrap;
-  background: rgba(245, 245, 245, 0.75);
+}
+
+.monthName {
+  font-weight: bold;
 }
 
 .monthData {
-  li {
-    font-size: 14px;
+  font-size: 14px;
+  padding: 4px 10px;
+  flex: 1;
+  ul li {
+    display: flex;
+    padding: 3px 0;
+
+    .name {
+      flex: 1;
+    }
+    .sum {
+      max-width: 250px;
+      text-align: right;
+    }
+    &.categoryTotal {
+      font-weight: bold;
+    }
+  }
+
+  &:nth-child(odd) {
+    background: rgba(245, 245, 245, 0.75);
   }
 }
