@@ -1,12 +1,8 @@
 import React, { Component } from "react";
 import AuthService from "../../middleware/AuthService";
 import qs from "query-string";
-import {
-  currency,
-  formatFullDate,
-  titleCase
-} from "../../utilities/formatLocales";
 import style from "./Transactions.module.scss";
+import Row from "./TransactionRow";
 
 class Transactions extends Component {
   constructor(props) {
@@ -23,14 +19,14 @@ class Transactions extends Component {
     this.fetch({ page });
   }
 
-  // LOOKUP NPM QUERY STRING FOR FETCH
   submitSearch = event => {
     event.preventDefault();
-    const page = this.props.match.params.page || 0;
+    const page = 0;
     this.fetch({ query: { search: this.state.searchTerm }, page });
   };
 
   updateSearchTerm = event => {
+    event.preventDefault();
     this.setState({ searchTerm: event.target.value });
   };
 
@@ -41,14 +37,6 @@ class Transactions extends Component {
         this.setState({ transactions, isLoading: false });
       }
     );
-  }
-
-  cleanDesc(description) {
-    const desc = description
-      .replace(/\w{14,}.+/, "")
-      .replace(/^Purchase authorized on /i, "");
-
-    return desc;
   }
 
   render() {
@@ -93,19 +81,7 @@ class Transactions extends Component {
           </thead>
           <tbody>
             {transactions.map((t, idx) => {
-              return (
-                <tr key={idx}>
-                  <td>
-                    {titleCase(t["payee"]) || this.cleanDesc(t["description"])}
-                  </td>
-                  <td className={style.columnAmount}>
-                    {currency(t["amount"])}
-                  </td>
-                  <td>{formatFullDate(new Date(t["date"]))}</td>
-                  <td>{t["Category"].name}</td>
-                  <td>{t["Subcategory"].name}</td>
-                </tr>
-              );
+              return <Row key={idx} transaction={t} />;
             })}
           </tbody>
         </table>
