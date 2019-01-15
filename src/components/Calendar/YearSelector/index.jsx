@@ -14,7 +14,7 @@ function YearSelector(props) {
             <NavLink
               className={styles.itemContainer}
               activeClassName={styles.active}
-              to={`/calendar/${year}/1`}
+              to={`/calendar/${year}`}
               key={year}
             >
               <div className={styles.singleItem} key={year}>

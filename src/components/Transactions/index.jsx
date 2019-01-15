@@ -53,7 +53,11 @@ class Transactions extends Component {
           <thead>
             <tr>
               {headers.map(header => {
-                return <th key={header}>{header}</th>;
+                return (
+                  <th className={style[`column${header}`]} key={header}>
+                    {header}
+                  </th>
+                );
               })}
             </tr>
           </thead>
@@ -64,10 +68,12 @@ class Transactions extends Component {
                   <td>
                     {titleCase(t["payee"]) || this.cleanDesc(t["description"])}
                   </td>
-                  <td>{currency(t["amount"])}</td>
+                  <td className={style.columnAmount}>
+                    {currency(t["amount"])}
+                  </td>
                   <td>{formatFullDate(new Date(t["date"]))}</td>
-                  <td>{t["category_id"]}</td>
-                  <td>{t["subcategory_id"]}</td>
+                  <td>{t["Category"].name}</td>
+                  <td>{t["Subcategory"].name}</td>
                 </tr>
               );
             })}
