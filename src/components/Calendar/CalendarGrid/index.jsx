@@ -24,6 +24,10 @@ function CalendarGrid(props) {
         return style.amount2000;
       case sum > 1000:
         return style.amount1000;
+      case sum < 50:
+        return style.amount50;
+      case sum < 100:
+        return style.amount100;
       default:
         return style.amount;
     }
