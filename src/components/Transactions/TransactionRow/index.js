@@ -4,7 +4,7 @@ import {
   formatFullDate,
   titleCase
 } from "../../../utilities/formatLocales";
-import style from "../Transactions.module.scss";
+import style from "./TransactionRow.module.scss";
 
 // Used PureComponent to avoid unneccessary re-rendering of
 // each transaction data row. The use of helper functions (currency, titleCase...)
@@ -23,6 +23,9 @@ class TransactionRow extends PureComponent {
 
     return (
       <tr>
+        <td className={style.checkBox}>
+          <input type="checkbox" />
+        </td>
         <td>
           {titleCase(transaction.payee) ||
             this.cleanDesc(transaction.description)}

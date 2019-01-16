@@ -1,0 +1,20 @@
+td,
+th {
+  text-align: left;
+  padding: 4px 8px;
+  max-width: 300px;
+}
+
+tbody {
+  tr:nth-child(odd) td {
+    background: rgba(245, 245, 245, 0.75);
+  }
+}
+
+.columnAmount {
+  text-align: right;
+}
+
+.checkBox {
+  width: 100px;
+}

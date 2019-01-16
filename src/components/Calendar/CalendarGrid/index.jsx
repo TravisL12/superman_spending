@@ -16,21 +16,21 @@ function CalendarGrid(props) {
     return dayPadding.concat(days);
   };
 
-  const calcColor = sum => {
-    switch (true) {
-      case sum > 3000:
-        return style.amount3000;
-      case sum > 2000:
-        return style.amount2000;
-      case sum > 1000:
-        return style.amount1000;
-      case sum < 50:
-        return style.amount50;
-      case sum < 100:
-        return style.amount100;
-      default:
-        return style.amount;
+  const checkToday = day => {
+    const today = new Date();
+    today.setHours(0); // this is janky af
+    today.setMinutes(0);
+    today.setSeconds(0);
+    today.setMilliseconds(0);
+    const checkDate = new Date(year, month - 1, day).getTime();
+
+    if (checkDate === today.getTime()) {
+      return style.today;
+    } else if (checkDate > today) {
+      return style.futureDay;
     }
+
+    return "";
   };
 
   const { year, month } = props.match.params;
@@ -93,7 +93,7 @@ function CalendarGrid(props) {
 
           return (
             <div
-              className={`${style.day} ${calcColor(sum / 100)}`}
+              className={`${style.day} ${checkToday(day)}`}
               key={`spending-${day}`}
             >
               <div className={style.date}>{day}</div>

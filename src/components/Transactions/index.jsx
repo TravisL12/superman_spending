@@ -42,6 +42,7 @@ class Transactions extends Component {
   render() {
     const { transactions, isLoading } = this.state;
     const headers = [
+      "",
       "Description",
       "Amount",
       "Date",

@@ -50,20 +50,13 @@
     border-radius: 5px;
     color: #444;
 
-    &.amount50 {
-      background: rgba(138, 255, 144, 0.3);
+    &.today {
+      background: pink;
     }
-    &.amount100 {
-      background: rgba(253, 255, 138, 0.5);
-    }
-    &.amount1000 {
-      background: rgba(255, 50, 0, 0.1);
-    }
-    &.amount2000 {
-      background: rgba(255, 50, 0, 0.4);
-    }
-    &.amount3000 {
-      background: rgba(255, 50, 0, 0.6);
+
+    &.futureDay {
+      background: darkgray;
+      color: gray;
     }
   }
 }
