@@ -9,6 +9,14 @@ li {
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
+
+  table {
+    border-spacing: 0;
+
+    td {
+      text-align: right;
+    }
+  }
 }
 
 .monthName {

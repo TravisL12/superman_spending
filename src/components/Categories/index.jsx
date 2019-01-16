@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import AuthService from "../../middleware/AuthService";
 import { currency, formatDate } from "../../utilities/formatLocales";
 import style from "./Categories.module.scss";
-import { find } from "lodash";
+import { values, keys, find } from "lodash";
 
 class Categories extends Component {
   constructor() {
@@ -26,14 +26,17 @@ class Categories extends Component {
     );
   }
 
-  calculateCategoryTotal = categories => {
-    const total = Object.keys(categories).reduce((sum, id) => {
-      return (
-        sum +
-        categories[id].Transactions.reduce((sum, i) => {
-          return sum + i.amount;
-        }, 0)
-      );
+  sumTransactions = data => {
+    return data.Transactions.reduce((sum, t) => {
+      sum += t.amount;
+      return sum;
+    }, 0);
+  };
+
+  calculateCategoryTotal = category => {
+    const total = values(category.categoryData).reduce((sum, c) => {
+      sum += this.sumTransactions(c);
+      return sum;
     }, 0);
     return currency(total, {
       minimumFractionDigits: 0,
@@ -41,25 +44,11 @@ class Categories extends Component {
     });
   };
 
-  createCategoryList = (idGroup, categories) => {
-    return Object.keys(idGroup).map(id => {
-      const name = idGroup[id];
-      const category = find(categories, o => {
-        return o.id === parseInt(id);
-      });
-
-      const sum = category
-        ? category.Transactions.reduce((sum, i) => {
-            return sum + i.amount;
-          }, 0)
-        : 0;
-
-      return (
-        <li key={`group-${id}`}>
-          <span className={style.name}>{name}</span>
-          <span className={style.sum}>{currency(sum)}</span>
-        </li>
-      );
+  createCategoryRow = (categories, id) => {
+    return categories.map((cat, cidx) => {
+      const data = cat.categoryData[id];
+      const sum = data ? this.sumTransactions(data) : 0;
+      return <td key={`cat-${cidx}`}>{currency(sum)}</td>;
     });
   };
 
@@ -71,27 +60,35 @@ class Categories extends Component {
     }
 
     return (
-      <div>
-        <div className={style.categoryTransactions}>
-          {categories.map((monthData, idx) => {
-            return (
-              <div className={style.monthData} key={`month-${idx}`}>
-                <span className={style.monthName}>
-                  {formatDate(monthData.month, monthData.year)}
-                </span>
-                <ul>
-                  {this.createCategoryList(categoryIds, monthData.categoryData)}
-                  <li className={style.categoryTotal}>
-                    <span className={style.name}>Total</span>
-                    <span className={style.sum}>
-                      {this.calculateCategoryTotal(monthData.categoryData)}
-                    </span>
-                  </li>
-                </ul>
-              </div>
-            );
-          })}
-        </div>
+      <div className={style.categoryTransactions}>
+        <table>
+          <thead>
+            <tr>
+              <th>Categories</th>
+              {categories.map((c, idx) => {
+                return <th key={idx}>{formatDate(c.month, c.year)}</th>;
+              })}
+            </tr>
+          </thead>
+          <tbody>
+            {keys(categoryIds).map((id, idx) => {
+              {
+                return (
+                  <tr key={`name-${idx}`}>
+                    <td>{categoryIds[id].name}</td>
+                    {this.createCategoryRow(categories, id)}
+                  </tr>
+                );
+              }
+            })}
+            <tr>
+              <td>Total</td>
+              {categories.map((c, idx) => {
+                return <td key={idx}>{this.calculateCategoryTotal(c)}</td>;
+              })}
+            </tr>
+          </tbody>
+        </table>
       </div>
     );
   }
