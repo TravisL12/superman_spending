@@ -1,0 +1,29 @@
+$yearColor: #ffe1e1;
+$monthColor: #ff9f9f;
+
+%selector {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  background: white;
+
+  .itemContainer {
+    flex: 1;
+    color: black;
+    text-decoration: none;
+  }
+
+  .active {
+    background: $yearColor;
+  }
+
+  .singleItem {
+    flex: 1;
+    text-align: center;
+    padding: 10px 20px;
+  }
+
+  .noData {
+    background: lightgray;
+  }
+}
