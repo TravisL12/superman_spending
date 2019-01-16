@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import AuthService from "../../middleware/AuthService";
 import { currency, formatDate } from "../../utilities/formatLocales";
 import style from "./Categories.module.scss";
-import { values, keys, find } from "lodash";
+import { values, keys } from "lodash";
 
 class Categories extends Component {
   constructor() {
@@ -66,20 +66,25 @@ class Categories extends Component {
             <tr>
               <th>Categories</th>
               {categories.map((c, idx) => {
-                return <th key={idx}>{formatDate(c.month, c.year)}</th>;
+                return (
+                  <th key={idx}>
+                    {formatDate(c.month, c.year, {
+                      month: "short",
+                      year: "numeric"
+                    })}
+                  </th>
+                );
               })}
             </tr>
           </thead>
           <tbody>
             {keys(categoryIds).map((id, idx) => {
-              {
-                return (
-                  <tr key={`name-${idx}`}>
-                    <td>{categoryIds[id].name}</td>
-                    {this.createCategoryRow(categories, id)}
-                  </tr>
-                );
-              }
+              return (
+                <tr key={`name-${idx}`}>
+                  <td>{categoryIds[id].name}</td>
+                  {this.createCategoryRow(categories, id)}
+                </tr>
+              );
             })}
             <tr>
               <td>Total</td>
