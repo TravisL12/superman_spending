@@ -33,11 +33,14 @@ class TransactionImporter extends Component {
       },
       isMultiPart
     ).then(response => {
-      this.setState({
-        selectedFile: null,
-        isUploading: false,
-        uploadComplete: true
-      });
+      this.setState(
+        {
+          selectedFile: null,
+          isUploading: false,
+          uploadComplete: true
+        },
+        this.props.callback
+      );
     });
   };
 

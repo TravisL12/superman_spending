@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import AuthService from "../../middleware/AuthService";
+import TransactionImporter from "../TransactionImporter";
 import qs from "query-string";
 import style from "./Transactions.module.scss";
 import Row from "./TransactionRow";
@@ -30,7 +31,7 @@ class Transactions extends Component {
     this.setState({ searchTerm: event.target.value });
   };
 
-  fetch(params = {}) {
+  fetch(params = { page: 0 }) {
     const query = params.query ? `?${qs.stringify(params.query)}` : "";
     AuthService.fetch(`api/transactions/list/${params.page}${query}`).then(
       ({ transactions }) => {
@@ -66,6 +67,9 @@ class Transactions extends Component {
             <button onClick={this.submitSearch}>Search</button>
           </div>
           <div>{transactions.length} Rows</div>
+          <div>
+            <TransactionImporter callback={this.fetch} />
+          </div>
         </div>
 
         <table className={style.transactionTable}>

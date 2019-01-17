@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import LogoutButton from "../LogoutButton";
-import TransactionImporter from "../TransactionImporter";
 import AuthService from "../../middleware/AuthService";
-import { NavLink, Route } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import styles from "./Header.module.scss";
 
 class Header extends Component {
@@ -51,7 +50,6 @@ class Header extends Component {
         </div>
 
         <div className={styles.logout}>
-          <Route path="/transactions" component={TransactionImporter} />
           <LogoutButton {...this.props} />
         </div>
       </div>
