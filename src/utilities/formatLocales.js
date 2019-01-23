@@ -16,6 +16,11 @@ export function currency(amount, options = {}) {
   return localeAmount.toLocaleString("en-US", localeOptions);
 }
 
+function localDateString(date, options) {
+  options.timeZone = "UTC";
+  return date.toLocaleDateString("en-US", options);
+}
+
 export function formatFullDate(
   date,
   options = {
@@ -24,9 +29,7 @@ export function formatFullDate(
     day: "numeric"
   }
 ) {
-  options.timeZone = "UTC";
-  const utcDate = new Date(date);
-  return utcDate.toLocaleDateString("en-US", options);
+  return localDateString(new Date(date), options);
 }
 
 export function formatDate(
@@ -37,9 +40,7 @@ export function formatDate(
     year: "numeric"
   }
 ) {
-  options.timeZone = "UTC";
-  const date = new Date(Date.UTC(year, month));
-  return date.toLocaleDateString("en-US", options);
+  return localDateString(new Date(Date.UTC(year, month)), options);
 }
 
 export const daysOfWeek = [
