@@ -2,19 +2,46 @@ td,
 th {
   text-align: left;
   padding: 4px 8px;
-  max-width: 300px;
+  box-sizing: border-box;
 }
 
 tbody {
   tr:nth-child(odd) td {
-    background: rgba(245, 245, 245, 0.75);
+    background: rgba(245, 245, 245, 0.3);
   }
 }
 
-.columnAmount {
+.amountCol {
   text-align: right;
 }
 
+.categoryCol {
+  white-space: nowrap;
+}
+
+.descriptionCol {
+  .description {
+    color: #696969;
+    font-size: 12px;
+  }
+}
+
 .checkBox {
-  width: 100px;
+  min-width: unset;
+  width: 50px;
+
+  input[type="checkbox"] {
+    display: none;
+  }
+
+  label {
+    display: block;
+    background: yellow;
+    width: 20px;
+    height: 20px;
+  }
+
+  input:checked + label {
+    background: red;
+  }
 }

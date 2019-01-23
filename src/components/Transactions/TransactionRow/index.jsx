@@ -18,22 +18,37 @@ class TransactionRow extends PureComponent {
     return desc;
   }
 
+  displayPayeeDescription({ payee, description }) {
+    const cleanDesc = this.cleanDesc(description);
+
+    if (!payee) {
+      return cleanDesc;
+    }
+
+    return (
+      <ul>
+        <li className={style.payee}>{titleCase(payee)}</li>
+        <li className={style.description}>{cleanDesc}</li>
+      </ul>
+    );
+  }
+
   render() {
     const { transaction } = this.props;
 
     return (
       <tr>
         <td className={style.checkBox}>
-          <input type="checkbox" />
+          <input id={transaction.id} type="checkbox" />
+          <label htmlFor={transaction.id} />
         </td>
-        <td>
-          {titleCase(transaction.payee) ||
-            this.cleanDesc(transaction.description)}
+        <td className={style.descriptionCol}>
+          {this.displayPayeeDescription(transaction)}
         </td>
-        <td className={style.columnAmount}>{currency(transaction.amount)}</td>
+        <td className={style.amountCol}>{currency(transaction.amount)}</td>
         <td>{formatFullDate(new Date(transaction.date))}</td>
-        <td>{transaction.Category.name}</td>
-        <td>{transaction.Subcategory.name}</td>
+        <td className={style.categoryCol}>{transaction.Category.name}</td>
+        <td className={style.categoryCol}>{transaction.Subcategory.name}</td>
       </tr>
     );
   }

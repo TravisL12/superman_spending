@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import AuthService from "../../middleware/AuthService";
 import TransactionImporter from "../TransactionImporter";
 import qs from "query-string";
+import { isEmpty } from "lodash";
 import style from "./Transactions.module.scss";
 import Row from "./TransactionRow";
 
@@ -11,30 +12,36 @@ class Transactions extends Component {
     this.state = {
       transactions: [],
       isLoading: true,
-      searchTerm: ""
+      searchQuery: undefined
     };
   }
 
   componentWillMount() {
-    const page = this.props.match.params.page || 0;
-    this.fetch({ page });
+    const searchQuery = qs.parse(this.props.history.location.search);
+    const page = isEmpty(searchQuery) ? this.props.match.params.page || 0 : 0;
+    this.fetch({ query: searchQuery, page });
   }
 
   submitSearch = event => {
     event.preventDefault();
-    this.fetch({ query: { search: this.state.searchTerm }, page: 0 });
+    const searchQuery = { search: this.state.searchQuery };
+    this.props.history.push({
+      search: qs.stringify(searchQuery)
+    });
+    this.fetch({ query: searchQuery, page: 0 });
   };
 
-  updateSearchTerm = event => {
+  updateSearchQuery = event => {
     event.preventDefault();
-    this.setState({ searchTerm: event.target.value });
+    this.setState({ searchQuery: event.target.value });
   };
 
   fetch(params = { page: 0 }) {
     const query = params.query ? `?${qs.stringify(params.query)}` : "";
     AuthService.fetch(`api/transactions/list/${params.page}${query}`).then(
       ({ transactions }) => {
-        this.setState({ transactions, isLoading: false });
+        const searchQuery = params.query.search;
+        this.setState({ transactions, searchQuery, isLoading: false });
       }
     );
   }
@@ -50,7 +57,7 @@ class Transactions extends Component {
       "Subcategory"
     ];
 
-    if (isLoading) return null;
+    if (isLoading) return <div>Loading...</div>;
 
     return (
       <div className={style.transactionsList}>
@@ -58,8 +65,8 @@ class Transactions extends Component {
           <div className={style.search}>
             <input
               type="text"
-              value={this.state.searchTerm}
-              onChange={this.updateSearchTerm}
+              value={this.state.searchQuery}
+              onChange={this.updateSearchQuery}
             />
             <button onClick={this.submitSearch}>Search</button>
           </div>

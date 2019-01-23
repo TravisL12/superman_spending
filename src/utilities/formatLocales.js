@@ -53,9 +53,6 @@ export const daysOfWeek = [
   "Saturday"
 ];
 
-export function titleCase(string) {
-  if (string) {
-    return startCase(toLower(string));
-  }
-  return string;
+export function titleCase(string = "") {
+  return startCase(toLower(string));
 }
