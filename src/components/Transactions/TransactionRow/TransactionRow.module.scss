@@ -36,12 +36,16 @@ tbody {
 
   label {
     display: block;
-    background: yellow;
+    border: 4px solid yellow;
+    background: transparent;
+    box-sizing: border-box;
     width: 20px;
     height: 20px;
+    transition: 0.05s linear border;
   }
 
   input:checked + label {
+    border-width: 2px;
     background: red;
   }
 }
