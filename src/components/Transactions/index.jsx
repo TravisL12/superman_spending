@@ -22,8 +22,7 @@ class Transactions extends Component {
 
   submitSearch = event => {
     event.preventDefault();
-    const page = 0;
-    this.fetch({ query: { search: this.state.searchTerm }, page });
+    this.fetch({ query: { search: this.state.searchTerm }, page: 0 });
   };
 
   updateSearchTerm = event => {
