@@ -40,8 +40,12 @@ class Transactions extends Component {
     const query = params.query ? `?${qs.stringify(params.query)}` : "";
     AuthService.fetch(`api/transactions/list/${params.page}${query}`).then(
       ({ transactions }) => {
-        const searchQuery = params.query.search;
-        this.setState({ transactions, searchQuery, isLoading: false });
+        const { search } = params.query ? params.query : "";
+        this.setState({
+          transactions,
+          searchQuery: search,
+          isLoading: false
+        });
       }
     );
   }
