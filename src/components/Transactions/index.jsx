@@ -51,9 +51,7 @@ class Transactions extends Component {
       "Subcategory"
     ];
 
-    if (isLoading) {
-      return <div />;
-    }
+    if (isLoading) return null;
 
     return (
       <div className={style.transactionsList}>

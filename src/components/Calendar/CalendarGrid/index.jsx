@@ -22,11 +22,11 @@ function CalendarGrid(props) {
     today.setMinutes(0);
     today.setSeconds(0);
     today.setMilliseconds(0);
-    const checkDate = new Date(year, month - 1, day).getTime();
+    const comparableDate = new Date(year, month - 1, day).getTime();
 
-    if (checkDate === today.getTime()) {
+    if (comparableDate === today.getTime()) {
       return style.today;
-    } else if (checkDate > today) {
+    } else if (comparableDate > today) {
       return style.futureDay;
     }
 

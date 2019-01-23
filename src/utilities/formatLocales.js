@@ -24,9 +24,7 @@ export function formatFullDate(
     day: "numeric"
   }
 ) {
-  options.timeZone = "UTC";
-  const utcDate = new Date(date);
-  return utcDate.toLocaleDateString("en-US", options);
+  return formatDate(date, options);
 }
 
 export function formatDate(

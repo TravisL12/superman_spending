@@ -55,9 +55,7 @@ class Categories extends Component {
   render() {
     const { isLoading, categories, categoryIds } = this.state;
 
-    if (isLoading) {
-      return <h1>Loading...</h1>;
-    }
+    if (isLoading) return null;
 
     return (
       <div className={style.categoryTransactions}>

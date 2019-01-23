@@ -44,9 +44,7 @@ class MonthSelector extends Component {
     const monthInts = Array.from({ length: 12 }, (v, k) => k + 1);
     const { year, transactionData, categoryData, isLoading } = this.state;
 
-    if (isLoading) {
-      return <div />;
-    }
+    if (isLoading) return null;
 
     return (
       <Fragment>

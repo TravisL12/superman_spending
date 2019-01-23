@@ -21,9 +21,7 @@ class Calendar extends Component {
   render() {
     const { yearsList, isLoading } = this.state;
 
-    if (isLoading) {
-      return <div />;
-    }
+    if (isLoading) return null;
 
     return (
       <div className={"calendar"}>
