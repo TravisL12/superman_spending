@@ -48,7 +48,11 @@ class Categories extends Component {
     return categories.map((cat, cidx) => {
       const data = cat.categoryData[id];
       const sum = data ? this.sumTransactions(data) : 0;
-      return <td key={`cat-${cidx}`}>{currency(sum)}</td>;
+      return (
+        <td className={style.amountCol} key={`cat-${cidx}`}>
+          {currency(sum)}
+        </td>
+      );
     });
   };
 
@@ -79,15 +83,19 @@ class Categories extends Component {
             {keys(categoryIds).map((id, idx) => {
               return (
                 <tr key={`name-${idx}`}>
-                  <td>{categoryIds[id].name}</td>
+                  <td className={style.categoryCol}>{categoryIds[id].name}</td>
                   {this.createCategoryRow(categories, id)}
                 </tr>
               );
             })}
             <tr>
-              <td>Total</td>
+              <td />
               {categories.map((c, idx) => {
-                return <td key={idx}>{this.calculateCategoryTotal(c)}</td>;
+                return (
+                  <td className={style.totalCol} key={idx}>
+                    {this.calculateCategoryTotal(c)}
+                  </td>
+                );
               })}
             </tr>
           </tbody>
