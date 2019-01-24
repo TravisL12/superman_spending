@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import AuthService from "../../middleware/AuthService";
 import TransactionImporter from "../TransactionImporter";
 import qs from "query-string";
-import { isEmpty } from "lodash";
 import style from "./Transactions.module.scss";
 import Row from "./TransactionRow";
 
@@ -18,7 +17,7 @@ class Transactions extends Component {
 
   componentWillMount() {
     const searchQuery = qs.parse(this.props.history.location.search);
-    const page = isEmpty(searchQuery) ? this.props.match.params.page || 0 : 0;
+    const page = this.props.match.params.page || 0;
     this.fetch({ query: searchQuery, page });
   }
 
