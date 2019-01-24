@@ -20,6 +20,8 @@ tbody {
 }
 
 .descriptionCol {
+  height: 40px;
+
   .description {
     color: #696969;
     font-size: 12px;
@@ -27,7 +29,6 @@ tbody {
 }
 
 .checkBox {
-  min-width: unset;
   width: 50px;
 
   input[type="checkbox"] {
