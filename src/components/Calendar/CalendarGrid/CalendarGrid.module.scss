@@ -7,25 +7,6 @@
   background: rgba(245, 245, 245, 0.75);
 }
 
-.categories {
-  grid-area: categories;
-  font-size: 14px;
-
-  ul li {
-    display: flex;
-    padding: 3px 0;
-    .name {
-      flex: 1;
-    }
-    .sum {
-      width: 100px;
-    }
-    &.categoryTotal {
-      font-weight: bold;
-    }
-  }
-}
-
 .monthName {
   grid-area: title;
 }
@@ -36,6 +17,7 @@
   grid-template-columns: repeat(7, 1fr);
   grid-gap: 10px;
   padding: 0 10px;
+  height: 420px;
 
   .dow {
     text-align: center;
@@ -49,6 +31,8 @@
     padding: 10px;
     border-radius: 5px;
     color: #444;
+    height: 70px;
+    box-sizing: border-box;
 
     &.today {
       background: pink;

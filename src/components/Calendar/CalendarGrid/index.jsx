@@ -6,6 +6,7 @@ import {
   daysOfWeek
 } from "../../../utilities/formatLocales";
 import style from "./CalendarGrid.module.scss";
+import SideColumn from "./SideColumn";
 
 function CalendarGrid(props) {
   const buildDays = (year, month) => {
@@ -36,40 +37,12 @@ function CalendarGrid(props) {
   const { year, month } = props.match.params;
   const { transactionData } = props;
   const categoryData = orderBy(values(props.categoryData), ["sum"], ["desc"]);
-  const categoryTotal = categoryData.reduce((sum, data) => {
-    sum += data.sum;
-    return sum;
-  }, 0);
+  const payeeData = orderBy(values(transactionData.payees), ["sum"], ["desc"]);
   const days = buildDays(year, month);
 
   return (
     <div className={style.calendar}>
-      <div className={style.categories}>
-        <ul>
-          {categoryData.map((data, idx) => {
-            return (
-              <li key={idx}>
-                <span className={style.name}>{data.name}</span>
-                <span className={style.sum}>
-                  {currency(data.sum, {
-                    minimumFractionDigits: 0,
-                    rounded: true
-                  })}
-                </span>
-              </li>
-            );
-          })}
-          <li className={style.categoryTotal}>
-            <span className={style.name}>Total</span>
-            <span className={style.sum}>
-              {currency(categoryTotal, {
-                minimumFractionDigits: 0,
-                rounded: true
-              })}
-            </span>
-          </li>
-        </ul>
-      </div>
+      <SideColumn categoryData={categoryData} payeeData={payeeData} />
 
       <div className={style.monthName}>
         <h1>{formatDate(month - 1, year)}</h1>
@@ -87,7 +60,7 @@ function CalendarGrid(props) {
         {days.map((day, idx) => {
           if (!day) return <div key={`week-pad-${idx}`} />;
 
-          const spentDay = transactionData[day];
+          const spentDay = transactionData.days[day];
           const count = spentDay ? spentDay.length : 0;
           const sum = spentDay ? sumBy(spentDay, "amount") : 0;
 
