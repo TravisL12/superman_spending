@@ -7,6 +7,7 @@ import {
 } from "../../../utilities/formatLocales";
 import style from "./CalendarGrid.module.scss";
 import SideColumn from "./SideColumn";
+import { Link } from "react-router-dom";
 
 function CalendarGrid(props) {
   const buildDays = (year, month) => {
@@ -15,6 +16,18 @@ function CalendarGrid(props) {
     const days = Array.from({ length: totalDays }, (v, k) => k + 1);
     const dayPadding = new Array(startDow).fill(null);
     return dayPadding.concat(days);
+  };
+
+  const getNextMonth = () => {
+    const nextMonth = +month + 1 > 12 ? 1 : +month + 1;
+    const nextYear = +month + 1 > 12 ? +year + 1 : +year;
+    return `/calendar/${nextYear}/${nextMonth}`;
+  };
+
+  const getPrevMonth = () => {
+    const nextMonth = +month - 1 === 0 ? 12 : +month - 1;
+    const nextYear = +month - 1 === 0 ? +year - 1 : +year;
+    return `/calendar/${nextYear}/${nextMonth}`;
   };
 
   const checkToday = day => {
@@ -46,6 +59,14 @@ function CalendarGrid(props) {
 
       <div className={style.monthName}>
         <h1>{formatDate(month - 1, year)}</h1>
+        <div className={style.changeMonth}>
+          <Link to={getPrevMonth()}>
+            <button>Previous</button>
+          </Link>
+          <Link to={getNextMonth()}>
+            <button>Next</button>
+          </Link>
+        </div>
       </div>
 
       <div className={style.monthGrid}>
