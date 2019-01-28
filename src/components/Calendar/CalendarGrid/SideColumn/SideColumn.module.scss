@@ -10,9 +10,12 @@ ul li {
   .name {
     flex: 1;
   }
-  .sum {
-    width: 100px;
+  .sum,
+  .average {
+    width: 80px;
+    text-align: right;
   }
+
   &.categoryTotal {
     font-weight: bold;
   }

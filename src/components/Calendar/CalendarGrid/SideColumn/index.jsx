@@ -59,7 +59,12 @@ class SideColumn extends Component {
         {payeeData.map((data, idx) => {
           return (
             <li key={idx}>
-              <span className={style.name}>{titleCase(data.name)}</span>
+              <span className={style.name}>
+                {titleCase(data.name)} - {data.count}
+              </span>
+              <span className={style.average}>
+                {currency(data.sum / data.count)}
+              </span>
               <span className={style.sum}>{currency(data.sum)}</span>
             </li>
           );
