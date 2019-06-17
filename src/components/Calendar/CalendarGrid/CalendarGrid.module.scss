@@ -1,8 +1,8 @@
 .calendar {
   display: grid;
   grid-template-areas:
-    "... title"
-    "categories grid";
+    "... title ..."
+    "categories grid day";
   padding: 0 10px 50px;
   background: rgba(245, 245, 245, 0.75);
 }
@@ -18,7 +18,7 @@
 .monthGrid {
   grid-area: grid;
   display: grid;
-  grid-template-columns: repeat(7, 135px);
+  grid-template-columns: repeat(7, 120px);
   grid-template-rows: 20px repeat(6, 70px);
   grid-gap: 10px;
 
@@ -46,6 +46,13 @@
       color: gray;
     }
   }
+}
+
+.dayGrid {
+  grid-area: day;
+  height: 100px;
+  width: 100px;
+  background: red;
 }
 
 .date {

@@ -105,6 +105,7 @@ function CalendarGrid(props) {
           );
         })}
       </div>
+      <div className={style.dayGrid}>hey</div>
     </div>
   );
 }
