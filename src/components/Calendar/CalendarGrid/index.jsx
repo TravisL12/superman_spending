@@ -10,27 +10,39 @@ import SideColumn from "./SideColumn";
 import { Link } from "react-router-dom";
 
 function CalendarGrid(props) {
-  const buildDays = (year, month) => {
+  const {
+    match: {
+      params: { year, month }
+    },
+    transactionData
+  } = props;
+  const categoryData = orderBy(values(props.categoryData), ["sum"], ["desc"]);
+  const payeeData = orderBy(values(transactionData.payees), ["sum"], ["desc"]);
+  const days = buildDays(year, month);
+
+  function buildDays(year, month) {
     const totalDays = new Date(year, month, 0).getDate();
     const startDow = new Date(year, month - 1, 1).getDay(); // not sure I totally understand the month-1 but whatever
     const days = Array.from({ length: totalDays }, (v, k) => k + 1);
     const dayPadding = new Array(startDow).fill(null);
     return dayPadding.concat(days);
-  };
+  }
 
-  const getNextMonth = () => {
-    const nextMonth = +month + 1 > 12 ? 1 : +month + 1;
-    const nextYear = +month + 1 > 12 ? +year + 1 : +year;
+  function getNextMonth() {
+    const isNextYear = +month + 1 > 12;
+    const nextMonth = isNextYear ? 1 : +month + 1;
+    const nextYear = isNextYear ? +year + 1 : +year;
     return `/calendar/${nextYear}/${nextMonth}`;
-  };
+  }
 
-  const getPrevMonth = () => {
-    const nextMonth = +month - 1 === 0 ? 12 : +month - 1;
-    const nextYear = +month - 1 === 0 ? +year - 1 : +year;
+  function getPrevMonth() {
+    const isPrevYear = +month - 1 === 0;
+    const nextMonth = isPrevYear ? 12 : +month - 1;
+    const nextYear = isPrevYear ? +year - 1 : +year;
     return `/calendar/${nextYear}/${nextMonth}`;
-  };
+  }
 
-  const checkToday = day => {
+  function checkToday(day) {
     const today = new Date();
     today.setHours(0); // this is janky af
     today.setMinutes(0);
@@ -45,13 +57,7 @@ function CalendarGrid(props) {
     }
 
     return "";
-  };
-
-  const { year, month } = props.match.params;
-  const { transactionData } = props;
-  const categoryData = orderBy(values(props.categoryData), ["sum"], ["desc"]);
-  const payeeData = orderBy(values(transactionData.payees), ["sum"], ["desc"]);
-  const days = buildDays(year, month);
+  }
 
   return (
     <div className={style.calendar}>

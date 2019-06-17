@@ -6,20 +6,19 @@ import styles from "../Selector.module.scss";
 import { Route, NavLink } from "react-router-dom";
 
 class MonthSelector extends Component {
-  constructor(props) {
-    super();
-    this.state = {
-      year: props.match.params.year,
-      transactionData: null,
-      categoryData: null,
-      isLoading: true
-    };
-  }
+  state = {
+    year: this.props.match.params.year,
+    transactionData: null,
+    categoryData: null,
+    isLoading: true
+  };
 
   componentWillReceiveProps(newProps) {
     const { year } = newProps.match.params;
     if (year !== this.state.year) {
-      this.fetch(year);
+      this.setState({ isLoading: true }, () => {
+        this.fetch(year);
+      });
     }
   }
 
