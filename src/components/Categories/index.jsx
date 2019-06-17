@@ -5,22 +5,28 @@ import style from "./Categories.module.scss";
 import { values, keys } from "lodash";
 
 class Categories extends Component {
-  constructor() {
-    super();
-    this.state = {
-      categories: null,
-      categoryIds: null,
-      isLoading: true
-    };
-  }
+  state = {
+    categories: null,
+    categoryIds: null,
+    isLoading: true,
+    checkedCategories: {}
+  };
 
   componentWillMount() {
     AuthService.fetch("api/categories/compare").then(
       ({ categories, category_ids }) => {
+        const checkedCategories = Object.keys(category_ids).reduce(
+          (result, id) => {
+            result[id] = true;
+            return result;
+          },
+          {}
+        );
         this.setState({
           categories,
           categoryIds: category_ids,
-          isLoading: false
+          isLoading: false,
+          checkedCategories
         });
       }
     );
@@ -35,9 +41,13 @@ class Categories extends Component {
 
   calculateCategoryTotal = category => {
     const total = values(category.categoryData).reduce((sum, c) => {
-      sum += this.sumTransactions(c);
+      if (this.state.checkedCategories[c.id]) {
+        sum += this.sumTransactions(c);
+      }
+
       return sum;
     }, 0);
+
     return currency(total, {
       minimumFractionDigits: 0,
       rounded: true
@@ -46,8 +56,12 @@ class Categories extends Component {
 
   createCategoryRow = (categories, id) => {
     return categories.map((cat, cidx) => {
-      const data = cat.categoryData[id];
-      const sum = data ? this.sumTransactions(data) : 0;
+      let sum = 0;
+      if (this.state.checkedCategories[id]) {
+        const data = cat.categoryData[id];
+        sum = data ? this.sumTransactions(data) : 0;
+      }
+
       return (
         <td className={style.amountCol} key={`cat-${cidx}`}>
           {currency(sum)}
@@ -56,8 +70,24 @@ class Categories extends Component {
     });
   };
 
+  handleCategoryCheckboxChange = event => {
+    const { target } = event;
+    const checkboxVal = this.state.checkedCategories[target.value];
+    const checkedCategories = this.state.checkedCategories;
+    checkedCategories[target.value] = !checkboxVal;
+
+    this.setState({
+      checkedCategories
+    });
+  };
+
   render() {
-    const { isLoading, categories, categoryIds } = this.state;
+    const {
+      isLoading,
+      categories,
+      categoryIds,
+      checkedCategories
+    } = this.state;
 
     if (isLoading) return null;
 
@@ -83,7 +113,18 @@ class Categories extends Component {
             {keys(categoryIds).map((id, idx) => {
               return (
                 <tr key={`name-${idx}`}>
-                  <td className={style.categoryCol}>{categoryIds[id].name}</td>
+                  <td className={style.categoryCol}>
+                    <input
+                      type="checkbox"
+                      id={`category-${id}`}
+                      value={id}
+                      checked={checkedCategories[id]}
+                      onChange={this.handleCategoryCheckboxChange}
+                    />
+                    <label htmlFor={`category-${id}`}>
+                      {categoryIds[id].name}
+                    </label>
+                  </td>
                   {this.createCategoryRow(categories, id)}
                 </tr>
               );
