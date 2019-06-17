@@ -1,3 +1,5 @@
+$gap: 10px;
+
 .calendar {
   display: grid;
   grid-template-areas:
@@ -5,6 +7,7 @@
     "categories grid day";
   padding: 0 10px 50px;
   background: rgba(245, 245, 245, 0.75);
+  grid-gap: $gap;
 }
 
 .monthName {
@@ -18,9 +21,10 @@
 .monthGrid {
   grid-area: grid;
   display: grid;
-  grid-template-columns: repeat(7, 120px);
+  flex: 1;
+  grid-template-columns: repeat(7, 100px);
   grid-template-rows: 20px repeat(6, 70px);
-  grid-gap: 10px;
+  grid-gap: $gap;
 
   .dow {
     text-align: center;
@@ -31,7 +35,7 @@
     align-items: center;
     justify-content: space-around;
     background: white;
-    padding: 10px;
+    padding: $gap;
     border-radius: 5px;
     color: #444;
     height: 70px;
@@ -51,14 +55,14 @@
 .dayGrid {
   grid-area: day;
   height: 100px;
-  width: 100px;
-  background: red;
+  width: 300px;
+  font-size: 12px;
 }
 
 .date {
   top: 0;
   left: 0;
-  font-size: 45px;
+  font-size: 30px;
 }
 
 .total,

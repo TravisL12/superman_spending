@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { sumBy, values, orderBy } from "lodash";
 import {
   currency,
@@ -10,6 +10,8 @@ import SideColumn from "./SideColumn";
 import { Link } from "react-router-dom";
 
 function CalendarGrid(props) {
+  const [selectedDay, setSelectedDay] = useState([]);
+
   const {
     match: {
       params: { year, month }
@@ -59,6 +61,14 @@ function CalendarGrid(props) {
     return "";
   }
 
+  function showDay(amount) {
+    setSelectedDay(amount);
+  }
+
+  function closeDay() {
+    setSelectedDay([]);
+  }
+
   return (
     <div className={style.calendar}>
       <SideColumn categoryData={categoryData} payeeData={payeeData} />
@@ -93,19 +103,34 @@ function CalendarGrid(props) {
 
           return (
             <div
+              onClick={() => showDay(spentDay)}
               className={`${style.day} ${checkToday(day)}`}
               key={`spending-${day}`}
             >
               <div className={style.date}>{day}</div>
               <div>
                 <div className={style.total}>{currency(sum)}</div>
-                <div className={style.count}>Count: {count}</div>
+                <div className={style.count}>{count}</div>
               </div>
             </div>
           );
         })}
       </div>
-      <div className={style.dayGrid}>hey</div>
+      <div className={style.dayGrid}>
+        {selectedDay.length > 0 && (
+          <div className={style.closeDay} onClick={closeDay}>
+            X
+          </div>
+        )}
+        <ul>
+          {selectedDay.map(({ amount, description }, idx) => (
+            <li key={idx}>
+              <span>{description}</span>
+              <span>{currency(amount)}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }
