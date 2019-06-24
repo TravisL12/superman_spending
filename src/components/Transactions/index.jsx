@@ -72,16 +72,19 @@ class Transactions extends Component {
 
     return (
       <div className={style.transactionsList}>
+        {/* combine this search stuff into a component with styling */}
         <div className={style.pageInfo}>
-          <div className={style.search}>
-            <input
-              type="text"
-              value={this.state.searchQuery}
-              onChange={this.updateSearchQuery}
-            />
-            <button onClick={this.submitSearch}>Search</button>
+          <div className={style.searchContainer}>
+            <div>{transactions.length} Rows</div>
+            <div className={style.search}>
+              <input
+                type="text"
+                value={this.state.searchQuery}
+                onChange={this.updateSearchQuery}
+              />
+              <button onClick={this.submitSearch}>Search</button>
+            </div>
           </div>
-          <div>{transactions.length} Rows</div>
           <div>
             <TransactionImporter callback={this.fetch} />
           </div>

@@ -16,3 +16,15 @@
 .columnAmount {
   text-align: right;
 }
+
+.searchContainer {
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(124, 240, 255);
+  margin-right: 10px;
+  padding: 10px;
+}
+
+.search {
+  padding-top: 10px;
+}

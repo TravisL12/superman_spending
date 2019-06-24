@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import style from "./TransactionsInputs.module.scss";
 import AuthService from "../../middleware/AuthService";
 
 class TransactionImporter extends Component {
@@ -46,7 +47,7 @@ class TransactionImporter extends Component {
     const uploadComplete = this.state.uploadComplete && <p>Upload Complete!</p>;
 
     return (
-      <div>
+      <div className={style.importerContainer}>
         <input type="file" onChange={this.selectFile} />
         <button
           disabled={this.state.isUploading || !this.state.selectedFile}
