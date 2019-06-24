@@ -92,6 +92,7 @@ function CalendarGrid(props) {
         </div>
       </div>
 
+      {/* Calendar of Days */}
       <div className={style.monthGrid}>
         {daysOfWeek.map(dow => {
           return (
@@ -125,6 +126,8 @@ function CalendarGrid(props) {
           );
         })}
       </div>
+
+      {/* Day Breakdown */}
       <div className={style.dayGrid}>
         {selectedDayTransactions.length > 0 && (
           <div className={style.closeDay} onClick={closeDay}>
