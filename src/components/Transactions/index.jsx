@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import AuthService from "../../middleware/AuthService";
 import TransactionImporter from "../TransactionImporter";
+import { isEmpty } from "lodash";
 import qs from "query-string";
 import style from "./Transactions.module.scss";
 import Row from "./TransactionRow";
@@ -9,37 +10,47 @@ class Transactions extends Component {
   state = {
     transactions: [],
     isLoading: true,
-    searchQuery: undefined
+    searchQuery: "",
+    searchCollection: []
   };
 
   componentWillMount() {
     const searchQuery = qs.parse(this.props.history.location.search);
     const page = this.props.match.params.page || 0;
-    this.fetch({ query: searchQuery, page });
+
+    const query =
+      typeof searchQuery.search === "string"
+        ? { search: [searchQuery.search] }
+        : searchQuery;
+
+    this.fetch({ query, page });
   }
 
   submitSearch = event => {
     event.preventDefault();
-    const searchQuery = { search: this.state.searchQuery };
+    const searches = this.state.searchCollection;
+    searches.push(this.state.searchQuery);
+    const searchCollection = { search: searches };
+
     this.props.history.push({
-      search: qs.stringify(searchQuery)
+      search: qs.stringify(searchCollection)
     });
-    this.fetch({ query: searchQuery, page: 0 });
+    this.fetch({ query: searchCollection, page: 0 });
   };
 
   updateSearchQuery = event => {
-    event.preventDefault();
     this.setState({ searchQuery: event.target.value });
   };
 
   fetch(params = { page: 0 }) {
-    const query = params.query ? `?${qs.stringify(params.query)}` : "";
+    const query = params.query ? `?${qs.stringify(params.query)}` : null;
     AuthService.fetch(`api/transactions/list/${params.page}${query}`).then(
       ({ transactions }) => {
-        const { search } = params.query ? params.query : "";
+        const search = !isEmpty(params.query) ? params.query.search : [];
+
         this.setState({
           transactions,
-          searchQuery: search,
+          searchCollection: search,
           isLoading: false
         });
       }
