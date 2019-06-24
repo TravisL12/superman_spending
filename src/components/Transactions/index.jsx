@@ -6,14 +6,11 @@ import style from "./Transactions.module.scss";
 import Row from "./TransactionRow";
 
 class Transactions extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      transactions: [],
-      isLoading: true,
-      searchQuery: undefined
-    };
-  }
+  state = {
+    transactions: [],
+    isLoading: true,
+    searchQuery: undefined
+  };
 
   componentWillMount() {
     const searchQuery = qs.parse(this.props.history.location.search);

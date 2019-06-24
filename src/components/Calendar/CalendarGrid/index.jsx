@@ -59,11 +59,11 @@ function CalendarGrid(props) {
       return style.futureDay;
     }
 
-    return "";
+    return null;
   }
 
   function checkSelected(day) {
-    return day === selectedDay ? style.selectedDay : "";
+    return day === selectedDay ? style.selectedDay : null;
   }
 
   function showDay(day) {
@@ -111,15 +111,15 @@ function CalendarGrid(props) {
           return (
             <div
               onClick={() => showDay(day)}
-              className={`${style.day} ${checkToday(day)} ${checkSelected(
-                day
-              )}`}
+              className={[style.day, checkToday(day), checkSelected(day)].join(
+                " "
+              )}
               key={`spending-${day}`}
             >
               <div className={style.date}>{day}</div>
               <div>
                 <div className={style.total}>{currency(sum)}</div>
-                <div className={style.count}>{count}</div>
+                <div className={style.count}>Count {count}</div>
               </div>
             </div>
           );

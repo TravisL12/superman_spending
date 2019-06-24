@@ -2,14 +2,11 @@ import React, { Component } from "react";
 import AuthService from "../../middleware/AuthService";
 
 class TransactionImporter extends Component {
-  constructor() {
-    super();
-    this.state = {
-      selectedFile: null,
-      isUploading: false,
-      uploadComplete: false
-    };
-  }
+  state = {
+    selectedFile: null,
+    isUploading: false,
+    uploadComplete: false
+  };
 
   selectFile = event => {
     this.setState({

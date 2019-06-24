@@ -32,14 +32,30 @@ $gap: 10px;
 
   .day {
     display: flex;
-    align-items: center;
-    justify-content: space-around;
+    flex-direction: column;
     background: white;
-    padding: $gap;
+    padding: 6px;
     border-radius: 5px;
     color: #444;
     height: 70px;
     box-sizing: border-box;
+
+    .date {
+      top: 0;
+      left: 0;
+      font-weight: 700;
+      font-size: 20px;
+    }
+
+    .total,
+    .count {
+      font-size: 16px;
+      text-align: right;
+    }
+
+    .count {
+      font-size: 12px;
+    }
 
     &.today {
       background: pink;
@@ -71,15 +87,4 @@ $gap: 10px;
     text-align: right;
     width: 75px;
   }
-}
-
-.date {
-  top: 0;
-  left: 0;
-  font-size: 30px;
-}
-
-.total,
-.count {
-  font-size: 14px;
 }

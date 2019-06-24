@@ -3,12 +3,9 @@ import AuthService from "./AuthService";
 
 export default function withAuth(AuthComponent) {
   return class AuthWrapped extends Component {
-    constructor() {
-      super();
-      this.state = {
-        user: null
-      };
-    }
+    state = {
+      user: null
+    };
 
     componentWillMount() {
       if (!AuthService.loggedIn()) {

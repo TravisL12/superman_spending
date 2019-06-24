@@ -3,12 +3,9 @@ import { titleCase, currency } from "../../../../utilities/formatLocales";
 import style from "./SideColumn.module.scss";
 
 class SideColumn extends Component {
-  constructor(props) {
-    super();
-    this.state = {
-      currentColumn: "categories"
-    };
-  }
+  state = {
+    currentColumn: "categories"
+  };
 
   showCategories = () => {
     this.setState({ currentColumn: "categories" });
@@ -56,16 +53,14 @@ class SideColumn extends Component {
 
     const payeeList = (
       <ul>
-        {payeeData.map((data, idx) => {
+        {payeeData.map(({ name, count, sum }, idx) => {
           return (
             <li key={idx}>
               <span className={style.name}>
-                {titleCase(data.name)} - {data.count}
+                {titleCase(name)} - {count}
               </span>
-              <span className={style.average}>
-                {currency(data.sum / data.count)}
-              </span>
-              <span className={style.sum}>{currency(data.sum)}</span>
+              <span className={style.average}>{currency(sum / count)}</span>
+              <span className={style.sum}>{currency(sum)}</span>
             </li>
           );
         })}

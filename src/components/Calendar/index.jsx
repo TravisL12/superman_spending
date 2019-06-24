@@ -4,13 +4,10 @@ import YearSelector from "./YearSelector";
 import { Route } from "react-router-dom";
 
 class Calendar extends Component {
-  constructor() {
-    super();
-    this.state = {
-      yearsList: [],
-      isLoading: true
-    };
-  }
+  state = {
+    yearsList: [],
+    isLoading: true
+  };
 
   componentWillMount() {
     AuthService.fetch("api/user/profile").then(({ years }) => {

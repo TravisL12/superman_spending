@@ -3,12 +3,6 @@ import AuthService from "../../middleware/AuthService";
 import styles from "./Login.module.scss";
 
 class Login extends Component {
-  constructor() {
-    super();
-    this.handleChange = this.handleChange.bind(this);
-    this.handleFormSubmit = this.handleFormSubmit.bind(this);
-  }
-
   componentWillMount() {
     if (AuthService.loggedIn()) this.props.history.replace("/calendar");
   }
@@ -39,13 +33,13 @@ class Login extends Component {
     );
   }
 
-  handleChange(e) {
+  handleChange = e => {
     this.setState({
       [e.target.name]: e.target.value
     });
-  }
+  };
 
-  handleFormSubmit(e) {
+  handleFormSubmit = e => {
     e.preventDefault();
 
     AuthService.login(this.state.email, this.state.password)
@@ -55,7 +49,7 @@ class Login extends Component {
       .catch(err => {
         alert(err);
       });
-  }
+  };
 }
 
 export default Login;
