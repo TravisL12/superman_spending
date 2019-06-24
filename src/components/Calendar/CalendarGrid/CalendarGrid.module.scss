@@ -74,9 +74,10 @@ $gap: 10px;
 
 .dayGrid {
   grid-area: day;
-  height: 100px;
+  height: 550px;
   width: 300px;
   font-size: 12px;
+  overflow: scroll;
 }
 
 .dayDescription {

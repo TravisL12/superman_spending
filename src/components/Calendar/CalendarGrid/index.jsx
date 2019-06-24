@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { sumBy, values, orderBy } from "lodash";
+import { sortBy, sumBy, values, orderBy } from "lodash";
 import {
   currency,
   formatDate,
@@ -135,12 +135,14 @@ function CalendarGrid(props) {
           </div>
         )}
         <ul>
-          {selectedDayTransactions.map(({ amount, description }, idx) => (
-            <li className={style.dayDescription} key={idx}>
-              <span>{cleanDescription(description)}</span>
-              <span>{currency(amount)}</span>
-            </li>
-          ))}
+          {sortBy(selectedDayTransactions, "amount")
+            .reverse()
+            .map(({ amount, description }, idx) => (
+              <li className={style.dayDescription} key={idx}>
+                <span>{cleanDescription(description)}</span>
+                <span>{currency(amount)}</span>
+              </li>
+            ))}
         </ul>
       </div>
     </div>
