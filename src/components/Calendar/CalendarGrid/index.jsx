@@ -3,14 +3,15 @@ import { sumBy, values, orderBy } from "lodash";
 import {
   currency,
   formatDate,
-  daysOfWeek
+  daysOfWeek,
+  cleanDescription
 } from "../../../utilities/formatLocales";
 import style from "./CalendarGrid.module.scss";
 import SideColumn from "./SideColumn";
 import { Link } from "react-router-dom";
 
 function CalendarGrid(props) {
-  const [selectedDay, setSelectedDay] = useState([]);
+  const [selectedDay, setSelectedDay] = useState(false);
 
   const {
     match: {
@@ -61,13 +62,19 @@ function CalendarGrid(props) {
     return "";
   }
 
-  function showDay(amount) {
-    setSelectedDay(amount);
+  function checkSelected(day) {
+    return day === selectedDay ? style.selectedDay : "";
+  }
+
+  function showDay(day) {
+    setSelectedDay(day);
   }
 
   function closeDay() {
-    setSelectedDay([]);
+    setSelectedDay(false);
   }
+
+  const selectedDayTransactions = transactionData.days[selectedDay] || [];
 
   return (
     <div className={style.calendar}>
@@ -103,8 +110,10 @@ function CalendarGrid(props) {
 
           return (
             <div
-              onClick={() => showDay(spentDay)}
-              className={`${style.day} ${checkToday(day)}`}
+              onClick={() => showDay(day)}
+              className={`${style.day} ${checkToday(day)} ${checkSelected(
+                day
+              )}`}
               key={`spending-${day}`}
             >
               <div className={style.date}>{day}</div>
@@ -117,15 +126,15 @@ function CalendarGrid(props) {
         })}
       </div>
       <div className={style.dayGrid}>
-        {selectedDay.length > 0 && (
+        {selectedDayTransactions.length > 0 && (
           <div className={style.closeDay} onClick={closeDay}>
             X
           </div>
         )}
         <ul>
-          {selectedDay.map(({ amount, description }, idx) => (
-            <li key={idx}>
-              <span>{description}</span>
+          {selectedDayTransactions.map(({ amount, description }, idx) => (
+            <li className={style.dayDescription} key={idx}>
+              <span>{cleanDescription(description)}</span>
               <span>{currency(amount)}</span>
             </li>
           ))}

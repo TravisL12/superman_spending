@@ -56,3 +56,9 @@ export const daysOfWeek = [
 export function titleCase(string = "") {
   return startCase(toLower(string));
 }
+
+export function cleanDescription(description) {
+  return description
+    .replace(/\w{14,}.+/, "")
+    .replace(/^Purchase authorized on /i, "");
+}

@@ -2,7 +2,8 @@ import React, { PureComponent } from "react";
 import {
   currency,
   formatFullDate,
-  titleCase
+  titleCase,
+  cleanDescription
 } from "../../../utilities/formatLocales";
 import style from "./TransactionRow.module.scss";
 
@@ -10,16 +11,8 @@ import style from "./TransactionRow.module.scss";
 // each transaction data row. The use of helper functions (currency, titleCase...)
 // was causing the rendering of text input updates to be very slow
 class TransactionRow extends PureComponent {
-  cleanDesc(description) {
-    const desc = description
-      .replace(/\w{14,}.+/, "")
-      .replace(/^Purchase authorized on /i, "");
-
-    return desc;
-  }
-
   displayPayeeDescription({ payee, description }) {
-    const cleanDesc = this.cleanDesc(description);
+    const cleanDesc = cleanDescription(description);
 
     if (!payee) {
       return cleanDesc;
