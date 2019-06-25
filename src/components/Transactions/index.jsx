@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import AuthService from "../../middleware/AuthService";
-import TransactionImporter from "../TransactionImporter";
+import TransactionImporter from "./TransactionImporter";
+import TransactionSearch from "./TransactionSearch";
 import { isEmpty } from "lodash";
 import qs from "query-string";
 import style from "./Transactions.module.scss";
@@ -11,7 +12,7 @@ class Transactions extends Component {
     transactions: [],
     isLoading: true,
     searchQuery: "",
-    searchCollection: []
+    currentSearches: []
   };
 
   componentWillMount() {
@@ -26,23 +27,38 @@ class Transactions extends Component {
     this.fetch({ query, page });
   }
 
-  submitSearch = event => {
-    event.preventDefault();
-    const searches = this.state.searchCollection;
-    searches.push(this.state.searchQuery);
-    const searchCollection = { search: searches };
+  removeSearch = value => {
+    const searches = this.state.currentSearches;
+    const idx = searches.indexOf(value);
+    searches.splice(idx, 1);
 
-    this.props.history.push({
-      search: qs.stringify(searchCollection)
-    });
-    this.fetch({ query: searchCollection, page: 0 });
+    this.updateQuery(searches);
   };
 
-  updateSearchQuery = event => {
+  submitSearch = event => {
+    event.preventDefault();
+    const searches = this.state.currentSearches;
+
+    if (searches.includes(this.state.searchQuery)) {
+      return;
+    }
+
+    searches.push(this.state.searchQuery);
+    this.updateQuery(searches);
+  };
+
+  updateQuery = searches => {
+    this.props.history.push({
+      search: qs.stringify({ search: searches })
+    });
+    this.fetch({ query: { search: searches }, page: 0 });
+  };
+
+  updateSearchString = event => {
     this.setState({ searchQuery: event.target.value });
   };
 
-  fetch(params = { page: 0 }) {
+  fetch = (params = { page: 0 }) => {
     const query = params.query ? `?${qs.stringify(params.query)}` : null;
     AuthService.fetch(`api/transactions/list/${params.page}${query}`).then(
       ({ transactions }) => {
@@ -50,15 +66,20 @@ class Transactions extends Component {
 
         this.setState({
           transactions,
-          searchCollection: search,
+          currentSearches: search,
           isLoading: false
         });
       }
     );
-  }
+  };
 
   render() {
-    const { transactions, isLoading } = this.state;
+    const {
+      transactions,
+      searchQuery,
+      currentSearches,
+      isLoading
+    } = this.state;
     const headers = [
       "",
       "Description",
@@ -72,22 +93,16 @@ class Transactions extends Component {
 
     return (
       <div className={style.transactionsList}>
-        {/* combine this search stuff into a component with styling */}
-        <div className={style.pageInfo}>
-          <div className={style.searchContainer}>
-            <div>{transactions.length} Rows</div>
-            <div className={style.search}>
-              <input
-                type="text"
-                value={this.state.searchQuery}
-                onChange={this.updateSearchQuery}
-              />
-              <button onClick={this.submitSearch}>Search</button>
-            </div>
-          </div>
-          <div>
-            <TransactionImporter callback={this.fetch} />
-          </div>
+        <div className={style.searchImport}>
+          <TransactionSearch
+            transactions={transactions}
+            searchQuery={searchQuery}
+            updateSearch={this.updateSearchString}
+            submitSearch={this.submitSearch}
+            searches={currentSearches}
+            removeSearch={this.removeSearch}
+          />
+          <TransactionImporter callback={this.fetch} />
         </div>
 
         <table className={style.transactionTable}>

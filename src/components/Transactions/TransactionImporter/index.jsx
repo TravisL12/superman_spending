@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import style from "./TransactionsInputs.module.scss";
-import AuthService from "../../middleware/AuthService";
+import AuthService from "../../../middleware/AuthService";
 
 class TransactionImporter extends Component {
   state = {
