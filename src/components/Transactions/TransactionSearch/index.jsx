@@ -18,11 +18,12 @@ function TransactionSearch(props) {
         <input type="text" value={searchQuery} onChange={updateSearch} />
         <button onClick={submitSearch}>Search</button>
       </div>
-      <ul>
+      <ul className={style.searchHistory}>
         {searches.map((search, idx) => {
           return (
             <li key={idx}>
-              {search} <button onClick={() => removeSearch(search)}>X</button>
+              <p>{search}</p>{" "}
+              <button onClick={() => removeSearch(search)}>X</button>
             </li>
           );
         })}

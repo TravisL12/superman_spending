@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import TransactionImporter from "components/Transactions/TransactionImporter";
 import LogoutButton from "components/LogoutButton";
 import AuthService from "middleware/AuthService";
 import { NavLink } from "react-router-dom";
@@ -50,6 +51,7 @@ class Header extends Component {
         </div>
 
         <div className={styles.logout}>
+          <TransactionImporter callback={this.fetch} />
           <LogoutButton {...this.props} />
         </div>
       </div>

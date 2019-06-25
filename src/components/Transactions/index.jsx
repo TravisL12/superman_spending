@@ -3,14 +3,15 @@ import { isEmpty } from "lodash";
 import qs from "query-string";
 
 import AuthService from "middleware/AuthService";
-import TransactionImporter from "./TransactionImporter";
-import TransactionSearch from "./TransactionSearch";
-import style from "./Transactions.module.scss";
+import Search from "./TransactionSearch";
+import Totals from "./TransactionTotals";
 import Row from "./TransactionRow";
+import style from "./Transactions.module.scss";
 
 class Transactions extends Component {
   state = {
     transactions: [],
+    payees: [],
     isLoading: true,
     searchQuery: "",
     currentSearches: []
@@ -65,12 +66,14 @@ class Transactions extends Component {
       : "";
 
     AuthService.fetch(`api/transactions/list/${params.page}${query}`).then(
-      ({ transactions }) => {
+      ({ transactions, payees }) => {
         this.setState(
           {
             transactions,
+            payees,
             currentSearches: searches,
-            isLoading: false
+            isLoading: false,
+            searchQuery: ""
           },
           this.updateLocation
         );
@@ -83,8 +86,10 @@ class Transactions extends Component {
       transactions,
       searchQuery,
       currentSearches,
-      isLoading
+      isLoading,
+      payees
     } = this.state;
+
     const headers = [
       "",
       "Description",
@@ -99,7 +104,7 @@ class Transactions extends Component {
     return (
       <div className={style.transactionsList}>
         <div className={style.searchImport}>
-          <TransactionSearch
+          <Search
             transactions={transactions}
             searchQuery={searchQuery}
             updateSearch={this.updateSearchString}
@@ -107,7 +112,9 @@ class Transactions extends Component {
             searches={currentSearches}
             removeSearch={this.removeSearch}
           />
-          <TransactionImporter callback={this.fetch} />
+        </div>
+        <div className={style.searchTotals}>
+          {!isEmpty(payees) && <Totals payees={payees} />}
         </div>
 
         <table className={style.transactionTable}>
