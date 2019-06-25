@@ -20,12 +20,12 @@ class Transactions extends Component {
     const searchQuery = qs.parse(this.props.history.location.search);
     const page = this.props.match.params.page || 0;
 
-    const query =
+    const searches =
       typeof searchQuery.search === "string"
-        ? { search: [searchQuery.search] }
-        : searchQuery;
+        ? [searchQuery.search]
+        : searchQuery.search;
 
-    this.fetch({ query, page });
+    this.fetch(searches, { page });
   }
 
   removeSearch = value => {
@@ -33,43 +33,47 @@ class Transactions extends Component {
     const idx = searches.indexOf(value);
     searches.splice(idx, 1);
 
-    this.updateQuery(searches);
+    this.fetch(searches);
   };
 
   submitSearch = event => {
     event.preventDefault();
-    const searches = this.state.currentSearches;
+    const { currentSearches, searchQuery } = this.state;
 
-    if (searches.includes(this.state.searchQuery)) {
+    if (currentSearches.includes(searchQuery)) {
       return;
     }
 
-    searches.push(this.state.searchQuery);
-    this.updateQuery(searches);
+    const searches = currentSearches;
+    searches.push(searchQuery);
+    this.fetch(searches);
   };
 
-  updateQuery = searches => {
+  updateSearchString = ({ target: { value } }) => {
+    this.setState({ searchQuery: value });
+  };
+
+  updateLocation = () => {
     this.props.history.push({
-      search: qs.stringify({ search: searches })
+      search: qs.stringify({ search: this.state.currentSearches })
     });
-    this.fetch({ query: { search: searches }, page: 0 });
   };
 
-  updateSearchString = event => {
-    this.setState({ searchQuery: event.target.value });
-  };
+  fetch = (searches = [], params = { page: 0 }) => {
+    const query = !isEmpty(searches)
+      ? `?${qs.stringify({ search: searches })}`
+      : "";
 
-  fetch = (params = { page: 0 }) => {
-    const query = params.query ? `?${qs.stringify(params.query)}` : null;
     AuthService.fetch(`api/transactions/list/${params.page}${query}`).then(
       ({ transactions }) => {
-        const search = !isEmpty(params.query) ? params.query.search : [];
-
-        this.setState({
-          transactions,
-          currentSearches: search,
-          isLoading: false
-        });
+        this.setState(
+          {
+            transactions,
+            currentSearches: searches,
+            isLoading: false
+          },
+          this.updateLocation
+        );
       }
     );
   };
