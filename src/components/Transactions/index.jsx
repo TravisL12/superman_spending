@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import AuthService from "../../middleware/AuthService";
-import TransactionImporter from "./TransactionImporter";
-import TransactionSearch from "./TransactionSearch";
 import { isEmpty } from "lodash";
 import qs from "query-string";
+
+import AuthService from "middleware/AuthService";
+import TransactionImporter from "./TransactionImporter";
+import TransactionSearch from "./TransactionSearch";
 import style from "./Transactions.module.scss";
 import Row from "./TransactionRow";
 

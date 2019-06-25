@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import AuthService from "../../middleware/AuthService";
+import AuthService from "middleware/AuthService";
 import styles from "./Login.module.scss";
 
 class Login extends Component {

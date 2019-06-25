@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import AuthService from "../../middleware/AuthService";
+import AuthService from "middleware/AuthService";
 import YearSelector from "./YearSelector";
 import { Route } from "react-router-dom";
 

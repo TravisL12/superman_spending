@@ -1,15 +1,15 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter, Route, withRouter } from "react-router-dom";
-import withAuth from "./middleware/withAuth";
+import withAuth from "middleware/withAuth";
 
-import Header from "./components/Header/";
-import Login from "./components/Login/";
-import Calendar from "./components/Calendar/";
-import Categories from "./components/Categories/";
-import Transactions from "./components/Transactions/";
+import Header from "components/Header/";
+import Login from "components/Login/";
+import Calendar from "components/Calendar/";
+import Categories from "components/Categories/";
+import Transactions from "components/Transactions/";
 
-import styles from "./index.module.scss";
+import styles from "index.module.scss";
 
 const WrappedHeader = withRouter(Header);
 

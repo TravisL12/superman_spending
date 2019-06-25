@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import LogoutButton from "../LogoutButton";
-import AuthService from "../../middleware/AuthService";
+import LogoutButton from "components/LogoutButton";
+import AuthService from "middleware/AuthService";
 import { NavLink } from "react-router-dom";
 import styles from "./Header.module.scss";
 

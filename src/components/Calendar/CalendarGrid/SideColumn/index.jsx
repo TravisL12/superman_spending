@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { titleCase, currency } from "../../../../utilities/formatLocales";
+import { titleCase, currency } from "utilities/formatLocales";
 import style from "./SideColumn.module.scss";
 
 class SideColumn extends Component {

@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import { sortBy, sumBy, values, orderBy } from "lodash";
+import { Link } from "react-router-dom";
+
 import {
   currency,
   formatDate,
   daysOfWeek,
   cleanDescription
-} from "../../../utilities/formatLocales";
+} from "utilities/formatLocales";
 import style from "./CalendarGrid.module.scss";
 import SideColumn from "./SideColumn";
-import { Link } from "react-router-dom";
 
 function CalendarGrid(props) {
   const [selectedDay, setSelectedDay] = useState(false);

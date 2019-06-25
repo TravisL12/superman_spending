@@ -4,7 +4,7 @@ import {
   formatFullDate,
   titleCase,
   cleanDescription
-} from "../../../utilities/formatLocales";
+} from "utilities/formatLocales";
 import style from "./TransactionRow.module.scss";
 
 // Used PureComponent to avoid unneccessary re-rendering of
@@ -19,10 +19,10 @@ class TransactionRow extends PureComponent {
     }
 
     return (
-      <ul>
-        <li className={style.payee}>{titleCase(payee)}</li>
-        <li className={style.description}>{cleanDesc}</li>
-      </ul>
+      <>
+        <div className={style.payee}>{titleCase(payee)}</div>
+        <div className={style.description}>{cleanDesc}</div>
+      </>
     );
   }
 

@@ -1,7 +1,8 @@
 import React, { Fragment } from "react";
-import styles from "../Selector.module.scss";
-import MonthSelector from "../MonthSelector";
 import { Route, NavLink } from "react-router-dom";
+
+import styles from "components/Calendar/Selector.module.scss";
+import MonthSelector from "components/Calendar/MonthSelector";
 
 function YearSelector(props) {
   const { years } = props;

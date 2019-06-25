@@ -1,7 +1,9 @@
+@import "global.module.scss";
+
 .searchContainer {
   display: flex;
   flex-direction: column;
-  background-color: rgb(124, 240, 255);
+  background-color: $accentBlue;
   margin-right: 10px;
   padding: 10px;
 }
@@ -13,7 +15,7 @@
 .importerContainer {
   display: flex;
   flex-direction: column;
-  background-color: rgb(124, 240, 255);
+  background-color: $accentBlue;
   margin-right: 10px;
   padding: 10px;
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import style from "../TransactionImporter/TransactionsInputs.module.scss";
+import style from "components/Transactions/TransactionImporter/TransactionsInputs.module.scss";
 
 function TransactionSearch(props) {
   const {
