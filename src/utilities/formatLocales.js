@@ -62,3 +62,17 @@ export function cleanDescription(description) {
     .replace(/\w{14,}.+/, "")
     .replace(/^Purchase authorized on /i, "");
 }
+
+export function getToday() {
+  const date = new Date();
+  const day = date.getDate();
+  const month = date.getMonth();
+  const year = date.getFullYear();
+
+  return {
+    date: new Date(year, month, day),
+    day,
+    month,
+    year
+  };
+}

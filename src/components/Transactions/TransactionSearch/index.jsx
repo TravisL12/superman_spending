@@ -1,9 +1,12 @@
 import React from "react";
 import style from "components/Transactions/TransactionsInputs.module.scss";
 
-function TransactionSearch(props) {
-  const { transactions, searchQuery, updateSearch, submitSearch } = props;
-
+function TransactionSearch({
+  transactions,
+  searchQuery,
+  updateSearch,
+  submitSearch
+}) {
   return (
     <div className={style.searchContainer}>
       <div>{transactions.length} Rows</div>

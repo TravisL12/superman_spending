@@ -36,6 +36,7 @@
   td {
     $cellWidth: 75px;
     padding: 2px 4px;
+    text-align: right;
 
     &.removeBtn {
       width: 25px;
@@ -47,7 +48,6 @@
     }
     &.sum {
       width: $cellWidth;
-      text-align: right;
     }
     &.count {
       width: $cellWidth;
@@ -55,7 +55,6 @@
     }
     &.average {
       width: $cellWidth;
-      text-align: right;
     }
   }
 }
