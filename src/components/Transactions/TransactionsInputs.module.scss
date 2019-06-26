@@ -27,4 +27,35 @@
 
 .totalsTable {
   border-spacing: 0;
+
+  .totalLabel {
+    font-weight: 800;
+  }
+
+  th,
+  td {
+    $cellWidth: 75px;
+    padding: 2px 4px;
+
+    &.removeBtn {
+      width: 25px;
+    }
+
+    &.name {
+      width: $cellWidth;
+      text-align: left;
+    }
+    &.sum {
+      width: $cellWidth;
+      text-align: right;
+    }
+    &.count {
+      width: $cellWidth;
+      text-align: center;
+    }
+    &.average {
+      width: $cellWidth;
+      text-align: right;
+    }
+  }
 }

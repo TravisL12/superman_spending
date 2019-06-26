@@ -16,32 +16,34 @@ function TransactionTotals({ searchResults, removeSearch }) {
     <table className={style.totalsTable}>
       <thead>
         <tr>
-          <th />
-          <th>Name</th>
-          <th>Sum</th>
-          <th>Count</th>
-          <th>Average</th>
+          <th className={style.removeBtn} />
+          <th className={style.name}>Name</th>
+          <th className={style.sum}>Sum</th>
+          <th className={style.count}>Count</th>
+          <th className={style.average}>Average</th>
         </tr>
       </thead>
       <tbody>
         {searchResults.map(({ name, sum, count }, idx) => {
           return (
             <tr key={idx}>
-              <td>
+              <td className={style.removeBtn}>
                 <button onClick={() => removeSearch(name)}>X</button>
               </td>
-              <td>{name}</td>
-              <td>{currency(sum)}</td>
-              <td>{count}</td>
-              <td>{count && currency(sum / count)}</td>
+              <td className={style.name}>{name}</td>
+              <td className={style.sum}>{currency(sum)}</td>
+              <td className={style.count}>{count}</td>
+              <td className={style.average}>
+                {count && currency(sum / count)}
+              </td>
             </tr>
           );
         })}
         <tr>
           <td />
-          <td>Totals</td>
-          <td>{currency(totals.sum)}</td>
-          <td>{totals.count}</td>
+          <td className={style.totalLabel}>Totals</td>
+          <td className={style.sum}>{currency(totals.sum)}</td>
+          <td className={style.count}>{totals.count}</td>
         </tr>
       </tbody>
     </table>
