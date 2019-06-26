@@ -1,7 +1,16 @@
 import React from "react";
 import { currency } from "utilities/formatLocales";
 
-function TransactionTotals({ payees }) {
+function TransactionTotals({ searchResults }) {
+  const totals = searchResults.reduce(
+    (result, payee) => {
+      result.sum += payee.sum;
+      result.count += payee.count;
+      return result;
+    },
+    { sum: 0, count: 0 }
+  );
+
   return (
     <table>
       <thead>
@@ -13,7 +22,7 @@ function TransactionTotals({ payees }) {
         </tr>
       </thead>
       <tbody>
-        {payees.map(({ name, sum, count }, idx) => {
+        {searchResults.map(({ name, sum, count }, idx) => {
           return (
             <tr key={idx}>
               <td>{name}</td>
@@ -23,6 +32,11 @@ function TransactionTotals({ payees }) {
             </tr>
           );
         })}
+        <tr>
+          <td>Totals</td>
+          <td>{currency(totals.sum)}</td>
+          <td>{totals.count}</td>
+        </tr>
       </tbody>
     </table>
   );

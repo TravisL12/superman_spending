@@ -11,7 +11,7 @@ import style from "./Transactions.module.scss";
 class Transactions extends Component {
   state = {
     transactions: [],
-    payees: [],
+    searchResults: [],
     isLoading: true,
     searchQuery: "",
     currentSearches: []
@@ -66,11 +66,11 @@ class Transactions extends Component {
       : "";
 
     AuthService.fetch(`api/transactions/list/${params.page}${query}`).then(
-      ({ transactions, payees }) => {
+      ({ transactions, searchResults }) => {
         this.setState(
           {
             transactions,
-            payees,
+            searchResults,
             currentSearches: searches,
             isLoading: false,
             searchQuery: ""
@@ -87,7 +87,7 @@ class Transactions extends Component {
       searchQuery,
       currentSearches,
       isLoading,
-      payees
+      searchResults
     } = this.state;
 
     const headers = [
@@ -114,7 +114,7 @@ class Transactions extends Component {
           />
         </div>
         <div className={style.searchTotals}>
-          {!isEmpty(payees) && <Totals payees={payees} />}
+          {!isEmpty(searchResults) && <Totals searchResults={searchResults} />}
         </div>
 
         <table className={style.transactionTable}>

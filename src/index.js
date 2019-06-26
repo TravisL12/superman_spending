@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import { BrowserRouter, Route, withRouter } from "react-router-dom";
 import withAuth from "middleware/withAuth";
 
+// Absolute paths set in .env file (NODE_PATH=src)
 import Header from "components/Header/";
 import Login from "components/Login/";
 import Calendar from "components/Calendar/";
