@@ -7,6 +7,24 @@ class Login extends Component {
     if (AuthService.loggedIn()) this.props.history.replace("/calendar");
   }
 
+  handleChange = e => {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  };
+
+  handleFormSubmit = e => {
+    e.preventDefault();
+
+    AuthService.login(this.state.email, this.state.password)
+      .then(res => {
+        this.props.history.replace("/calendar");
+      })
+      .catch(err => {
+        alert(err);
+      });
+  };
+
   render() {
     return (
       <div className={styles.center}>
@@ -32,24 +50,6 @@ class Login extends Component {
       </div>
     );
   }
-
-  handleChange = e => {
-    this.setState({
-      [e.target.name]: e.target.value
-    });
-  };
-
-  handleFormSubmit = e => {
-    e.preventDefault();
-
-    AuthService.login(this.state.email, this.state.password)
-      .then(res => {
-        this.props.history.replace("/calendar");
-      })
-      .catch(err => {
-        alert(err);
-      });
-  };
 }
 
 export default Login;

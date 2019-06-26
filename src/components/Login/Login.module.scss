@@ -1,7 +1,6 @@
-@import url("https://fonts.googleapis.com/css?family=Raleway");
+@import "global.module.scss";
 
 .center {
-  font-family: "Raleway", sans-serif;
   height: 100vh;
   display: flex;
   justify-content: center;
@@ -9,7 +8,7 @@
 }
 
 .card {
-  background-color: #fff;
+  background-color: $white;
   padding: 0.8rem;
 }
 
@@ -25,7 +24,6 @@
 }
 
 .formItem {
-  font-family: "Raleway", sans-serif;
   padding: 5px;
   margin-bottom: 2rem;
   height: 30px;
@@ -34,10 +32,9 @@
 }
 
 .formSubmit {
-  font-family: "Raleway", sans-serif;
   height: 35px;
-  color: #fff;
-  background-color: #1abc9c;
+  color: $white;
+  background-color: $loginBtn;
   border: none;
   letter-spacing: 0.2rem;
   transition: 0.3s opacity ease;

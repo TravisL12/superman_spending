@@ -28,7 +28,7 @@ function TransactionTotals({ searchResults }) {
               <td>{name}</td>
               <td>{currency(sum)}</td>
               <td>{count}</td>
-              <td>{currency(sum / count)}</td>
+              <td>{count && currency(sum / count)}</td>
             </tr>
           );
         })}
