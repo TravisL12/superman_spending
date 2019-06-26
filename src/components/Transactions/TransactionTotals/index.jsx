@@ -13,9 +13,9 @@ function TransactionTotals({ payees }) {
         </tr>
       </thead>
       <tbody>
-        {payees.map(({ name, sum, count }) => {
+        {payees.map(({ name, sum, count }, idx) => {
           return (
-            <tr>
+            <tr key={idx}>
               <td>{name}</td>
               <td>{currency(sum)}</td>
               <td>{count}</td>
