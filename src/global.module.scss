@@ -3,6 +3,7 @@ $monthColor: #ff9f9f;
 $white: #ffffff;
 $blue: #ccf1fc;
 $accentBlue: lightcyan;
+$accentRowBlue: #ddf2f9;
 $loginBtn: #1abc9c;
 $black: #696969;
 
@@ -36,6 +37,12 @@ p {
   margin: 0;
 }
 
+tbody {
+  tr:nth-child(odd) td {
+    background: $accentRowBlue;
+  }
+}
+
 %selector {
   display: flex;
   justify-content: space-around;
@@ -60,5 +67,30 @@ p {
 
   .noData {
     background: lightgray;
+  }
+}
+
+%checkboxLabel {
+  input[type="checkbox"] {
+    display: none;
+  }
+
+  label {
+    display: block;
+    border: 1px solid $black;
+    background: transparent;
+    box-sizing: border-box;
+    width: 20px;
+    height: 20px;
+    transition: 0.1s linear background;
+    cursor: pointer;
+
+    &:hover {
+      background: $accentBlue;
+    }
+  }
+
+  input:checked + label {
+    background: red;
   }
 }

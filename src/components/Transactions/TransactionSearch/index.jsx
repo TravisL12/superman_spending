@@ -1,33 +1,16 @@
 import React from "react";
-import style from "components/Transactions/TransactionImporter/TransactionsInputs.module.scss";
+import style from "components/Transactions/TransactionsInputs.module.scss";
 
 function TransactionSearch(props) {
-  const {
-    transactions,
-    searchQuery,
-    updateSearch,
-    searches,
-    submitSearch,
-    removeSearch
-  } = props;
+  const { transactions, searchQuery, updateSearch, submitSearch } = props;
 
   return (
     <div className={style.searchContainer}>
       <div>{transactions.length} Rows</div>
-      <div className={style.search}>
+      <form className={style.search} onSubmit={submitSearch}>
         <input type="text" value={searchQuery} onChange={updateSearch} />
-        <button onClick={submitSearch}>Search</button>
-      </div>
-      <ul className={style.searchHistory}>
-        {searches.map((search, idx) => {
-          return (
-            <li key={idx}>
-              <p>{search}</p>{" "}
-              <button onClick={() => removeSearch(search)}>X</button>
-            </li>
-          );
-        })}
-      </ul>
+        <input type="submit" value={"Search"} />
+      </form>
     </div>
   );
 }

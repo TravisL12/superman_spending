@@ -1,7 +1,8 @@
 import React from "react";
+import style from "components/Transactions/TransactionsInputs.module.scss";
 import { currency } from "utilities/formatLocales";
 
-function TransactionTotals({ searchResults }) {
+function TransactionTotals({ searchResults, removeSearch }) {
   const totals = searchResults.reduce(
     (result, payee) => {
       result.sum += payee.sum;
@@ -12,9 +13,10 @@ function TransactionTotals({ searchResults }) {
   );
 
   return (
-    <table>
+    <table className={style.totalsTable}>
       <thead>
         <tr>
+          <th />
           <th>Name</th>
           <th>Sum</th>
           <th>Count</th>
@@ -25,6 +27,9 @@ function TransactionTotals({ searchResults }) {
         {searchResults.map(({ name, sum, count }, idx) => {
           return (
             <tr key={idx}>
+              <td>
+                <button onClick={() => removeSearch(name)}>X</button>
+              </td>
               <td>{name}</td>
               <td>{currency(sum)}</td>
               <td>{count}</td>
@@ -33,6 +38,7 @@ function TransactionTotals({ searchResults }) {
           );
         })}
         <tr>
+          <td />
           <td>Totals</td>
           <td>{currency(totals.sum)}</td>
           <td>{totals.count}</td>

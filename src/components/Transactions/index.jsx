@@ -10,11 +10,11 @@ import style from "./Transactions.module.scss";
 
 class Transactions extends Component {
   state = {
-    transactions: [],
-    searchResults: [],
+    currentSearches: [],
     isLoading: true,
     searchQuery: "",
-    currentSearches: []
+    searchResults: [],
+    transactions: []
   };
 
   componentWillMount() {
@@ -69,11 +69,11 @@ class Transactions extends Component {
       ({ transactions, searchResults }) => {
         this.setState(
           {
-            transactions,
-            searchResults,
             currentSearches: searches,
             isLoading: false,
-            searchQuery: ""
+            searchQuery: "",
+            searchResults,
+            transactions
           },
           this.updateLocation
         );
@@ -82,13 +82,7 @@ class Transactions extends Component {
   };
 
   render() {
-    const {
-      transactions,
-      searchQuery,
-      currentSearches,
-      isLoading,
-      searchResults
-    } = this.state;
+    const { isLoading, searchQuery, searchResults, transactions } = this.state;
 
     const headers = [
       "",
@@ -109,12 +103,15 @@ class Transactions extends Component {
             searchQuery={searchQuery}
             updateSearch={this.updateSearchString}
             submitSearch={this.submitSearch}
-            searches={currentSearches}
-            removeSearch={this.removeSearch}
           />
         </div>
         <div className={style.searchTotals}>
-          {!isEmpty(searchResults) && <Totals searchResults={searchResults} />}
+          {!isEmpty(searchResults) && (
+            <Totals
+              removeSearch={this.removeSearch}
+              searchResults={searchResults}
+            />
+          )}
         </div>
 
         <table className={style.transactionTable}>

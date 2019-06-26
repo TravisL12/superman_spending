@@ -1,19 +1,5 @@
 @import "global.module.scss";
 
-td,
-th {
-  text-align: left;
-  padding: 4px 8px;
-  box-sizing: border-box;
-  height: 40px;
-}
-
-tbody {
-  tr:nth-child(odd) td {
-    background: #ddf2f9;
-  }
-}
-
 .amountCol {
   text-align: right;
 }
@@ -32,21 +18,5 @@ tbody {
 .checkBox {
   width: 50px;
 
-  input[type="checkbox"] {
-    display: none;
-  }
-
-  label {
-    display: block;
-    border: 1px solid $black;
-    background: transparent;
-    box-sizing: border-box;
-    width: 20px;
-    height: 20px;
-    transition: 0.07s linear background;
-  }
-
-  input:checked + label {
-    background: red;
-  }
+  @extend %checkboxLabel;
 }

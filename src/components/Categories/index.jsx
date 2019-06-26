@@ -96,6 +96,7 @@ class Categories extends Component {
         <table>
           <thead>
             <tr>
+              <th />
               <th>Categories</th>
               {categories.map((c, idx) => {
                 return (
@@ -113,7 +114,7 @@ class Categories extends Component {
             {keys(categoryIds).map((id, idx) => {
               return (
                 <tr key={`name-${idx}`}>
-                  <td className={style.categoryCol}>
+                  <td>
                     <input
                       type="checkbox"
                       id={`category-${id}`}
@@ -121,10 +122,9 @@ class Categories extends Component {
                       checked={checkedCategories[id]}
                       onChange={this.handleCategoryCheckboxChange}
                     />
-                    <label htmlFor={`category-${id}`}>
-                      {categoryIds[id].name}
-                    </label>
+                    <label htmlFor={`category-${id}`} />
                   </td>
+                  <td className={style.categoryCol}>{categoryIds[id].name}</td>
                   {this.createCategoryRow(categories, id)}
                 </tr>
               );
