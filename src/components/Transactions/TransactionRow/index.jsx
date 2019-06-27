@@ -4,7 +4,7 @@ import {
   formatFullDate,
   titleCase,
   cleanDescription
-} from "utilities/formatLocales";
+} from "utilities/date-format-utils";
 import style from "./TransactionRow.module.scss";
 
 // Used PureComponent to avoid unneccessary re-rendering of

@@ -1,4 +1,4 @@
-import { startCase, toLower } from "lodash";
+import { range, startCase, toLower } from "lodash";
 
 export function currency(amount, options = {}) {
   const localeOptions = Object.assign(
@@ -75,4 +75,12 @@ export function getToday() {
     month,
     year
   };
+}
+
+export function dateRange(months) {
+  const { year, month } = getToday();
+  return range(months).map(i => {
+    const newDate = new Date(year, month - i);
+    return { year: newDate.getFullYear(), month: newDate.getMonth() };
+  });
 }

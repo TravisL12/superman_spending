@@ -1,7 +1,7 @@
 import React from "react";
-import { sumBy, range } from "lodash";
+import { sumBy } from "lodash";
 import style from "components/Transactions/TransactionsInputs.module.scss";
-import { formatDate, getToday, currency } from "utilities/formatLocales";
+import { dateRange, formatDate, currency } from "utilities/date-format-utils";
 
 function TransactionTotals({ searchResults, removeSearch }) {
   const totals = searchResults.reduce(
@@ -13,8 +13,7 @@ function TransactionTotals({ searchResults, removeSearch }) {
     { sum: 0, count: 0 }
   );
 
-  const today = getToday();
-  console.log(today);
+  const viewDates = dateRange(5);
 
   return (
     <table className={style.totalsTable}>
@@ -24,9 +23,9 @@ function TransactionTotals({ searchResults, removeSearch }) {
           <th className={style.name}>Name</th>
           <th className={style.sum}>Sum</th>
           <th className={style.count}>Count</th>
-          {range(today.month + 1, 0).map(i => (
-            <th key={i}>
-              {formatDate(i, today.year, {
+          {viewDates.map(({ year, month }, idx) => (
+            <th key={idx}>
+              {formatDate(month, year, {
                 month: "short",
                 year: "numeric"
               })}
@@ -44,9 +43,9 @@ function TransactionTotals({ searchResults, removeSearch }) {
               <td className={style.name}>{name}</td>
               <td className={style.sum}>{currency(sum)}</td>
               <td className={style.count}>{count}</td>
-              {range(today.month + 1, 0).map(i => (
-                <td key={i}>
-                  {currency(sumBy(grouped[today.year][i], "amount"))}
+              {viewDates.map(({ year, month }, idx) => (
+                <td key={idx}>
+                  {currency(sumBy(grouped[year][month + 1], "amount"))}
                 </td>
               ))}
             </tr>

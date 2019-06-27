@@ -6,8 +6,9 @@ import {
   currency,
   formatDate,
   daysOfWeek,
+  getToday,
   cleanDescription
-} from "utilities/formatLocales";
+} from "utilities/date-format-utils";
 import style from "./CalendarGrid.module.scss";
 import SideColumn from "./SideColumn";
 
@@ -47,16 +48,12 @@ function CalendarGrid(props) {
   }
 
   function checkToday(day) {
-    const today = new Date();
-    today.setHours(0); // this is janky af
-    today.setMinutes(0);
-    today.setSeconds(0);
-    today.setMilliseconds(0);
+    const today = getToday();
     const comparableDate = new Date(year, month - 1, day).getTime();
 
-    if (comparableDate === today.getTime()) {
+    if (comparableDate === today.date.getTime()) {
       return style.today;
-    } else if (comparableDate > today) {
+    } else if (comparableDate > today.date) {
       return style.futureDay;
     }
 

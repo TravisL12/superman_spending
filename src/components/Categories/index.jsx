@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import AuthService from "middleware/AuthService";
-import { currency, formatDate } from "utilities/formatLocales";
+import { currency, formatDate } from "utilities/date-format-utils";
 import style from "./Categories.module.scss";
 import { values, keys } from "lodash";
 
