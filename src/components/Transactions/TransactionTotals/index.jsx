@@ -1,5 +1,5 @@
 import React from "react";
-import { sumBy } from "lodash";
+import { isEmpty, sumBy } from "lodash";
 import style from "components/Transactions/TransactionsInputs.module.scss";
 import { dateRange, formatDate, currency } from "utilities/date-format-utils";
 
@@ -13,7 +13,7 @@ function TransactionTotals({ searchResults, removeSearch }) {
     { sum: 0, count: 0 }
   );
 
-  const viewDates = dateRange(5);
+  const viewDates = dateRange(10);
 
   return (
     <table className={style.totalsTable}>
@@ -43,11 +43,15 @@ function TransactionTotals({ searchResults, removeSearch }) {
               <td className={style.name}>{name}</td>
               <td className={style.sum}>{currency(sum)}</td>
               <td className={style.count}>{count}</td>
-              {viewDates.map(({ year, month }, idx) => (
-                <td key={idx}>
-                  {currency(sumBy(grouped[year][month + 1], "amount"))}
-                </td>
-              ))}
+              {!isEmpty(grouped) &&
+                viewDates.map(
+                  ({ year, month }, idx) =>
+                    grouped[year] && (
+                      <td key={idx}>
+                        {currency(sumBy(grouped[year][month + 1], "amount"))}
+                      </td>
+                    )
+                )}
             </tr>
           );
         })}
