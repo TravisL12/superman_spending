@@ -84,15 +84,6 @@ class Transactions extends Component {
   render() {
     const { isLoading, searchQuery, searchResults, transactions } = this.state;
 
-    const headers = [
-      "",
-      "Description",
-      "Amount",
-      "Date",
-      "Category",
-      "Subcategory"
-    ];
-
     if (isLoading) return <div>Loading...</div>;
 
     return (
@@ -117,13 +108,12 @@ class Transactions extends Component {
         <table className={style.transactionTable}>
           <thead>
             <tr>
-              {headers.map(header => {
-                return (
-                  <th className={style[`column${header}`]} key={header}>
-                    {header}
-                  </th>
-                );
-              })}
+              <th />
+              <th>Description</th>
+              <th>Amount</th>
+              <th>Date</th>
+              <th>Category</th>
+              <th>Subcategory</th>
             </tr>
           </thead>
           <tbody>
