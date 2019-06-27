@@ -131,6 +131,7 @@ class Categories extends Component {
             })}
             <tr>
               <td />
+              <td />
               {categories.map((c, idx) => {
                 return (
                   <td className={style.totalCol} key={idx}>

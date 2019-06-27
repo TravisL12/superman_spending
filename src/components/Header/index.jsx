@@ -35,7 +35,7 @@ class Header extends Component {
     return (
       <div className={styles.container}>
         <div className={styles.greeting}>
-          <h1>Superman!</h1>
+          <h1>CASH CAL</h1>
         </div>
 
         <div className={styles.navLinks}>
