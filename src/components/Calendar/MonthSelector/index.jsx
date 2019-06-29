@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 import AuthService from "middleware/AuthService";
 import { formatDate } from "utilities/date-format-utils";
 import CalendarGrid from "components/Calendar/CalendarGrid";
-import styles from "components/Calendar/Selector.module.scss";
+import style from "components/Calendar/Calendar.module.scss";
 import { Route, NavLink } from "react-router-dom";
 
 class MonthSelector extends Component {
@@ -47,7 +47,7 @@ class MonthSelector extends Component {
 
     return (
       <Fragment>
-        <div className={styles.months}>
+        <div className={style.months}>
           {monthInts.map(monthInt => {
             const formattedDate = formatDate(monthInt - 1, year, {
               month: "long"
@@ -56,8 +56,8 @@ class MonthSelector extends Component {
 
             if (!transactionData[monthInt]) {
               return (
-                <div className={styles.itemContainer} key={key}>
-                  <div className={`${styles.singleItem} ${styles.noData}`}>
+                <div className={style.itemContainer} key={key}>
+                  <div className={`${style.singleItem} ${style.noData}`}>
                     {formattedDate}
                   </div>
                 </div>
@@ -66,26 +66,28 @@ class MonthSelector extends Component {
 
             return (
               <NavLink
-                className={styles.itemContainer}
-                activeClassName={styles.active}
+                className={style.itemContainer}
+                activeClassName={style.active}
                 to={`/calendar/${year}/${monthInt}`}
                 key={key}
               >
-                <div className={styles.singleItem}>{formattedDate}</div>
+                <div className={style.singleItem}>{formattedDate}</div>
               </NavLink>
             );
           })}
         </div>
+
         <Route
           exact
           path={`${this.props.match.path}/:month`}
           render={props => {
-            const propMonth = props.match.params.month;
+            const { month } = props.match.params;
+
             return (
               <CalendarGrid
                 {...props}
-                transactionData={transactionData[propMonth]}
-                categoryData={categoryData[propMonth]}
+                transactionData={transactionData[month]}
+                categoryData={categoryData[month]}
               />
             );
           }}

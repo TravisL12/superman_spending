@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Route, NavLink } from "react-router-dom";
 
 import AuthService from "middleware/AuthService";
-import style from "components/Calendar/Selector.module.scss";
+import style from "components/Calendar/Calendar.module.scss";
 import MonthSelector from "components/Calendar/MonthSelector";
 import Loading from "components/Loading";
 
@@ -25,7 +25,7 @@ class Calendar extends Component {
     if (isLoading) return <Loading />;
 
     return (
-      <div>
+      <>
         <div className={style.years}>
           {years.map(year => {
             return (
@@ -43,7 +43,7 @@ class Calendar extends Component {
           })}
         </div>
         <Route path={`${match.path}/:year`} component={MonthSelector} />
-      </div>
+      </>
     );
   }
 }
