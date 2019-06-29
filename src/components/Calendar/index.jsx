@@ -25,7 +25,7 @@ class Calendar extends Component {
     if (isLoading) return <Loading />;
 
     return (
-      <>
+      <div className={style.calendar}>
         <div className={style.years}>
           {years.map(year => {
             return (
@@ -35,15 +35,13 @@ class Calendar extends Component {
                 to={`/calendar/${year}`}
                 key={year}
               >
-                <div className={style.singleItem} key={year}>
-                  {year}
-                </div>
+                {year}
               </NavLink>
             );
           })}
         </div>
         <Route path={`${match.path}/:year`} component={MonthSelector} />
-      </>
+      </div>
     );
   }
 }

@@ -1,7 +1,7 @@
 @import "global.module.scss";
 $gap: 10px;
 
-.calendar {
+.calendarGrid {
   display: grid;
   grid-template-areas:
     "... title ..."

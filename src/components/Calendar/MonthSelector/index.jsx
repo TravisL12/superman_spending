@@ -2,6 +2,7 @@ import React, { Component, Fragment } from "react";
 import AuthService from "middleware/AuthService";
 import { formatDate } from "utilities/date-format-utils";
 import CalendarGrid from "components/Calendar/CalendarGrid";
+import Loading from "components/Loading";
 import style from "components/Calendar/Calendar.module.scss";
 import { Route, NavLink } from "react-router-dom";
 
@@ -15,6 +16,7 @@ class MonthSelector extends Component {
 
   componentWillReceiveProps(newProps) {
     const { year } = newProps.match.params;
+
     if (year !== this.state.year) {
       this.setState({ isLoading: true }, () => {
         this.fetch(year);
@@ -23,7 +25,9 @@ class MonthSelector extends Component {
   }
 
   componentWillMount() {
-    this.fetch(this.state.year);
+    if (this.state.year) {
+      this.fetch(this.state.year);
+    }
   }
 
   fetch(year) {
@@ -43,7 +47,7 @@ class MonthSelector extends Component {
     const monthInts = Array.from({ length: 12 }, (v, k) => k + 1);
     const { year, transactionData, categoryData, isLoading } = this.state;
 
-    if (isLoading) return null;
+    if (isLoading) return <Loading />;
 
     return (
       <Fragment>
@@ -56,10 +60,11 @@ class MonthSelector extends Component {
 
             if (!transactionData[monthInt]) {
               return (
-                <div className={style.itemContainer} key={key}>
-                  <div className={`${style.singleItem} ${style.noData}`}>
-                    {formattedDate}
-                  </div>
+                <div
+                  className={`${style.itemContainer} ${style.noData}`}
+                  key={key}
+                >
+                  {formattedDate}
                 </div>
               );
             }
@@ -71,7 +76,7 @@ class MonthSelector extends Component {
                 to={`/calendar/${year}/${monthInt}`}
                 key={key}
               >
-                <div className={style.singleItem}>{formattedDate}</div>
+                {formattedDate}
               </NavLink>
             );
           })}

@@ -2,24 +2,19 @@
 
 %selector {
   display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
   background: white;
 
   .itemContainer {
-    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     color: black;
     text-decoration: none;
+    padding: 10px 0;
   }
 
   .active {
     background: $yearColor;
-  }
-
-  .singleItem {
-    flex: 1;
-    text-align: center;
-    padding: 10px 20px;
   }
 
   .noData {

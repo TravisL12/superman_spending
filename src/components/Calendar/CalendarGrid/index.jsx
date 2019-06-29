@@ -75,7 +75,7 @@ function CalendarGrid(props) {
   const selectedDayTransactions = transactionData.days[selectedDay] || [];
 
   return (
-    <div className={style.calendar}>
+    <div className={style.calendarGrid}>
       <SideColumn categoryData={categoryData} payeeData={payeeData} />
 
       <div className={style.monthName}>
