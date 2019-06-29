@@ -48,12 +48,17 @@ class MonthSelector extends Component {
     return (
       <Fragment>
         <div className={styles.months}>
-          {monthInts.map(num => {
-            if (!transactionData[num]) {
+          {monthInts.map(monthInt => {
+            const formattedDate = formatDate(monthInt - 1, year, {
+              month: "long"
+            });
+            const key = `month-${monthInt}`;
+
+            if (!transactionData[monthInt]) {
               return (
-                <div className={styles.itemContainer} key={`month-${num}`}>
+                <div className={styles.itemContainer} key={key}>
                   <div className={`${styles.singleItem} ${styles.noData}`}>
-                    {formatDate(num - 1, year, { month: "long" })}
+                    {formattedDate}
                   </div>
                 </div>
               );
@@ -63,19 +68,17 @@ class MonthSelector extends Component {
               <NavLink
                 className={styles.itemContainer}
                 activeClassName={styles.active}
-                to={`/calendar/${year}/${num}`}
-                key={`month-${num}`}
+                to={`/calendar/${year}/${monthInt}`}
+                key={key}
               >
-                <div className={styles.singleItem}>
-                  {formatDate(num - 1, year, { month: "long" })}
-                </div>
+                <div className={styles.singleItem}>{formattedDate}</div>
               </NavLink>
             );
           })}
         </div>
         <Route
           exact
-          path="/calendar/:year/:month"
+          path={`${this.props.match.path}/:month`}
           render={props => {
             const propMonth = props.match.params.month;
             return (
