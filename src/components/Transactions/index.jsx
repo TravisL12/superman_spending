@@ -3,6 +3,7 @@ import { isEmpty } from "lodash";
 import qs from "query-string";
 
 import AuthService from "middleware/AuthService";
+import Loading from "components/Loading";
 import Search from "./TransactionSearch";
 import Totals from "./TransactionTotals";
 import Row from "./TransactionRow";
@@ -84,7 +85,7 @@ class Transactions extends Component {
   render() {
     const { isLoading, searchQuery, searchResults, transactions } = this.state;
 
-    if (isLoading) return <div>Loading...</div>;
+    if (isLoading) return <Loading />;
 
     return (
       <div className={style.transactionsList}>
