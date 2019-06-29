@@ -1,33 +1,47 @@
 import React, { Component } from "react";
+import { Route, NavLink } from "react-router-dom";
+
 import AuthService from "middleware/AuthService";
-import YearSelector from "./YearSelector";
-import { Route } from "react-router-dom";
+import style from "components/Calendar/Selector.module.scss";
+import MonthSelector from "components/Calendar/MonthSelector";
 
 class Calendar extends Component {
   state = {
-    yearsList: [],
+    years: [],
     isLoading: true
   };
 
   componentWillMount() {
     AuthService.fetch("api/user/profile").then(({ years }) => {
-      this.setState({ yearsList: years, isLoading: false });
+      this.setState({ years, isLoading: false });
     });
   }
 
   render() {
-    const { yearsList, isLoading } = this.state;
+    const { match } = this.props;
+    const { years, isLoading } = this.state;
 
     if (isLoading) return null;
 
     return (
-      <div className={"calendar"}>
-        <Route
-          path="/calendar"
-          render={props => {
-            return <YearSelector {...props} years={yearsList} />;
-          }}
-        />
+      <div>
+        <div className={style.years}>
+          {years.map(year => {
+            return (
+              <NavLink
+                className={style.itemContainer}
+                activeClassName={style.active}
+                to={`/calendar/${year}`}
+                key={year}
+              >
+                <div className={style.singleItem} key={year}>
+                  {year}
+                </div>
+              </NavLink>
+            );
+          })}
+        </div>
+        <Route path={`${match.path}/:year`} component={MonthSelector} />
       </div>
     );
   }
