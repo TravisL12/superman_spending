@@ -51,8 +51,8 @@ class Transactions extends Component {
     this.fetch(searches);
   };
 
-  updateSearchString = ({ target: { value } }) => {
-    this.setState({ searchQuery: value });
+  updateSearchString = ({ target }) => {
+    this.setState({ [target.name]: target.value });
   };
 
   updateLocation = () => {
