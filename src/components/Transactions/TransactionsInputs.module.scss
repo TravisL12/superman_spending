@@ -15,6 +15,12 @@
 
 .search {
   padding-top: 10px;
+
+  .input {
+    display: flex;
+    justify-content: space-between;
+    padding: 3px 0;
+  }
 }
 
 .importerContainer {

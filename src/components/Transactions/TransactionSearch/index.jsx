@@ -12,28 +12,39 @@ function TransactionSearch({
     <div className={style.searchContainer}>
       <div>{transactions.length} Rows</div>
       <form className={style.search} onSubmit={submitSearch}>
-        <input
-          type="text"
-          name="keyword"
-          placeholder="Keyword"
-          value={searchInput.keyword}
-          onChange={updateSearch}
-        />
-        <input
-          type="text"
-          name="afterDate"
-          placeholder="After Date"
-          value={searchInput.afterDate}
-          onChange={updateSearch}
-        />
-        <input
-          type="text"
-          name="beforeDate"
-          placeholder="Before Date"
-          value={searchInput.beforeDate}
-          onChange={updateSearch}
-        />
-        <input type="submit" value={"Search"} />
+        <div className={style.input}>
+          <label>Keyword</label>
+          <input
+            type="text"
+            name="keyword"
+            placeholder="Keyword"
+            value={searchInput.keyword}
+            onChange={updateSearch}
+          />
+        </div>
+        <div className={style.input}>
+          <label>After Date</label>
+          <input
+            type="text"
+            name="afterDate"
+            placeholder="YYYY-MM-DD"
+            value={searchInput.afterDate}
+            onChange={updateSearch}
+          />
+        </div>
+        <div className={style.input}>
+          <label>Before Date</label>
+          <input
+            type="text"
+            name="beforeDate"
+            placeholder="YYYY-MM-DD"
+            value={searchInput.beforeDate}
+            onChange={updateSearch}
+          />
+        </div>
+        <div className={style.input}>
+          <input type="submit" value={"Search"} />
+        </div>
       </form>
     </div>
   );
