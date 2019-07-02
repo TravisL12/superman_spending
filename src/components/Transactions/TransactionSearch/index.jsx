@@ -3,7 +3,8 @@ import style from "components/Transactions/TransactionsInputs.module.scss";
 
 function TransactionSearch({
   transactions,
-  keywordInput,
+  searchInput,
+  dateInput,
   updateSearch,
   submitSearch
 }) {
@@ -13,8 +14,16 @@ function TransactionSearch({
       <form className={style.search} onSubmit={submitSearch}>
         <input
           type="text"
-          name="keywordInput"
-          value={keywordInput}
+          name="keyword"
+          placeholder="Keyword"
+          value={searchInput.keyword}
+          onChange={updateSearch}
+        />
+        <input
+          type="text"
+          name="date"
+          placeholder="Date"
+          value={searchInput.date}
           onChange={updateSearch}
         />
         <input type="submit" value={"Search"} />

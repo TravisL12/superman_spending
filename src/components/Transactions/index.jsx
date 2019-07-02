@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { isEmpty } from "lodash";
+import { isEqual, isEmpty } from "lodash";
 import qs from "query-string";
 
 import AuthService from "middleware/AuthService";
@@ -11,9 +11,12 @@ import style from "./Transactions.module.scss";
 
 class Transactions extends Component {
   state = {
-    searchQueries: { keywordSearches: [] },
+    searchQueries: { keywordSearches: [], date: undefined },
     isLoading: true,
-    keywordInput: "",
+    searchInput: {
+      keyword: "",
+      date: ""
+    },
     searchResults: [],
     transactions: []
   };
@@ -47,21 +50,37 @@ class Transactions extends Component {
     event.preventDefault();
     const {
       searchQueries: { keywordSearches },
-      keywordInput
+      searchInput: { keyword: keywordInput, date }
     } = this.state;
 
-    if (keywordSearches.includes(keywordInput)) {
+    const request = { ...this.state.searchQueries };
+
+    const searches = [...keywordSearches];
+    if (keywordInput && !keywordSearches.includes(keywordInput)) {
+      searches.push(keywordInput);
+      request.keywordSearches = searches;
+    }
+
+    if (date) {
+      request.date = date;
+    }
+
+    if (isEqual(request, this.state.searchQueries)) {
       return;
     }
 
-    const searches = keywordSearches;
-    searches.push(keywordInput);
-
-    this.fetch({ ...this.state.searchQueries, keywordSearches: searches });
+    this.fetch(request);
   };
 
   updateSearchString = ({ target }) => {
-    this.setState({ [target.name]: target.value });
+    this.setState(oldState => {
+      const searchInput = {
+        ...oldState.searchInput,
+        [target.name]: target.value
+      };
+
+      return { searchInput };
+    });
   };
 
   updateLocation = () => {
@@ -81,7 +100,10 @@ class Transactions extends Component {
           {
             searchQueries,
             isLoading: false,
-            keywordInput: "",
+            searchInput: {
+              keyword: "",
+              date: ""
+            },
             searchResults,
             transactions
           },
@@ -92,7 +114,7 @@ class Transactions extends Component {
   };
 
   render() {
-    const { isLoading, keywordInput, searchResults, transactions } = this.state;
+    const { isLoading, searchInput, searchResults, transactions } = this.state;
 
     if (isLoading) return <Loading />;
 
@@ -101,7 +123,7 @@ class Transactions extends Component {
         <div className={style.searchImport}>
           <Search
             transactions={transactions}
-            keywordInput={keywordInput}
+            searchInput={searchInput}
             updateSearch={this.updateSearchString}
             submitSearch={this.submitSearch}
           />
