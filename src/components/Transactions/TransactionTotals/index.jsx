@@ -3,7 +3,7 @@ import { sumBy } from "lodash";
 import style from "components/Transactions/TransactionsInputs.module.scss";
 import { dateRange, formatDate, currency } from "utilities/date-format-utils";
 
-function TransactionTotals({ searchResults, removeSearch }) {
+function TransactionTotals({ searchResults, removeKeyword }) {
   const totals = searchResults.reduce(
     (result, payee) => {
       result.sum += payee.sum;
@@ -38,7 +38,7 @@ function TransactionTotals({ searchResults, removeSearch }) {
           return (
             <tr key={idx}>
               <td className={style.removeBtn}>
-                <button onClick={() => removeSearch(name)}>X</button>
+                <button onClick={() => removeKeyword(name)}>X</button>
               </td>
               <td className={style.name}>{name}</td>
               <td className={style.sum}>{currency(sum)}</td>

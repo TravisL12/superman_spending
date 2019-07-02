@@ -11,44 +11,53 @@ import style from "./Transactions.module.scss";
 
 class Transactions extends Component {
   state = {
-    currentSearches: [],
+    searchQueries: { keywordSearches: [] },
     isLoading: true,
-    searchQuery: "",
+    keywordInput: "",
     searchResults: [],
     transactions: []
   };
 
   componentWillMount() {
-    const searchQuery = qs.parse(this.props.history.location.search);
+    const query = qs.parse(this.props.history.location.search);
     const page = this.props.match.params.page || 0;
 
-    const searches =
-      typeof searchQuery.search === "string"
-        ? [searchQuery.search]
-        : searchQuery.search;
+    const keywordSearches = !query.keywordSearches
+      ? []
+      : typeof query.keywordSearches === "string"
+        ? [query.keywordSearches]
+        : query.keywordSearches;
 
-    this.fetch(searches, { page });
+    const searchQueries = { ...query, keywordSearches };
+
+    this.fetch(searchQueries, { page });
   }
 
-  removeSearch = value => {
-    const searches = this.state.currentSearches;
-    const idx = searches.indexOf(value);
-    searches.splice(idx, 1);
+  removeKeyword = keyword => {
+    const {
+      searchQueries: { keywordSearches }
+    } = this.state;
+    const idx = keywordSearches.indexOf(keyword);
+    keywordSearches.splice(idx, 1);
 
-    this.fetch(searches);
+    this.fetch({ ...this.state.searchQueries, keywordSearches });
   };
 
   submitSearch = event => {
     event.preventDefault();
-    const { currentSearches, searchQuery } = this.state;
+    const {
+      searchQueries: { keywordSearches },
+      keywordInput
+    } = this.state;
 
-    if (currentSearches.includes(searchQuery)) {
+    if (keywordSearches.includes(keywordInput)) {
       return;
     }
 
-    const searches = currentSearches;
-    searches.push(searchQuery);
-    this.fetch(searches);
+    const searches = keywordSearches;
+    searches.push(keywordInput);
+
+    this.fetch({ ...this.state.searchQueries, keywordSearches: searches });
   };
 
   updateSearchString = ({ target }) => {
@@ -57,22 +66,22 @@ class Transactions extends Component {
 
   updateLocation = () => {
     this.props.history.push({
-      search: qs.stringify({ search: this.state.currentSearches })
+      search: qs.stringify(this.state.searchQueries)
     });
   };
 
-  fetch = (searches = [], params = { page: 0 }) => {
-    const query = !isEmpty(searches)
-      ? `?${qs.stringify({ search: searches })}`
+  fetch = (searchQueries = {}, params = { page: 0 }) => {
+    const query = !isEmpty(searchQueries)
+      ? `?${qs.stringify(searchQueries)}`
       : "";
 
     AuthService.fetch(`api/transactions/list/${params.page}${query}`).then(
       ({ transactions, searchResults }) => {
         this.setState(
           {
-            currentSearches: searches,
+            searchQueries,
             isLoading: false,
-            searchQuery: "",
+            keywordInput: "",
             searchResults,
             transactions
           },
@@ -83,7 +92,7 @@ class Transactions extends Component {
   };
 
   render() {
-    const { isLoading, searchQuery, searchResults, transactions } = this.state;
+    const { isLoading, keywordInput, searchResults, transactions } = this.state;
 
     if (isLoading) return <Loading />;
 
@@ -92,7 +101,7 @@ class Transactions extends Component {
         <div className={style.searchImport}>
           <Search
             transactions={transactions}
-            searchQuery={searchQuery}
+            keywordInput={keywordInput}
             updateSearch={this.updateSearchString}
             submitSearch={this.submitSearch}
           />
@@ -100,7 +109,7 @@ class Transactions extends Component {
         <div className={style.searchTotals}>
           {!isEmpty(searchResults) && (
             <Totals
-              removeSearch={this.removeSearch}
+              removeKeyword={this.removeKeyword}
               searchResults={searchResults}
             />
           )}
