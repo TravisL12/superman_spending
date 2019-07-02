@@ -21,9 +21,16 @@ function TransactionSearch({
         />
         <input
           type="text"
-          name="date"
-          placeholder="Date"
-          value={searchInput.date}
+          name="afterDate"
+          placeholder="After Date"
+          value={searchInput.afterDate}
+          onChange={updateSearch}
+        />
+        <input
+          type="text"
+          name="beforeDate"
+          placeholder="Before Date"
+          value={searchInput.beforeDate}
           onChange={updateSearch}
         />
         <input type="submit" value={"Search"} />

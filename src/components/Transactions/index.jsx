@@ -11,11 +11,16 @@ import style from "./Transactions.module.scss";
 
 class Transactions extends Component {
   state = {
-    searchQueries: { keywordSearches: [], date: undefined },
+    searchQueries: {
+      keywordSearches: [],
+      beforeDate: undefined,
+      afterDate: undefined
+    },
     isLoading: true,
     searchInput: {
       keyword: "",
-      date: ""
+      beforeDate: "",
+      afterDate: ""
     },
     searchResults: [],
     transactions: []
@@ -50,7 +55,7 @@ class Transactions extends Component {
     event.preventDefault();
     const {
       searchQueries: { keywordSearches },
-      searchInput: { keyword: keywordInput, date }
+      searchInput: { keyword: keywordInput, beforeDate, afterDate }
     } = this.state;
 
     const request = { ...this.state.searchQueries };
@@ -61,8 +66,12 @@ class Transactions extends Component {
       request.keywordSearches = searches;
     }
 
-    if (date) {
-      request.date = date;
+    if (beforeDate) {
+      request.beforeDate = beforeDate;
+    }
+
+    if (afterDate) {
+      request.afterDate = afterDate;
     }
 
     if (isEqual(request, this.state.searchQueries)) {
@@ -102,7 +111,8 @@ class Transactions extends Component {
             isLoading: false,
             searchInput: {
               keyword: "",
-              date: ""
+              beforeDate: "",
+              afterDate: ""
             },
             searchResults,
             transactions
