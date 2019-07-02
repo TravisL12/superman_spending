@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import AuthService from "middleware/AuthService";
+import { sortBy } from "lodash";
 
 function CategoryDropdown({ onChange, selectedCategories }) {
   const [categories, setCategories] = useState([]);
@@ -22,7 +23,7 @@ function CategoryDropdown({ onChange, selectedCategories }) {
       value={selectedCategories}
       onChange={updateSelection}
     >
-      {categories.map((cat, idx) => (
+      {sortBy(categories, "name").map((cat, idx) => (
         <option key={idx} value={cat.id}>
           {cat.name}
         </option>

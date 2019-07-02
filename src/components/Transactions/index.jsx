@@ -56,15 +56,27 @@ class Transactions extends Component {
   submitSearch = event => {
     event.preventDefault();
     const {
-      searchQueries: { keywordSearches },
-      searchInput: { keyword: keywordInput, beforeDate, afterDate, categoryIds }
+      searchQueries: { keywordSearches, categoryIds },
+      searchInput: {
+        keyword: keywordInput,
+        beforeDate,
+        afterDate,
+        categoryIds: categoryInput
+      }
     } = this.state;
 
     const request = { ...this.state.searchQueries };
-    const searches = [...keywordSearches];
-    if (keywordInput && !keywordSearches.includes(keywordInput)) {
+
+    const searches = keywordSearches ? [...keywordSearches] : [];
+    if (keywordInput && !searches.includes(keywordInput)) {
       searches.push(keywordInput);
       request.keywordSearches = searches;
+    }
+
+    const categories = categoryIds ? [...categoryIds] : [];
+    if (!isEmpty(categoryInput) && !categories.includes(categoryInput)) {
+      categories.push(categoryInput);
+      request.categoryIds = categories;
     }
 
     if (beforeDate) {
@@ -73,10 +85,6 @@ class Transactions extends Component {
 
     if (afterDate) {
       request.afterDate = afterDate;
-    }
-
-    if (categoryIds) {
-      request.categoryIds = categoryIds;
     }
 
     if (isEqual(request, this.state.searchQueries)) {
