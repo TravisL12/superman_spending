@@ -1,28 +1,33 @@
 import React, { useState, useEffect } from "react";
 import AuthService from "middleware/AuthService";
 
-function CategoryDropdown() {
+function CategoryDropdown({ onChange, selectedCategories }) {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    if (categories.length === 0) {
-      AuthService.fetch("api/categories").then(({ categories }) => {
-        console.log(categories);
-        setCategories(categories);
-      });
-    }
+    AuthService.fetch("api/categories").then(({ categories }) => {
+      setCategories(categories);
+    });
   }, []);
 
+  // Group all selected categories
+  const updateSelection = ({ target: { value, name } }) => {
+    onChange({ target: { value: [...selectedCategories, value], name } });
+  };
+
   return (
-    categories.length > 0 && (
-      <select value={"Categories"}>
-        {categories.map((cat, idx) => (
-          <option key={idx} value={cat.name}>
-            {cat.name}
-          </option>
-        ))}
-      </select>
-    )
+    <select
+      name={"categoryIds"}
+      multiple
+      value={selectedCategories}
+      onChange={updateSelection}
+    >
+      {categories.map((cat, idx) => (
+        <option key={idx} value={cat.id}>
+          {cat.name}
+        </option>
+      ))}
+    </select>
   );
 }
 

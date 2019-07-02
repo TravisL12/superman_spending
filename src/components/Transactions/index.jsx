@@ -14,13 +14,15 @@ class Transactions extends Component {
     searchQueries: {
       keywordSearches: [],
       beforeDate: undefined,
-      afterDate: undefined
+      afterDate: undefined,
+      categoryIds: []
     },
     isLoading: true,
     searchInput: {
       keyword: "",
       beforeDate: "",
-      afterDate: ""
+      afterDate: "",
+      categoryIds: []
     },
     searchResults: [],
     transactions: []
@@ -55,11 +57,10 @@ class Transactions extends Component {
     event.preventDefault();
     const {
       searchQueries: { keywordSearches },
-      searchInput: { keyword: keywordInput, beforeDate, afterDate }
+      searchInput: { keyword: keywordInput, beforeDate, afterDate, categoryIds }
     } = this.state;
 
     const request = { ...this.state.searchQueries };
-
     const searches = [...keywordSearches];
     if (keywordInput && !keywordSearches.includes(keywordInput)) {
       searches.push(keywordInput);
@@ -74,11 +75,19 @@ class Transactions extends Component {
       request.afterDate = afterDate;
     }
 
+    if (categoryIds) {
+      request.categoryIds = categoryIds;
+    }
+
     if (isEqual(request, this.state.searchQueries)) {
       return;
     }
 
     this.fetch(request);
+  };
+
+  resetSearch = () => {
+    this.fetch({ keywordSearches: [] });
   };
 
   updateSearchString = ({ target }) => {
@@ -92,16 +101,18 @@ class Transactions extends Component {
     });
   };
 
-  updateLocation = () => {
-    this.props.history.push({
-      search: qs.stringify(this.state.searchQueries)
-    });
+  // Keyword Searches needs to always be an array
+  buildQuery = searchQueries => {
+    const queryKeys = Object.keys(searchQueries);
+    if (queryKeys.length === 1 && isEmpty(searchQueries.keywordSearches)) {
+      return "";
+    }
+
+    return `?${qs.stringify(searchQueries, { arrayFormat: "comma" })}`;
   };
 
   fetch = (searchQueries = {}, params = { page: 0 }) => {
-    const query = !isEmpty(searchQueries)
-      ? `?${qs.stringify(searchQueries)}`
-      : "";
+    const query = this.buildQuery(searchQueries);
 
     AuthService.fetch(`api/transactions/list/${params.page}${query}`).then(
       ({ transactions, searchResults }) => {
@@ -112,7 +123,8 @@ class Transactions extends Component {
             searchInput: {
               keyword: "",
               beforeDate: "",
-              afterDate: ""
+              afterDate: "",
+              categoryIds: []
             },
             searchResults,
             transactions
@@ -121,6 +133,12 @@ class Transactions extends Component {
         );
       }
     );
+  };
+
+  updateLocation = () => {
+    this.props.history.push({
+      search: qs.stringify(this.state.searchQueries, { arrayFormat: "comma" })
+    });
   };
 
   render() {
@@ -136,6 +154,7 @@ class Transactions extends Component {
             searchInput={searchInput}
             updateSearch={this.updateSearchString}
             submitSearch={this.submitSearch}
+            resetSearch={this.resetSearch}
           />
         </div>
         <div className={style.searchTotals}>

@@ -7,7 +7,8 @@ function TransactionSearch({
   searchInput,
   dateInput,
   updateSearch,
-  submitSearch
+  submitSearch,
+  resetSearch
 }) {
   return (
     <div className={style.searchContainer}>
@@ -44,10 +45,14 @@ function TransactionSearch({
           />
         </div>
         <div className={style.input}>
-          <CategoryDropdown />
+          <CategoryDropdown
+            onChange={updateSearch}
+            selectedCategories={searchInput.categoryIds}
+          />
         </div>
         <div className={style.input}>
           <input type="submit" value={"Search"} />
+          <button onClick={resetSearch}>Reset</button>
         </div>
       </form>
     </div>
