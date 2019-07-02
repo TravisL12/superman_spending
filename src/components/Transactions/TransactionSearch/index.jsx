@@ -1,4 +1,5 @@
 import React from "react";
+import CategoryDropdown from "components/CategoryDropdown";
 import style from "components/Transactions/TransactionsInputs.module.scss";
 
 function TransactionSearch({
@@ -41,6 +42,9 @@ function TransactionSearch({
             value={searchInput.beforeDate}
             onChange={updateSearch}
           />
+        </div>
+        <div className={style.input}>
+          <CategoryDropdown />
         </div>
         <div className={style.input}>
           <input type="submit" value={"Search"} />
