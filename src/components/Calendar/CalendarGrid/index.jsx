@@ -76,18 +76,16 @@ function CalendarGrid(props) {
 
   return (
     <div className={style.calendarGrid}>
-      <SideColumn categoryData={categoryData} payeeData={payeeData} />
+      {/* <SideColumn categoryData={categoryData} payeeData={payeeData} /> */}
 
       <div className={style.monthName}>
+        <Link to={getPrevMonth()}>
+          <button className={style.monthChangeArrow}>&#8592;</button>
+        </Link>
         <h1>{formatDate(month - 1, year)}</h1>
-        <div className={style.changeMonth}>
-          <Link to={getPrevMonth()}>
-            <button>Previous</button>
-          </Link>
-          <Link to={getNextMonth()}>
-            <button>Next</button>
-          </Link>
-        </div>
+        <Link to={getNextMonth()}>
+          <button className={style.monthChangeArrow}>&#8594;</button>
+        </Link>
       </div>
 
       {/* Calendar of Days */}
@@ -126,7 +124,7 @@ function CalendarGrid(props) {
       </div>
 
       {/* Day Breakdown */}
-      <div className={style.dayGrid}>
+      {/* <div className={style.dayGrid}>
         {selectedDayTransactions.length > 0 && (
           <div className={style.closeDay} onClick={closeDay}>
             X
@@ -142,7 +140,7 @@ function CalendarGrid(props) {
               </li>
             ))}
         </ul>
-      </div>
+      </div> */}
     </div>
   );
 }

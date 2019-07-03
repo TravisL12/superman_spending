@@ -4,8 +4,8 @@ $gap: 10px;
 .calendarGrid {
   display: grid;
   grid-template-areas:
-    "... title ..."
-    "categories grid day";
+    "title"
+    "grid";
   padding: 0 10px 50px;
   background: $white;
   grid-gap: $gap;
@@ -13,8 +13,29 @@ $gap: 10px;
 
 .monthName {
   grid-area: title;
-  margin: 15px 0 15px 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 15px 0;
+
+  .monthChangeArrow {
+    border: 0;
+    font-size: 30px;
+
+    &:hover {
+      background: $blue;
+    }
+    &:focus {
+      outline: none;
+    }
+    &:active {
+      transform: translate(1px, 1px);
+    }
+  }
+
   h1 {
+    width: 275px;
+    text-align: center;
     margin: 3px 0;
   }
 }
@@ -23,9 +44,10 @@ $gap: 10px;
   grid-area: grid;
   display: grid;
   flex: 1;
-  grid-template-columns: repeat(7, 110px);
+  grid-template-columns: repeat(7, minmax(110px, 180px));
   grid-template-rows: 20px repeat(6, 70px);
   grid-gap: $gap;
+  justify-content: center;
 
   .dow {
     text-align: center;
