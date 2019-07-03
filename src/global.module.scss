@@ -1,11 +1,11 @@
-$yearColor: #ffe1e1;
-$monthColor: #ff9f9f;
+$yearColor: #7a7a7a;
+$monthColor: #000000;
 $white: #ffffff;
 $blue: #f0fbff;
-$accentBlue: lightcyan;
-$accentRowBlue: #ddf2f9;
+$accentBlue: rgb(207, 207, 207);
+$accentRowBlue: #f5f5f5;
 $loginBtn: #1abc9c;
-$black: #696969;
+$black: #000000;
 
 $footer-height: 100px;
 
@@ -47,7 +47,7 @@ tbody {
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
-  background: white;
+  background: $white;
 
   .itemContainer {
     flex: 1;

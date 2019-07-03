@@ -7,7 +7,7 @@ $gap: 10px;
     "... title ..."
     "categories grid day";
   padding: 0 10px 50px;
-  background: $accentBlue;
+  background: $white;
   grid-gap: $gap;
 }
 
@@ -23,7 +23,7 @@ $gap: 10px;
   grid-area: grid;
   display: grid;
   flex: 1;
-  grid-template-columns: repeat(7, 100px);
+  grid-template-columns: repeat(7, 110px);
   grid-template-rows: 20px repeat(6, 70px);
   grid-gap: $gap;
 
@@ -32,20 +32,30 @@ $gap: 10px;
   }
 
   .day {
+    position: relative;
     display: flex;
     flex-direction: column;
-    background: white;
-    padding: 6px;
-    border-radius: 5px;
+    background: $white;
+    padding: 3px;
+    border-radius: 10px;
     color: $black;
     height: 70px;
     box-sizing: border-box;
+    border: 3px solid $black;
 
     .date {
       top: 0;
-      left: 0;
-      font-weight: 700;
-      font-size: 20px;
+      left: 5px;
+      position: absolute;
+      font-size: 50px;
+      color: rgb(230, 230, 230);
+    }
+
+    .dateInfo {
+      position: absolute;
+      bottom: 5px;
+      right: 5px;
+      font-weight: bold;
     }
 
     .total,
@@ -63,7 +73,7 @@ $gap: 10px;
     }
 
     &.selectedDay {
-      background: lightgreen;
+      background: rgb(208, 255, 208);
     }
 
     &.futureDay {

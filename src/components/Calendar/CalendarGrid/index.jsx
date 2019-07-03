@@ -116,7 +116,7 @@ function CalendarGrid(props) {
               key={`spending-${day}`}
             >
               <div className={style.date}>{day}</div>
-              <div>
+              <div className={style.dateInfo}>
                 <div className={style.total}>{currency(sum)}</div>
                 <div className={style.count}>Count {count}</div>
               </div>

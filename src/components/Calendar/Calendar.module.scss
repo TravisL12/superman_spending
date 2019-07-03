@@ -2,7 +2,7 @@
 
 %selector {
   display: flex;
-  background: white;
+  background: $white;
 
   .itemContainer {
     display: flex;
@@ -15,6 +15,7 @@
 
   .active {
     background: $yearColor;
+    color: $white;
   }
 
   .noData {
@@ -29,6 +30,10 @@
 .months {
   @extend %selector;
   background: $yearColor;
+
+  .itemContainer {
+    color: $white;
+  }
 
   .active {
     background: $monthColor;
