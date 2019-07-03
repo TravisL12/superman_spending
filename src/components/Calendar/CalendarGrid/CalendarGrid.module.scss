@@ -45,7 +45,7 @@ $gap: 10px;
   display: grid;
   flex: 1;
   grid-template-columns: repeat(7, minmax(110px, 180px));
-  grid-template-rows: 20px repeat(6, 70px);
+  grid-template-rows: 20px repeat(6, 110px);
   grid-gap: $gap;
   justify-content: center;
 
@@ -59,11 +59,16 @@ $gap: 10px;
     flex-direction: column;
     background: $white;
     padding: 3px;
-    border-radius: 10px;
     color: $black;
-    height: 70px;
     box-sizing: border-box;
-    border: 3px solid $black;
+    cursor: pointer;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 1) 0%,
+      rgba(246, 246, 246, 1) 47%,
+      rgba(237, 237, 237, 1) 100%
+    );
+    box-shadow: -1px 1px 5px 1px rgba(0, 0, 0, 0.15);
 
     .date {
       top: 0;
