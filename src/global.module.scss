@@ -5,7 +5,7 @@ $blue: #f0fbff;
 $accentBlue: rgb(207, 207, 207);
 $accentRowBlue: #f5f5f5;
 $loginBtn: #1abc9c;
-$black: #000000;
+$black: #242424;
 
 $footer-height: 100px;
 
@@ -38,8 +38,8 @@ p {
 }
 
 tbody {
-  tr:nth-child(odd) td {
-    background: $accentRowBlue;
+  tr td {
+    border-bottom: 1px solid $accentRowBlue;
   }
 }
 

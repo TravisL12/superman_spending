@@ -14,6 +14,7 @@ import SideColumn from "./SideColumn";
 
 function CalendarGrid(props) {
   const [selectedDay, setSelectedDay] = useState(false);
+  const [showCategories, setShowCategories] = useState(false);
 
   const {
     match: {
@@ -76,7 +77,9 @@ function CalendarGrid(props) {
 
   return (
     <div className={style.calendarGrid}>
-      {/* <SideColumn categoryData={categoryData} payeeData={payeeData} /> */}
+      {showCategories && (
+        <SideColumn categoryData={categoryData} payeeData={payeeData} />
+      )}
 
       <div className={style.monthName}>
         <Link to={getPrevMonth()}>
@@ -86,6 +89,14 @@ function CalendarGrid(props) {
         <Link to={getNextMonth()}>
           <button className={style.monthChangeArrow}>&#8594;</button>
         </Link>
+        <button
+          className={style.toggleCategories}
+          onClick={() => {
+            setShowCategories(!showCategories);
+          }}
+        >
+          {showCategories ? "Hide" : "Show"} Categories
+        </button>
       </div>
 
       {/* Calendar of Days */}

@@ -2,21 +2,20 @@
 $gap: 10px;
 
 .calendarGrid {
-  display: grid;
-  grid-template-areas:
-    "title"
-    "grid";
+  position: relative;
   padding: 0 10px 50px;
   background: $white;
-  grid-gap: $gap;
 }
 
 .monthName {
-  grid-area: title;
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 15px 0;
+
+  .toggleCategories {
+    border: none;
+  }
 
   .monthChangeArrow {
     border: 0;
@@ -41,7 +40,6 @@ $gap: 10px;
 }
 
 .monthGrid {
-  grid-area: grid;
   display: grid;
   flex: 1;
   grid-template-columns: repeat(7, minmax(110px, 180px));
@@ -101,6 +99,10 @@ $gap: 10px;
 
     &.selectedDay {
       background: rgb(208, 255, 208);
+
+      .date {
+        color: rgb(75, 75, 75);
+      }
     }
 
     &.futureDay {

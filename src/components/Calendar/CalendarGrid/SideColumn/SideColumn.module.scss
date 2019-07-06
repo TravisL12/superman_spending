@@ -1,5 +1,11 @@
+@import "global.module.scss";
+
 .categories {
-  grid-area: categories;
+  position: absolute;
+  right: 0;
+  padding: 20px;
+  background: $white;
+  z-index: 1;
   font-size: 14px;
   width: 275px;
 }

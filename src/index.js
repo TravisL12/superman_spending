@@ -28,7 +28,6 @@ ReactDOM.render(
         />
         <Route exact path="/login" component={Login} />
       </div>
-      <footer />
     </div>
   </BrowserRouter>,
   document.getElementById("root")
