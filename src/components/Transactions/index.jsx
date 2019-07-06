@@ -116,7 +116,7 @@ class Transactions extends Component {
       return "";
     }
 
-    return `?${qs.stringify(searchQueries, { arrayFormat: "comma" })}`;
+    return `?${qs.stringify(searchQueries)}`;
   };
 
   fetch = (searchQueries = {}, params = { page: 0 }) => {
@@ -145,7 +145,7 @@ class Transactions extends Component {
 
   updateLocation = () => {
     this.props.history.push({
-      search: qs.stringify(this.state.searchQueries, { arrayFormat: "comma" })
+      search: qs.stringify(this.state.searchQueries)
     });
   };
 
@@ -166,12 +166,10 @@ class Transactions extends Component {
           />
         </div>
         <div className={style.searchTotals}>
-          {!isEmpty(searchResults) && (
-            <Totals
-              removeKeyword={this.removeKeyword}
-              searchResults={searchResults}
-            />
-          )}
+          <Totals
+            removeKeyword={this.removeKeyword}
+            searchResults={searchResults}
+          />
         </div>
 
         <table className={style.transactionTable}>
@@ -186,8 +184,8 @@ class Transactions extends Component {
             </tr>
           </thead>
           <tbody>
-            {transactions.map((t, idx) => {
-              return <Row key={idx} transaction={t} />;
+            {transactions.map((transaction, idx) => {
+              return <Row key={idx} transaction={transaction} />;
             })}
           </tbody>
         </table>

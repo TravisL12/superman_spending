@@ -4,6 +4,10 @@ import style from "components/Transactions/TransactionsInputs.module.scss";
 import { dateRange, formatDate, currency } from "utilities/date-format-utils";
 
 function TransactionTotals({ searchResults, removeKeyword }) {
+  if (!searchResults) {
+    return null;
+  }
+
   const totals = searchResults.reduce(
     (result, payee) => {
       result.sum += payee.sum;
