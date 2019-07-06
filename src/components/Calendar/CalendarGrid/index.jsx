@@ -1,16 +1,16 @@
 import React, { useState } from "react";
-import { sortBy, sumBy, values, orderBy } from "lodash";
+import { sumBy, values, orderBy } from "lodash";
 import { Link } from "react-router-dom";
 
 import {
   currency,
   formatDate,
   daysOfWeek,
-  getToday,
-  cleanDescription
+  getToday
 } from "utilities/date-format-utils";
 import style from "./CalendarGrid.module.scss";
 import MonthTotals from "./MonthTotals";
+import DayTotals from "./DayTotals";
 
 function CalendarGrid(props) {
   const [selectedDay, setSelectedDay] = useState(false);
@@ -81,6 +81,11 @@ function CalendarGrid(props) {
         <MonthTotals categoryData={categoryData} payeeData={payeeData} />
       )}
 
+      {/* Day Breakdown */}
+      {selectedDay && (
+        <DayTotals close={closeDay} transactions={selectedDayTransactions} />
+      )}
+
       <div className={style.monthName}>
         <Link to={getPrevMonth()}>
           <button className={style.monthChangeArrow}>&#8592;</button>
@@ -133,25 +138,6 @@ function CalendarGrid(props) {
           );
         })}
       </div>
-
-      {/* Day Breakdown */}
-      {/* <div className={style.dayGrid}>
-        {selectedDayTransactions.length > 0 && (
-          <div className={style.closeDay} onClick={closeDay}>
-            X
-          </div>
-        )}
-        <ul>
-          {sortBy(selectedDayTransactions, "amount")
-            .reverse()
-            .map(({ amount, description }, idx) => (
-              <li className={style.dayDescription} key={idx}>
-                <span>{cleanDescription(description)}</span>
-                <span>{currency(amount)}</span>
-              </li>
-            ))}
-        </ul>
-      </div> */}
     </div>
   );
 }

@@ -1,13 +1,16 @@
 @import "global.module.scss";
 
-.categories {
+.totalsContainer {
   position: absolute;
   right: 0;
+  width: 300px;
   padding: 20px;
   background: rgba(255, 255, 255, 0.9);
   z-index: 1;
+}
+
+.categories {
   font-size: 14px;
-  width: 275px;
 }
 
 ul li {
@@ -24,5 +27,20 @@ ul li {
 
   &.categoryTotal {
     font-weight: bold;
+  }
+}
+
+.dayGrid {
+  font-size: 12px;
+  overflow: scroll;
+}
+
+.dayDescription {
+  display: flex;
+  justify-content: space-between;
+
+  span:last-child {
+    text-align: right;
+    width: 75px;
   }
 }
