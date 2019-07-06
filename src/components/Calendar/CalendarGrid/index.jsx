@@ -65,7 +65,13 @@ function CalendarGrid(props) {
     return day === selectedDay ? style.selectedDay : null;
   }
 
+  function toggleCategories() {
+    setSelectedDay(false);
+    setShowCategories(!showCategories);
+  }
+
   function showDay(day) {
+    setShowCategories(false);
     setSelectedDay(day);
   }
 
@@ -94,12 +100,7 @@ function CalendarGrid(props) {
         <Link to={getNextMonth()}>
           <button className={style.monthChangeArrow}>&#8594;</button>
         </Link>
-        <button
-          className={style.toggleCategories}
-          onClick={() => {
-            setShowCategories(!showCategories);
-          }}
-        >
+        <button className={style.toggleCategories} onClick={toggleCategories}>
           {showCategories ? "Hide" : "Show"} Categories
         </button>
       </div>
