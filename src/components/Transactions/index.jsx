@@ -25,7 +25,8 @@ class Transactions extends Component {
       categoryIds: []
     },
     searchResults: [],
-    transactions: []
+    transactions: [],
+    checkedIds: []
   };
 
   componentWillMount() {
@@ -98,6 +99,16 @@ class Transactions extends Component {
     this.fetch({ keywordSearches: [] });
   };
 
+  updateCheckedRow = ({ target: { value } }) => {
+    this.setState(oldState => {
+      if (oldState.checkedIds.includes(value)) {
+        return { checkedIds: oldState.checkedIds.filter(id => id !== value) };
+      } else {
+        return { checkedIds: [...oldState.checkedIds, value] };
+      }
+    });
+  };
+
   updateSearchString = ({ target }) => {
     this.setState(oldState => {
       const searchInput = {
@@ -116,7 +127,7 @@ class Transactions extends Component {
       return "";
     }
 
-    return `?${qs.stringify(searchQueries, { arrayFormat: "comma" })}`;
+    return `?${qs.stringify(searchQueries)}`;
   };
 
   fetch = (searchQueries = {}, params = { page: 0 }) => {
@@ -145,7 +156,7 @@ class Transactions extends Component {
 
   updateLocation = () => {
     this.props.history.push({
-      search: qs.stringify(this.state.searchQueries, { arrayFormat: "comma" })
+      search: qs.stringify(this.state.searchQueries)
     });
   };
 
@@ -187,7 +198,13 @@ class Transactions extends Component {
           </thead>
           <tbody>
             {transactions.map((t, idx) => {
-              return <Row key={idx} transaction={t} />;
+              return (
+                <Row
+                  key={idx}
+                  onCheckboxChange={this.updateCheckedRow}
+                  transaction={t}
+                />
+              );
             })}
           </tbody>
         </table>
