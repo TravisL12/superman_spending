@@ -10,7 +10,7 @@ import {
   cleanDescription
 } from "utilities/date-format-utils";
 import style from "./CalendarGrid.module.scss";
-import SideColumn from "./SideColumn";
+import MonthTotals from "./MonthTotals";
 
 function CalendarGrid(props) {
   const [selectedDay, setSelectedDay] = useState(false);
@@ -78,7 +78,7 @@ function CalendarGrid(props) {
   return (
     <div className={style.calendarGrid}>
       {showCategories && (
-        <SideColumn categoryData={categoryData} payeeData={payeeData} />
+        <MonthTotals categoryData={categoryData} payeeData={payeeData} />
       )}
 
       <div className={style.monthName}>

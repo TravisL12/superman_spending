@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { titleCase, currency } from "utilities/date-format-utils";
-import style from "./SideColumn.module.scss";
+import style from "./MonthTotals.module.scss";
 
-class SideColumn extends Component {
+class MonthTotals extends Component {
   state = {
     currentColumn: "categories"
   };
@@ -84,4 +84,4 @@ class SideColumn extends Component {
   }
 }
 
-export default SideColumn;
+export default MonthTotals;
