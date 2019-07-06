@@ -177,12 +177,10 @@ class Transactions extends Component {
           />
         </div>
         <div className={style.searchTotals}>
-          {!isEmpty(searchResults) && (
-            <Totals
-              removeKeyword={this.removeKeyword}
-              searchResults={searchResults}
-            />
-          )}
+          <Totals
+            removeKeyword={this.removeKeyword}
+            searchResults={searchResults}
+          />
         </div>
 
         <table className={style.transactionTable}>
@@ -197,12 +195,12 @@ class Transactions extends Component {
             </tr>
           </thead>
           <tbody>
-            {transactions.map((t, idx) => {
+            {transactions.map((transaction, idx) => {
               return (
                 <Row
                   key={idx}
                   onCheckboxChange={this.updateCheckedRow}
-                  transaction={t}
+                  transaction={transaction}
                 />
               );
             })}

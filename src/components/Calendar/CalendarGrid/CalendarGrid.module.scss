@@ -1,5 +1,4 @@
 @import "global.module.scss";
-$gap: 10px;
 
 .calendarGrid {
   position: relative;
@@ -44,7 +43,7 @@ $gap: 10px;
   flex: 1;
   grid-template-columns: repeat(7, minmax(110px, 180px));
   grid-template-rows: 20px repeat(6, 110px);
-  grid-gap: $gap;
+  grid-gap: 10px;
   justify-content: center;
 
   .dow {
@@ -109,23 +108,5 @@ $gap: 10px;
       background: darkgray;
       color: gray;
     }
-  }
-}
-
-.dayGrid {
-  grid-area: day;
-  height: 550px;
-  width: 300px;
-  font-size: 12px;
-  overflow: scroll;
-}
-
-.dayDescription {
-  display: flex;
-  justify-content: space-between;
-
-  span:last-child {
-    text-align: right;
-    width: 75px;
   }
 }
