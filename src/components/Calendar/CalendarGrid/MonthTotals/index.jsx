@@ -73,7 +73,7 @@ class MonthTotals extends Component {
     };
 
     return (
-      <div className={`${style.totalsContainer} ${style.categories}`}>
+      <div className={style.totalsContainer}>
         <div className={style.selectColumn}>
           <button onClick={this.showCategories}>Categories</button>
           <button onClick={this.showPayees}>Payees</button>

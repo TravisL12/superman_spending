@@ -5,7 +5,7 @@ import style from "../MonthTotals/MonthTotals.module.scss";
 
 function DayTotals({ transactions, close }) {
   return (
-    <div className={`${style.totalsContainer} ${style.dayGrid}`}>
+    <div className={style.totalsContainer}>
       {transactions.length > 0 && (
         <div className={style.closeDay} onClick={close}>
           X
