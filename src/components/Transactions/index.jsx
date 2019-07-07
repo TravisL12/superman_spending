@@ -44,14 +44,24 @@ class Transactions extends Component {
     this.fetch(searchQueries, { page });
   }
 
-  removeKeyword = keyword => {
-    const {
-      searchQueries: { keywordSearches }
-    } = this.state;
-    const idx = keywordSearches.indexOf(keyword);
-    keywordSearches.splice(idx, 1);
+  removeSearch = keyword => {
+    if (["afterDate", "beforeDate"].includes(keyword)) {
+      this.fetch({
+        ...this.state.searchQueries,
+        [keyword]: undefined
+      });
 
-    this.fetch({ ...this.state.searchQueries, keywordSearches });
+      return;
+    }
+    const { searchQueries } = this.state;
+    const keywordSearches = searchQueries.keywordSearches.filter(
+      search => search !== keyword
+    );
+
+    this.fetch({
+      ...this.state.searchQueries,
+      keywordSearches
+    });
   };
 
   submitSearch = event => {
@@ -161,7 +171,13 @@ class Transactions extends Component {
   };
 
   render() {
-    const { isLoading, searchInput, searchResults, transactions } = this.state;
+    const {
+      isLoading,
+      searchInput,
+      searchResults,
+      transactions,
+      searchQueries
+    } = this.state;
 
     if (isLoading) return <Loading />;
 
@@ -178,8 +194,9 @@ class Transactions extends Component {
         </div>
         <div className={style.searchTotals}>
           <Totals
-            removeKeyword={this.removeKeyword}
+            removeSearch={this.removeSearch}
             searchResults={searchResults}
+            currentSearches={searchQueries}
           />
         </div>
 
