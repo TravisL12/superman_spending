@@ -2,15 +2,10 @@ import decode from "jwt-decode";
 
 // Auth setup using: https://hptechblogs.com/using-json-web-token-react/
 
-class AuthService {
-  constructor(domain) {
-    this.domain = "http://0.0.0.0:3131";
-    this.fetch = this.fetch.bind(this);
-    this.login = this.login.bind(this);
-    this.getProfile = this.getProfile.bind(this);
-  }
+const DOMAIN = "http://0.0.0.0:3131";
 
-  login(email, password) {
+class AuthService {
+  login = (email, password) => {
     return this.fetch("api/login", {
       method: "POST",
       body: JSON.stringify({
@@ -21,7 +16,7 @@ class AuthService {
       this.setToken(res.token);
       return Promise.resolve(res);
     });
-  }
+  };
 
   loggedIn() {
     const token = this.getToken();
@@ -49,11 +44,11 @@ class AuthService {
     localStorage.removeItem("id_token");
   }
 
-  getProfile() {
+  getProfile = () => {
     return decode(this.getToken());
-  }
+  };
 
-  fetch(url, options, isMultiPart = false) {
+  fetch = (url, options, isMultiPart = false) => {
     const headers = {
       Accept: "application/json"
     };
@@ -66,13 +61,14 @@ class AuthService {
       headers["Authorization"] = this.getToken();
     }
 
-    return fetch(`${this.domain}/${url}`, {
+    return fetch(`${DOMAIN}/${url}`, {
       headers,
       ...options
     })
       .then(this._checkStatus)
-      .then(response => response.json());
-  }
+      .then(response => response.json())
+      .catch(error => console.log(error));
+  };
 
   _checkStatus(response) {
     if (response.status >= 200 && response.status < 300) {
