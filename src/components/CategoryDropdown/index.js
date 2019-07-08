@@ -1,15 +1,9 @@
-import React, { useState, useEffect } from "react";
-import AuthService from "middleware/AuthService";
+import React from "react";
+import useCategories from "hooks/useCategories";
 import { sortBy } from "lodash";
 
 function CategoryDropdown({ onChange, selectedCategories }) {
-  const [categories, setCategories] = useState([]);
-
-  useEffect(() => {
-    AuthService.fetch("api/categories").then(({ categories }) => {
-      setCategories(categories);
-    });
-  }, []);
+  const { categories } = useCategories();
 
   // Group all selected categories
   const updateSelection = ({ target: { value, name } }) => {
