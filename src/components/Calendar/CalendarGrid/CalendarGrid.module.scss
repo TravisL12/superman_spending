@@ -1,51 +1,86 @@
 @import "global.module.scss";
-$gap: 10px;
 
 .calendarGrid {
-  display: grid;
-  grid-template-areas:
-    "... title ..."
-    "categories grid day";
+  position: relative;
   padding: 0 10px 50px;
-  background: $accentBlue;
-  grid-gap: $gap;
+  background: $white;
 }
 
 .monthName {
-  grid-area: title;
-  margin: 15px 0 15px 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 15px 0;
+
+  .toggleCategories {
+    width: 105px;
+    border: none;
+  }
+
+  .monthChangeArrow {
+    border: 0;
+    font-size: 30px;
+
+    &:hover {
+      background: $blue;
+    }
+    &:focus {
+      outline: none;
+    }
+    &:active {
+      transform: translate(1px, 1px);
+    }
+  }
+
   h1 {
+    width: 275px;
+    text-align: center;
     margin: 3px 0;
   }
 }
 
 .monthGrid {
-  grid-area: grid;
   display: grid;
   flex: 1;
-  grid-template-columns: repeat(7, 100px);
-  grid-template-rows: 20px repeat(6, 70px);
-  grid-gap: $gap;
+  grid-template-columns: repeat(7, minmax(110px, 180px));
+  grid-template-rows: 20px repeat(6, 110px);
+  grid-gap: 10px;
+  justify-content: center;
 
   .dow {
     text-align: center;
   }
 
   .day {
+    position: relative;
     display: flex;
     flex-direction: column;
-    background: white;
-    padding: 6px;
-    border-radius: 5px;
+    background: $white;
+    padding: 3px;
     color: $black;
-    height: 70px;
     box-sizing: border-box;
+    cursor: pointer;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 1) 0%,
+      rgba(246, 246, 246, 1) 47%,
+      rgba(237, 237, 237, 1) 100%
+    );
+    box-shadow: -1px 1px 5px 1px rgba(0, 0, 0, 0.15);
 
     .date {
       top: 0;
-      left: 0;
-      font-weight: 700;
-      font-size: 20px;
+      left: 5px;
+      position: absolute;
+      font-size: 50px;
+      color: rgb(230, 230, 230);
+    }
+
+    .dateInfo {
+      position: absolute;
+      bottom: 5px;
+      right: 5px;
+      font-weight: bold;
     }
 
     .total,
@@ -63,30 +98,16 @@ $gap: 10px;
     }
 
     &.selectedDay {
-      background: lightgreen;
+      background: rgb(208, 255, 208);
+
+      .date {
+        color: rgb(75, 75, 75);
+      }
     }
 
     &.futureDay {
       background: darkgray;
       color: gray;
     }
-  }
-}
-
-.dayGrid {
-  grid-area: day;
-  height: 550px;
-  width: 300px;
-  font-size: 12px;
-  overflow: scroll;
-}
-
-.dayDescription {
-  display: flex;
-  justify-content: space-between;
-
-  span:last-child {
-    text-align: right;
-    width: 75px;
   }
 }

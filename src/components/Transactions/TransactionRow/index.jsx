@@ -22,11 +22,16 @@ function displayPayeeDescription({ payee, description }) {
   );
 }
 
-const TransactionRow = memo(({ transaction }) => {
+const TransactionRow = memo(({ transaction, onCheckboxChange }) => {
   return (
     <tr>
       <td className={style.checkBox}>
-        <input id={transaction.id} type="checkbox" />
+        <input
+          id={transaction.id}
+          type="checkbox"
+          value={transaction.id}
+          onChange={onCheckboxChange}
+        />
         <label htmlFor={transaction.id} />
       </td>
       <td className={style.descriptionCol}>

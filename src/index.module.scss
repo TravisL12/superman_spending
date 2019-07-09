@@ -1,12 +1,13 @@
 @import "global.module.scss";
 
 .app {
-  background: $blue;
+  background: $white;
   min-height: 100vh;
 }
 
 .appContainer {
   max-width: 1400px;
+  min-width: 1000px;
   margin: 0 auto;
   min-height: calc(100vh - #{$footer-height});
 }

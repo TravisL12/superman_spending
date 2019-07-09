@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import AuthService from "middleware/AuthService";
 import { currency, formatDate } from "utilities/date-format-utils";
 import style from "./Categories.module.scss";
+import Loading from "components/Loading";
 import { values, keys } from "lodash";
 
 class Categories extends Component {
@@ -89,7 +90,7 @@ class Categories extends Component {
       checkedCategories
     } = this.state;
 
-    if (isLoading) return null;
+    if (isLoading) return <Loading />;
 
     return (
       <div className={style.categoryTransactions}>

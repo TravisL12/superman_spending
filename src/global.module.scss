@@ -1,11 +1,11 @@
-$yearColor: #ffe1e1;
-$monthColor: #ff9f9f;
+$yearColor: #7a7a7a;
+$monthColor: #000000;
 $white: #ffffff;
 $blue: #f0fbff;
-$accentBlue: lightcyan;
-$accentRowBlue: #ddf2f9;
+$accentBlue: rgb(207, 207, 207);
+$accentRowBlue: #f5f5f5;
 $loginBtn: #1abc9c;
-$black: #696969;
+$black: #242424;
 
 $footer-height: 100px;
 
@@ -38,25 +38,30 @@ p {
 }
 
 tbody {
-  tr:nth-child(odd) td {
-    background: $accentRowBlue;
+  tr td {
+    border-bottom: 1px solid $accentRowBlue;
   }
 }
 
 %selector {
   display: flex;
   justify-content: space-around;
-  flex-wrap: wrap;
-  background: white;
+  background: $white;
 
   .itemContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 100px;
     flex: 1;
     color: black;
     text-decoration: none;
+    padding: 10px 0;
   }
 
   .active {
     background: $yearColor;
+    color: $white;
   }
 
   .singleItem {

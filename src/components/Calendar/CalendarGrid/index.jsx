@@ -1,19 +1,20 @@
 import React, { useState } from "react";
-import { sortBy, sumBy, values, orderBy } from "lodash";
+import { sumBy, values, orderBy } from "lodash";
 import { Link } from "react-router-dom";
 
 import {
   currency,
   formatDate,
   daysOfWeek,
-  getToday,
-  cleanDescription
+  getToday
 } from "utilities/date-format-utils";
 import style from "./CalendarGrid.module.scss";
-import SideColumn from "./SideColumn";
+import MonthTotals from "./MonthTotals";
+import DayTotals from "./DayTotals";
 
 function CalendarGrid(props) {
   const [selectedDay, setSelectedDay] = useState(false);
+  const [showCategories, setShowCategories] = useState(false);
 
   const {
     match: {
@@ -64,7 +65,13 @@ function CalendarGrid(props) {
     return day === selectedDay ? style.selectedDay : null;
   }
 
+  function toggleCategories() {
+    setSelectedDay(false);
+    setShowCategories(!showCategories);
+  }
+
   function showDay(day) {
+    setShowCategories(false);
     setSelectedDay(day);
   }
 
@@ -76,18 +83,26 @@ function CalendarGrid(props) {
 
   return (
     <div className={style.calendarGrid}>
-      <SideColumn categoryData={categoryData} payeeData={payeeData} />
+      {showCategories && (
+        <MonthTotals categoryData={categoryData} payeeData={payeeData} />
+      )}
+
+      {/* Day Breakdown */}
+      {selectedDay && (
+        <DayTotals close={closeDay} transactions={selectedDayTransactions} />
+      )}
 
       <div className={style.monthName}>
+        <Link to={getPrevMonth()}>
+          <button className={style.monthChangeArrow}>&#8592;</button>
+        </Link>
         <h1>{formatDate(month - 1, year)}</h1>
-        <div className={style.changeMonth}>
-          <Link to={getPrevMonth()}>
-            <button>Previous</button>
-          </Link>
-          <Link to={getNextMonth()}>
-            <button>Next</button>
-          </Link>
-        </div>
+        <Link to={getNextMonth()}>
+          <button className={style.monthChangeArrow}>&#8594;</button>
+        </Link>
+        <button className={style.toggleCategories} onClick={toggleCategories}>
+          {showCategories ? "Hide" : "Show"} Categories
+        </button>
       </div>
 
       {/* Calendar of Days */}
@@ -116,32 +131,13 @@ function CalendarGrid(props) {
               key={`spending-${day}`}
             >
               <div className={style.date}>{day}</div>
-              <div>
+              <div className={style.dateInfo}>
                 <div className={style.total}>{currency(sum)}</div>
                 <div className={style.count}>Count {count}</div>
               </div>
             </div>
           );
         })}
-      </div>
-
-      {/* Day Breakdown */}
-      <div className={style.dayGrid}>
-        {selectedDayTransactions.length > 0 && (
-          <div className={style.closeDay} onClick={closeDay}>
-            X
-          </div>
-        )}
-        <ul>
-          {sortBy(selectedDayTransactions, "amount")
-            .reverse()
-            .map(({ amount, description }, idx) => (
-              <li className={style.dayDescription} key={idx}>
-                <span>{cleanDescription(description)}</span>
-                <span>{currency(amount)}</span>
-              </li>
-            ))}
-        </ul>
       </div>
     </div>
   );

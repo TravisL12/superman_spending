@@ -1,34 +1,19 @@
 @import "global.module.scss";
 
-%selector {
-  display: flex;
-  background: white;
-
-  .itemContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: black;
-    text-decoration: none;
-    padding: 10px 0;
-  }
-
-  .active {
-    background: $yearColor;
-  }
-
-  .noData {
-    background: lightgray;
-  }
-}
-
 .years {
   @extend %selector;
+  .itemContainer {
+    min-width: 50px;
+  }
 }
 
 .months {
   @extend %selector;
   background: $yearColor;
+
+  .itemContainer {
+    color: $white;
+  }
 
   .active {
     background: $monthColor;

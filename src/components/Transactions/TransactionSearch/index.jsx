@@ -51,7 +51,7 @@ function TransactionSearch({
           />
         </div>
         <div className={style.input}>
-          <button onClick={resetSearch}>Reset</button>
+          <input type="button" onClick={resetSearch} value={"Reset"} />
           <input type="submit" value={"Search"} />
         </div>
       </form>

@@ -25,7 +25,8 @@ class Transactions extends Component {
       categoryIds: []
     },
     searchResults: [],
-    transactions: []
+    transactions: [],
+    checkedIds: []
   };
 
   componentWillMount() {
@@ -43,14 +44,24 @@ class Transactions extends Component {
     this.fetch(searchQueries, { page });
   }
 
-  removeKeyword = keyword => {
-    const {
-      searchQueries: { keywordSearches }
-    } = this.state;
-    const idx = keywordSearches.indexOf(keyword);
-    keywordSearches.splice(idx, 1);
+  removeSearch = keyword => {
+    if (["afterDate", "beforeDate"].includes(keyword)) {
+      this.fetch({
+        ...this.state.searchQueries,
+        [keyword]: undefined
+      });
 
-    this.fetch({ ...this.state.searchQueries, keywordSearches });
+      return;
+    }
+    const { searchQueries } = this.state;
+    const keywordSearches = searchQueries.keywordSearches.filter(
+      search => search !== keyword
+    );
+
+    this.fetch({
+      ...this.state.searchQueries,
+      keywordSearches
+    });
   };
 
   submitSearch = event => {
@@ -98,6 +109,16 @@ class Transactions extends Component {
     this.fetch({ keywordSearches: [] });
   };
 
+  updateCheckedRow = ({ target: { value } }) => {
+    this.setState(oldState => {
+      if (oldState.checkedIds.includes(value)) {
+        return { checkedIds: oldState.checkedIds.filter(id => id !== value) };
+      } else {
+        return { checkedIds: [...oldState.checkedIds, value] };
+      }
+    });
+  };
+
   updateSearchString = ({ target }) => {
     this.setState(oldState => {
       const searchInput = {
@@ -116,7 +137,7 @@ class Transactions extends Component {
       return "";
     }
 
-    return `?${qs.stringify(searchQueries, { arrayFormat: "comma" })}`;
+    return `?${qs.stringify(searchQueries)}`;
   };
 
   fetch = (searchQueries = {}, params = { page: 0 }) => {
@@ -145,12 +166,18 @@ class Transactions extends Component {
 
   updateLocation = () => {
     this.props.history.push({
-      search: qs.stringify(this.state.searchQueries, { arrayFormat: "comma" })
+      search: qs.stringify(this.state.searchQueries)
     });
   };
 
   render() {
-    const { isLoading, searchInput, searchResults, transactions } = this.state;
+    const {
+      isLoading,
+      searchInput,
+      searchResults,
+      transactions,
+      searchQueries
+    } = this.state;
 
     if (isLoading) return <Loading />;
 
@@ -166,12 +193,11 @@ class Transactions extends Component {
           />
         </div>
         <div className={style.searchTotals}>
-          {!isEmpty(searchResults) && (
-            <Totals
-              removeKeyword={this.removeKeyword}
-              searchResults={searchResults}
-            />
-          )}
+          <Totals
+            removeSearch={this.removeSearch}
+            searchResults={searchResults}
+            currentSearches={searchQueries}
+          />
         </div>
 
         <table className={style.transactionTable}>
@@ -186,8 +212,14 @@ class Transactions extends Component {
             </tr>
           </thead>
           <tbody>
-            {transactions.map((t, idx) => {
-              return <Row key={idx} transaction={t} />;
+            {transactions.map((transaction, idx) => {
+              return (
+                <Row
+                  key={idx}
+                  onCheckboxChange={this.updateCheckedRow}
+                  transaction={transaction}
+                />
+              );
             })}
           </tbody>
         </table>

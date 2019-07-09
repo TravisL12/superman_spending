@@ -1,0 +1,38 @@
+@import "global.module.scss";
+
+.totalsContainer {
+  position: absolute;
+  right: 0;
+  width: 450px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.9);
+  z-index: 1;
+  font-size: 14px;
+}
+
+ul li {
+  display: flex;
+  padding: 3px 0;
+  .name {
+    flex: 1;
+  }
+  .sum,
+  .average {
+    width: 80px;
+    text-align: right;
+  }
+
+  &.categoryTotal {
+    font-weight: bold;
+  }
+}
+
+.dayDescription {
+  display: flex;
+  justify-content: space-between;
+
+  span:last-child {
+    text-align: right;
+    width: 75px;
+  }
+}
