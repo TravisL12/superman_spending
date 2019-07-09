@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import CatgoriesProvider from "providers/CategoriesProvider";
 import AuthService from "./AuthService";
 
 export default function withAuth(AuthComponent) {
@@ -24,9 +23,7 @@ export default function withAuth(AuthComponent) {
 
     render() {
       return this.state.user ? (
-        <CatgoriesProvider>
-          <AuthComponent user={this.state.user} {...this.props} />
-        </CatgoriesProvider>
+        <AuthComponent user={this.state.user} {...this.props} />
       ) : null;
     }
   };

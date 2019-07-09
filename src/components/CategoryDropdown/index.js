@@ -10,22 +10,20 @@ function CategoryDropdown({ onChange, selectedCategories }) {
 
   return (
     <CategoriesConsumer>
-      {categories => {
-        return (
-          <select
-            name={"categoryIds"}
-            multiple
-            value={selectedCategories}
-            onChange={updateSelection}
-          >
-            {sortBy(categories, "name").map((cat, idx) => (
-              <option key={idx} value={cat.id}>
-                {cat.name}
-              </option>
-            ))}
-          </select>
-        );
-      }}
+      {categories => (
+        <select
+          name={"categoryIds"}
+          multiple
+          value={selectedCategories}
+          onChange={updateSelection}
+        >
+          {sortBy(categories, "name").map((cat, idx) => (
+            <option key={idx} value={cat.id}>
+              {cat.name}
+            </option>
+          ))}
+        </select>
+      )}
     </CategoriesConsumer>
   );
 }

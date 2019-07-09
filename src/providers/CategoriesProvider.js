@@ -6,7 +6,7 @@ const { Provider, Consumer } = createContext();
 export const CategoriesConsumer = Consumer;
 
 function CategoriesProvider(props) {
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState(undefined);
 
   const fetchCategories = () => {
     if (AuthService.loggedIn()) {

@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter, Route, withRouter } from "react-router-dom";
 import withAuth from "middleware/withAuth";
+import CatgoriesProvider from "providers/CategoriesProvider";
 
 // Absolute paths set in .env file (NODE_PATH=src)
 import Header from "components/Header/";
@@ -15,21 +16,23 @@ import styles from "index.module.scss";
 const WrappedHeader = withRouter(Header);
 
 ReactDOM.render(
-  <BrowserRouter>
-    <div className={styles.app}>
-      <div className={styles.appContainer}>
-        <Route path="/" component={WrappedHeader} />
-        <Route path="/calendar" component={withAuth(Calendar)} />
-        <Route exact path="/categories" component={withAuth(Categories)} />
-        <Route
-          exact
-          path="/transactions/:page?"
-          component={withAuth(Transactions)}
-        />
-        <Route exact path="/login" component={Login} />
+  <CatgoriesProvider>
+    <BrowserRouter>
+      <div className={styles.app}>
+        <div className={styles.appContainer}>
+          <Route path="/" component={WrappedHeader} />
+          <Route path="/calendar" component={withAuth(Calendar)} />
+          <Route exact path="/categories" component={withAuth(Categories)} />
+          <Route
+            exact
+            path="/transactions/:page?"
+            component={withAuth(Transactions)}
+          />
+          <Route exact path="/login" component={Login} />
+        </div>
       </div>
-    </div>
-  </BrowserRouter>,
+    </BrowserRouter>
+  </CatgoriesProvider>,
   document.getElementById("root")
 );
 
