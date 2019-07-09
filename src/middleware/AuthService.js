@@ -1,6 +1,5 @@
-import decode from "jwt-decode";
-
 // Auth setup using: https://hptechblogs.com/using-json-web-token-react/
+import decode from "jwt-decode";
 
 const DOMAIN = "http://0.0.0.0:3131";
 

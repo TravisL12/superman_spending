@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter, Route, withRouter } from "react-router-dom";
 import withAuth from "middleware/withAuth";
-import CatgoriesProvider from "providers/CategoriesProvider";
+import CategoriesProvider from "providers/CategoriesProvider";
 
 // Absolute paths set in .env file (NODE_PATH=src)
 import Header from "components/Header/";
@@ -16,7 +16,7 @@ import styles from "index.module.scss";
 const WrappedHeader = withRouter(Header);
 
 ReactDOM.render(
-  <CatgoriesProvider>
+  <CategoriesProvider>
     <BrowserRouter>
       <div className={styles.app}>
         <div className={styles.appContainer}>
@@ -32,7 +32,7 @@ ReactDOM.render(
         </div>
       </div>
     </BrowserRouter>
-  </CatgoriesProvider>,
+  </CategoriesProvider>,
   document.getElementById("root")
 );
 

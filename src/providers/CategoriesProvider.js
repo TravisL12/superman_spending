@@ -20,7 +20,11 @@ function CategoriesProvider(props) {
     fetchCategories();
   }, []);
 
-  return <Provider value={categories}>{props.children}</Provider>;
+  return (
+    <Provider value={{ categories, fetchCategories }}>
+      {props.children}
+    </Provider>
+  );
 }
 
 export default CategoriesProvider;
