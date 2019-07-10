@@ -86,7 +86,7 @@ class Transactions extends Component {
 
     const categories = categoryIds ? [...categoryIds] : [];
     if (!isEmpty(categoryInput) && !categories.includes(categoryInput)) {
-      categories.push(categoryInput);
+      categories.push(categoryInput[0]);
       request.categoryIds = categories;
     }
 
