@@ -12,17 +12,17 @@ import style from "./Transactions.module.scss";
 class Transactions extends Component {
   state = {
     searchQueries: {
-      keywordSearches: [],
+      keywordSearches: undefined,
       beforeDate: undefined,
       afterDate: undefined,
-      categoryIds: []
+      categoryIds: undefined
     },
     isLoading: true,
     searchInput: {
       keyword: "",
       beforeDate: "",
       afterDate: "",
-      categoryIds: []
+      categoryIds: ""
     },
     searchResults: [],
     transactions: [],
@@ -33,15 +33,7 @@ class Transactions extends Component {
     const query = qs.parse(this.props.history.location.search);
     const page = this.props.match.params.page || 0;
 
-    const keywordSearches = !query.keywordSearches
-      ? []
-      : typeof query.keywordSearches === "string"
-        ? [query.keywordSearches]
-        : query.keywordSearches;
-
-    const searchQueries = { ...query, keywordSearches };
-
-    this.fetch(searchQueries, { page });
+    this.fetch(query, { page });
   }
 
   removeSearch = keyword => {
@@ -66,8 +58,8 @@ class Transactions extends Component {
 
   submitSearch = event => {
     event.preventDefault();
+    const searchQueries = qs.parse(this.props.history.location.search);
     const {
-      searchQueries: { keywordSearches, categoryIds },
       searchInput: {
         keyword: keywordInput,
         beforeDate,
@@ -78,15 +70,25 @@ class Transactions extends Component {
 
     const request = { ...this.state.searchQueries };
 
-    const searches = keywordSearches ? [...keywordSearches] : [];
+    const searches = Array.isArray(searchQueries.keywordSearches)
+      ? [...searchQueries.keywordSearches]
+      : !isEmpty(searchQueries.keywordSearches)
+        ? [searchQueries.keywordSearches]
+        : [];
+
     if (keywordInput && !searches.includes(keywordInput)) {
       searches.push(keywordInput);
       request.keywordSearches = searches;
     }
 
-    const categories = categoryIds ? [...categoryIds] : [];
-    if (!isEmpty(categoryInput) && !categories.includes(categoryInput)) {
-      categories.push(categoryInput[0]);
+    const categories = Array.isArray(searchQueries.categoryIds)
+      ? [...searchQueries.categoryIds]
+      : !isEmpty(searchQueries.categoryIds)
+        ? [searchQueries.categoryIds]
+        : [];
+
+    if (categoryInput && !categories.includes(categoryInput)) {
+      categories.push(categoryInput);
       request.categoryIds = categories;
     }
 
@@ -106,7 +108,7 @@ class Transactions extends Component {
   };
 
   resetSearch = () => {
-    this.fetch({ keywordSearches: [] });
+    this.fetch();
   };
 
   updateCheckedRow = ({ target: { value } }) => {
@@ -133,7 +135,7 @@ class Transactions extends Component {
   // Keyword Searches needs to always be an array
   buildQuery = searchQueries => {
     const queryKeys = Object.keys(searchQueries);
-    if (queryKeys.length === 1 && isEmpty(searchQueries.keywordSearches)) {
+    if (queryKeys.length === 0) {
       return "";
     }
 
@@ -153,7 +155,7 @@ class Transactions extends Component {
               keyword: "",
               beforeDate: "",
               afterDate: "",
-              categoryIds: []
+              categoryIds: ""
             },
             searchResults,
             transactions

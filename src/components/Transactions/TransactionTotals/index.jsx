@@ -18,7 +18,6 @@ function TransactionTotals({
   );
 
   const { afterDate, beforeDate, categoryIds } = currentSearches;
-  console.log(categoryIds);
 
   const viewDates = dateRange(10);
 
@@ -38,14 +37,14 @@ function TransactionTotals({
               Before: {beforeDate}
             </li>
           )}
-          {categoryIds.map((id, idx) => {
-            return (
-              <li key={idx}>
-                <button>X</button>{" "}
-                Category {id}
-              </li>
-            );
-          })}
+          {categoryIds &&
+            categoryIds.map((id, idx) => {
+              return (
+                <li key={idx}>
+                  <button>X</button> Category {id}
+                </li>
+              );
+            })}
         </ul>
       </div>
 

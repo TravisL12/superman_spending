@@ -16,7 +16,6 @@ function CategoryDropdown({ onChange, selectedCategories }) {
         return (
           <select
             name={"categoryIds"}
-            multiple
             value={selectedCategories}
             onChange={updateSelection}
           >
