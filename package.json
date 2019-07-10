@@ -2,6 +2,9 @@
   "name": "batman",
   "version": "0.1.0",
   "private": true,
+  "resolutions": {
+    "handlebars": "^4.1.0"
+  },
   "dependencies": {
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.11",
