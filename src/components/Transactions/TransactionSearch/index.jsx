@@ -6,7 +6,7 @@ function TransactionSearch({
   transactions,
   searchInput,
   dateInput,
-  updateSearch,
+  onSearchChange,
   submitSearch,
   resetSearch
 }) {
@@ -21,7 +21,7 @@ function TransactionSearch({
             name="keyword"
             placeholder="Keyword"
             value={searchInput.keyword}
-            onChange={updateSearch}
+            onChange={onSearchChange}
           />
         </div>
         <div className={style.input}>
@@ -31,7 +31,7 @@ function TransactionSearch({
             name="afterDate"
             placeholder="YYYY-MM-DD"
             value={searchInput.afterDate}
-            onChange={updateSearch}
+            onChange={onSearchChange}
           />
         </div>
         <div className={style.input}>
@@ -41,12 +41,12 @@ function TransactionSearch({
             name="beforeDate"
             placeholder="YYYY-MM-DD"
             value={searchInput.beforeDate}
-            onChange={updateSearch}
+            onChange={onSearchChange}
           />
         </div>
         <div className={style.input}>
           <CategoryDropdown
-            onChange={updateSearch}
+            onChange={onSearchChange}
             selectedCategories={searchInput.categoryIds}
           />
         </div>

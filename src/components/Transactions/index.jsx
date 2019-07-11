@@ -8,6 +8,7 @@ import Search from "./TransactionSearch";
 import Totals from "./TransactionTotals";
 import Row from "./TransactionRow";
 import style from "./Transactions.module.scss";
+import { qsToArray, filterOutValue } from "utilities/query-string-utils";
 
 class Transactions extends Component {
   state = {
@@ -46,8 +47,9 @@ class Transactions extends Component {
       return;
     }
     const { searchQueries } = this.state;
-    const keywordSearches = searchQueries.keywordSearches.filter(
-      search => search !== keyword
+    const keywordSearches = filterOutValue(
+      searchQueries.keywordSearches,
+      keyword
     );
 
     this.fetch({
@@ -68,25 +70,15 @@ class Transactions extends Component {
       }
     } = this.state;
 
-    const request = { ...this.state.searchQueries };
+    const request = { ...searchQueries };
 
-    const searches = Array.isArray(searchQueries.keywordSearches)
-      ? [...searchQueries.keywordSearches]
-      : !isEmpty(searchQueries.keywordSearches)
-        ? [searchQueries.keywordSearches]
-        : [];
-
+    const searches = qsToArray(searchQueries.keywordSearches);
     if (keywordInput && !searches.includes(keywordInput)) {
       searches.push(keywordInput);
       request.keywordSearches = searches;
     }
 
-    const categories = Array.isArray(searchQueries.categoryIds)
-      ? [...searchQueries.categoryIds]
-      : !isEmpty(searchQueries.categoryIds)
-        ? [searchQueries.categoryIds]
-        : [];
-
+    const categories = qsToArray(searchQueries.categoryIds);
     if (categoryInput && !categories.includes(categoryInput)) {
       categories.push(categoryInput);
       request.categoryIds = categories;
@@ -100,7 +92,7 @@ class Transactions extends Component {
       request.afterDate = afterDate;
     }
 
-    if (isEqual(request, this.state.searchQueries)) {
+    if (isEqual(request, searchQueries)) {
       return;
     }
 
@@ -113,15 +105,13 @@ class Transactions extends Component {
 
   updateCheckedRow = ({ target: { value } }) => {
     this.setState(oldState => {
-      if (oldState.checkedIds.includes(value)) {
-        return { checkedIds: oldState.checkedIds.filter(id => id !== value) };
-      } else {
-        return { checkedIds: [...oldState.checkedIds, value] };
-      }
+      return oldState.checkedIds.includes(value)
+        ? { checkedIds: oldState.checkedIds.filter(id => id !== value) }
+        : { checkedIds: [...oldState.checkedIds, value] };
     });
   };
 
-  updateSearchString = ({ target }) => {
+  onSearchChange = ({ target }) => {
     this.setState(oldState => {
       const searchInput = {
         ...oldState.searchInput,
@@ -132,20 +122,10 @@ class Transactions extends Component {
     });
   };
 
-  // Keyword Searches needs to always be an array
-  buildQuery = searchQueries => {
-    const queryKeys = Object.keys(searchQueries);
-    if (queryKeys.length === 0) {
-      return "";
-    }
-
-    return `?${qs.stringify(searchQueries)}`;
-  };
-
   fetch = (searchQueries = {}, params = { page: 0 }) => {
-    const query = this.buildQuery(searchQueries);
+    const query = !isEmpty(searchQueries) ? qs.stringify(searchQueries) : "";
 
-    AuthService.fetch(`api/transactions/list/${params.page}${query}`).then(
+    AuthService.fetch(`api/transactions/list/${params.page}?${query}`).then(
       ({ transactions, searchResults }) => {
         this.setState(
           {
@@ -189,7 +169,7 @@ class Transactions extends Component {
           <Search
             transactions={transactions}
             searchInput={searchInput}
-            updateSearch={this.updateSearchString}
+            onSearchChange={this.onSearchChange}
             submitSearch={this.submitSearch}
             resetSearch={this.resetSearch}
           />
