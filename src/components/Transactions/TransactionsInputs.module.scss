@@ -39,9 +39,11 @@
     font-weight: 800;
   }
 
+  $cellWidth: 75px;
+
   th,
   td {
-    $cellWidth: 75px;
+    min-width: $cellWidth;
     padding: 2px 4px;
     text-align: right;
 

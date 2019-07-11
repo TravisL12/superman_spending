@@ -9,5 +9,5 @@ export function filterOutValue(value, keyword) {
     return "";
   }
 
-  value.filter(search => search !== keyword);
+  return value.filter(search => search !== keyword);
 }

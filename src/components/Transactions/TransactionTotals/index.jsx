@@ -21,7 +21,7 @@ function TransactionTotals({
 
   const { afterDate, beforeDate, categoryIds } = currentSearches;
 
-  const viewDates = dateRange(10);
+  const viewDates = dateRange(20);
 
   return (
     <CategoriesConsumer>
@@ -99,11 +99,22 @@ function TransactionTotals({
                       </tr>
                     );
                   })}
+                  {/* Total Row */}
                   <tr>
                     <td />
                     <td className={style.totalLabel}>Totals</td>
                     <td className={style.sum}>{currency(totals.sum)}</td>
                     <td className={style.count}>{totals.count}</td>
+                    {searchResults.length > 1 &&
+                      viewDates.map(({ year, month }, idx) => {
+                        const total = searchResults.reduce((sum, search) => {
+                          sum += search.grouped[year]
+                            ? sumBy(search.grouped[year][month + 1], "amount")
+                            : 0;
+                          return sum;
+                        }, 0);
+                        return <td key={idx}>{currency(total)}</td>;
+                      })}
                   </tr>
                 </tbody>
               </table>
