@@ -4,25 +4,24 @@ import { currency, formatDate } from "utilities/date-format-utils";
 import style from "./Categories.module.scss";
 import Loading from "components/Loading";
 import { values, keys } from "lodash";
+import { VictoryStack, VictoryArea } from "victory";
 
 class Categories extends Component {
   state = {
     categories: null,
     categoryIds: null,
     isLoading: true,
-    checkedCategories: {}
+    checkedCategories: {},
+    graphCumulative: true
   };
 
   componentWillMount() {
     AuthService.fetch("api/categories/compare").then(
       ({ categories, category_ids }) => {
-        const checkedCategories = Object.keys(category_ids).reduce(
-          (result, id) => {
-            result[id] = true;
-            return result;
-          },
-          {}
-        );
+        const checkedCategories = keys(category_ids).reduce((result, id) => {
+          result[id] = true;
+          return result;
+        }, {});
         this.setState({
           categories,
           categoryIds: category_ids,
@@ -55,6 +54,20 @@ class Categories extends Component {
     });
   };
 
+  createRowData = (categories, id) => {
+    return categories.reduce((result, cat, idx) => {
+      let sum =
+        this.state.graphCumulative && idx > 0 ? result.slice(-1)[0].y : 0;
+      if (this.state.checkedCategories[id]) {
+        const data = cat.categoryData[id];
+        sum = data ? sum + this.sumTransactions(data) : sum;
+      }
+
+      result.push({ x: idx, y: sum });
+      return result;
+    }, []);
+  };
+
   createCategoryRow = (categories, id) => {
     return categories.map((cat, cidx) => {
       let sum = 0;
@@ -69,6 +82,20 @@ class Categories extends Component {
         </td>
       );
     });
+  };
+
+  buildGraph = (categories, categoryIds) => {
+    const data = keys(categoryIds).map((id, idx) => {
+      return this.createRowData(categories, id);
+    });
+
+    return (
+      <VictoryStack>
+        {data.map((d, idx) => {
+          return <VictoryArea data={d} key={idx} />;
+        })}
+      </VictoryStack>
+    );
   };
 
   handleCategoryCheckboxChange = event => {
@@ -91,6 +118,8 @@ class Categories extends Component {
     } = this.state;
 
     if (isLoading) return <Loading />;
+
+    const graph = this.buildGraph(categories, categoryIds);
 
     return (
       <div className={style.categoryTransactions}>
@@ -143,6 +172,7 @@ class Categories extends Component {
             </tr>
           </tbody>
         </table>
+        {graph}
       </div>
     );
   }
