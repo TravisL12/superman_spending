@@ -3,7 +3,11 @@
 .categoryTransactions {
   display: flex;
   justify-content: space-around;
-  flex-wrap: wrap;
+
+  .graph {
+    max-width: 1000px;
+    flex: 1;
+  }
 
   table {
     border-spacing: 0;

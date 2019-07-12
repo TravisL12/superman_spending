@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import AuthService from "middleware/AuthService";
-import { currency, formatDate } from "utilities/date-format-utils";
+import { currency } from "utilities/date-format-utils";
 import style from "./Categories.module.scss";
 import Loading from "components/Loading";
 import { values, keys } from "lodash";
-import { VictoryStack, VictoryArea } from "victory";
+import { VictoryTheme, VictoryChart, VictoryStack, VictoryArea } from "victory";
 
 class Categories extends Component {
   state = {
@@ -12,7 +12,7 @@ class Categories extends Component {
     categoryIds: null,
     isLoading: true,
     checkedCategories: {},
-    graphCumulative: true
+    graphCumulative: false
   };
 
   componentWillMount() {
@@ -33,10 +33,12 @@ class Categories extends Component {
   }
 
   sumTransactions = data => {
-    return data.Transactions.reduce((sum, t) => {
-      sum += t.amount;
-      return sum;
-    }, 0);
+    return (
+      data.Transactions.reduce((sum, t) => {
+        sum += t.amount;
+        return sum;
+      }, 0) / 100
+    );
   };
 
   calculateCategoryTotal = category => {
@@ -68,33 +70,24 @@ class Categories extends Component {
     }, []);
   };
 
-  createCategoryRow = (categories, id) => {
-    return categories.map((cat, cidx) => {
-      let sum = 0;
-      if (this.state.checkedCategories[id]) {
-        const data = cat.categoryData[id];
-        sum = data ? this.sumTransactions(data) : 0;
-      }
-
-      return (
-        <td className={style.amountCol} key={`cat-${cidx}`}>
-          {currency(sum)}
-        </td>
-      );
-    });
-  };
-
   buildGraph = (categories, categoryIds) => {
     const data = keys(categoryIds).map((id, idx) => {
       return this.createRowData(categories, id);
     });
 
     return (
-      <VictoryStack>
-        {data.map((d, idx) => {
-          return <VictoryArea data={d} key={idx} />;
-        })}
-      </VictoryStack>
+      <VictoryChart
+        animate={{ duration: 500 }}
+        padding={{ top: 0, bottom: 0, left: 50, right: 0 }}
+        height={250}
+        theme={VictoryTheme.material}
+      >
+        <VictoryStack>
+          {data.map((d, idx) => {
+            return <VictoryArea data={d} key={idx} interpolation={"basis"} />;
+          })}
+        </VictoryStack>
+      </VictoryChart>
     );
   };
 
@@ -123,56 +116,47 @@ class Categories extends Component {
 
     return (
       <div className={style.categoryTransactions}>
-        <table>
-          <thead>
-            <tr>
-              <th />
-              <th>Categories</th>
-              {categories.map((c, idx) => {
+        <div className={style.table}>
+          <table>
+            <thead>
+              <tr>
+                <th />
+                <th>Categories</th>
+              </tr>
+            </thead>
+            <tbody>
+              {keys(categoryIds).map((id, idx) => {
                 return (
-                  <th key={idx}>
-                    {formatDate(c.month, c.year, {
-                      month: "short",
-                      year: "numeric"
-                    })}
-                  </th>
+                  <tr key={`name-${idx}`}>
+                    <td>
+                      <input
+                        type="checkbox"
+                        id={`category-${id}`}
+                        value={id}
+                        checked={checkedCategories[id]}
+                        onChange={this.handleCategoryCheckboxChange}
+                      />
+                      <label htmlFor={`category-${id}`} />
+                    </td>
+                    <td className={style.categoryCol}>
+                      {categoryIds[id].name}
+                    </td>
+                  </tr>
                 );
               })}
-            </tr>
-          </thead>
-          <tbody>
-            {keys(categoryIds).map((id, idx) => {
-              return (
-                <tr key={`name-${idx}`}>
-                  <td>
-                    <input
-                      type="checkbox"
-                      id={`category-${id}`}
-                      value={id}
-                      checked={checkedCategories[id]}
-                      onChange={this.handleCategoryCheckboxChange}
-                    />
-                    <label htmlFor={`category-${id}`} />
-                  </td>
-                  <td className={style.categoryCol}>{categoryIds[id].name}</td>
-                  {this.createCategoryRow(categories, id)}
-                </tr>
-              );
-            })}
-            <tr>
-              <td />
-              <td />
-              {categories.map((c, idx) => {
-                return (
-                  <td className={style.totalCol} key={idx}>
-                    {this.calculateCategoryTotal(c)}
-                  </td>
-                );
-              })}
-            </tr>
-          </tbody>
-        </table>
-        {graph}
+            </tbody>
+          </table>
+        </div>
+        <div className={style.graph}>
+          <button
+            onClick={() => {
+              this.setState({ graphCumulative: !this.state.graphCumulative });
+            }}
+          >
+            Toggle Cumulative
+          </button>
+          {graph}
+        </div>
       </div>
     );
   }
