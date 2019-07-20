@@ -4,7 +4,7 @@ import { currency } from "utilities/date-format-utils";
 import style from "./Categories.module.scss";
 import Loading from "components/Loading";
 import { values, keys } from "lodash";
-import { VictoryTheme, VictoryChart, VictoryStack, VictoryArea } from "victory";
+import { VictoryAxis, VictoryChart, VictoryStack, VictoryArea } from "victory";
 
 class Categories extends Component {
   state = {
@@ -74,14 +74,26 @@ class Categories extends Component {
     const data = keys(categoryIds).map((id, idx) => {
       return this.createRowData(categories, id);
     });
-
+    const graphHeight = 200;
     return (
       <VictoryChart
         animate={{ duration: 500 }}
-        padding={{ top: 0, bottom: 0, left: 50, right: 0 }}
-        height={250}
-        theme={VictoryTheme.material}
+        padding={{ top: 0, bottom: 50, left: 50, right: 0 }}
+        height={graphHeight}
       >
+        <VictoryAxis
+          style={{ tickLabels: { fontSize: 6 } }}
+          crossAxis
+          label="Month"
+          standalone={false}
+        />
+        <VictoryAxis
+          dependentAxis
+          crossAxis
+          label="Total"
+          style={{ tickLabels: { fontSize: 6 } }}
+          standalone={false}
+        />
         <VictoryStack>
           {data.map((d, idx) => {
             return <VictoryArea data={d} key={idx} interpolation={"basis"} />;
