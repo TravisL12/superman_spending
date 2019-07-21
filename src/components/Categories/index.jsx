@@ -108,10 +108,15 @@ class Categories extends Component {
         <VictoryAxis
           dependentAxis
           label="Total"
-          tickFormat={t => `$${t}`}
+          tickFormat={t => `$${t.toLocaleString()}`}
           tickLabelComponent={<VictoryLabel dx={35} dy={-5} />}
           style={{
-            tickLabels: { fill: axisColor, fontSize: axisFontSize },
+            axis: { stroke: 0 },
+            tickLabels: {
+              fill: axisColor,
+              fontSize: axisFontSize,
+              fontWeight: 600
+            },
             grid: {
               strokeDasharray: "15, 5",
               stroke: axisColor
