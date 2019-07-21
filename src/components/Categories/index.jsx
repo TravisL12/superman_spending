@@ -4,7 +4,13 @@ import { currency } from "utilities/date-format-utils";
 import style from "./Categories.module.scss";
 import Loading from "components/Loading";
 import { values, keys } from "lodash";
-import { VictoryAxis, VictoryChart, VictoryStack, VictoryArea } from "victory";
+import {
+  VictoryLabel,
+  VictoryAxis,
+  VictoryChart,
+  VictoryStack,
+  VictoryArea
+} from "victory";
 
 class Categories extends Component {
   state = {
@@ -74,31 +80,44 @@ class Categories extends Component {
     const data = keys(categoryIds).map((id, idx) => {
       return this.createRowData(categories, id);
     });
-    const graphHeight = 200;
+
+    const graphHeight = 250;
+    const axisColor = "red";
+    const axisFontSize = 6;
+
     return (
       <VictoryChart
         animate={{ duration: 500 }}
-        padding={{ top: 0, bottom: 50, left: 50, right: 0 }}
+        padding={{ top: 10, bottom: 50, left: 50, right: 10 }}
         height={graphHeight}
       >
-        <VictoryAxis
-          style={{ tickLabels: { fontSize: 6 } }}
-          crossAxis
-          label="Month"
-          standalone={false}
-        />
-        <VictoryAxis
-          dependentAxis
-          crossAxis
-          label="Total"
-          style={{ tickLabels: { fontSize: 6 } }}
-          standalone={false}
-        />
         <VictoryStack>
           {data.map((d, idx) => {
             return <VictoryArea data={d} key={idx} interpolation={"basis"} />;
           })}
         </VictoryStack>
+
+        {/* X-axis */}
+        <VictoryAxis
+          style={{ tickLabels: { fontSize: axisFontSize } }}
+          label="Month"
+          tickCount={categories.length}
+        />
+
+        {/* Y-axis */}
+        <VictoryAxis
+          dependentAxis
+          label="Total"
+          tickFormat={t => `$${t}`}
+          tickLabelComponent={<VictoryLabel dx={35} dy={-5} />}
+          style={{
+            tickLabels: { fill: axisColor, fontSize: axisFontSize },
+            grid: {
+              strokeDasharray: "15, 5",
+              stroke: axisColor
+            }
+          }}
+        />
       </VictoryChart>
     );
   };
