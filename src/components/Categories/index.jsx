@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import AuthService from "middleware/AuthService";
-import { currency } from "utilities/date-format-utils";
+import { currency, formatDate } from "utilities/date-format-utils";
 import style from "./Categories.module.scss";
 import Loading from "components/Loading";
 import categoryColors from "utilities/categoryColors";
@@ -62,6 +62,22 @@ class Categories extends Component {
     return currency(total, {
       minimumFractionDigits: 0,
       rounded: true
+    });
+  };
+
+  createCategoryRow = (categories, id) => {
+    return categories.map((cat, cidx) => {
+      let sum = 0;
+      if (this.state.checkedCategories[id]) {
+        const data = cat.categoryData[id];
+        sum = data ? this.sumTransactions(data) : 0;
+      }
+
+      return (
+        <td className={style.amountCol} key={`cat-${cidx}`}>
+          {currency(sum)}
+        </td>
+      );
     });
   };
 
@@ -171,39 +187,6 @@ class Categories extends Component {
 
     return (
       <div className={style.categoryTransactions}>
-        <div className={style.table}>
-          <table>
-            <thead>
-              <tr>
-                <th>Categories</th>
-              </tr>
-            </thead>
-            <tbody>
-              {keys(categoryIds).map((id, idx) => {
-                const checkBoxStyling = checkedCategories[id]
-                  ? { background: categoryColors[idx], color: "black" }
-                  : { background: "lightgray", color: "gray" };
-
-                return (
-                  <tr key={`name-${idx}`}>
-                    <td>
-                      <input
-                        type="checkbox"
-                        id={`category-${id}`}
-                        value={id}
-                        checked={checkedCategories[id]}
-                        onChange={this.handleCategoryCheckboxChange}
-                      />
-                      <label htmlFor={`category-${id}`} style={checkBoxStyling}>
-                        {categoryIds[id].name}
-                      </label>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
         <div className={style.graph}>
           <button
             onClick={() => {
@@ -227,6 +210,60 @@ class Categories extends Component {
             Line Chart
           </button>
           {graph}
+        </div>
+        <div className={style.table}>
+          <table>
+            <thead>
+              <tr>
+                <th>Categories</th>
+                {categories.map((c, idx) => {
+                  return (
+                    <th key={idx}>
+                      {formatDate(c.month, c.year, {
+                        month: "short",
+                        year: "numeric"
+                      })}
+                    </th>
+                  );
+                })}
+              </tr>
+            </thead>
+            <tbody>
+              {keys(categoryIds).map((id, idx) => {
+                const checkBoxStyling = checkedCategories[id]
+                  ? { background: categoryColors[idx], color: "black" }
+                  : { background: "lightgray", color: "gray" };
+
+                return (
+                  <tr key={`name-${idx}`}>
+                    <td>
+                      <input
+                        type="checkbox"
+                        id={`category-${id}`}
+                        value={id}
+                        checked={checkedCategories[id]}
+                        onChange={this.handleCategoryCheckboxChange}
+                      />
+                      <label htmlFor={`category-${id}`} style={checkBoxStyling}>
+                        {categoryIds[id].name}
+                      </label>
+                    </td>
+                    {this.createCategoryRow(categories, id)}
+                  </tr>
+                );
+              })}
+              <tr>
+                <td />
+                {categories.map((c, idx) => {
+                  return (
+                    <td className={style.totalCol} key={idx}>
+                      {this.calculateCategoryTotal(c)}
+                    </td>
+                  );
+                })}
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     );
