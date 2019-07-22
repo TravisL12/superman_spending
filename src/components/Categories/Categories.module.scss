@@ -25,7 +25,13 @@
     td,
     th {
       height: 25px;
-      @extend %checkboxLabel;
+
+      label {
+        display: block;
+        padding: 5px;
+        transition: 0.1s linear background;
+        cursor: pointer;
+      }
     }
   }
 }

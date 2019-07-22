@@ -3,12 +3,14 @@ import AuthService from "middleware/AuthService";
 import { currency } from "utilities/date-format-utils";
 import style from "./Categories.module.scss";
 import Loading from "components/Loading";
+import categoryColors from "utilities/categoryColors";
 import { values, keys } from "lodash";
 import {
   VictoryLabel,
   VictoryAxis,
   VictoryChart,
   VictoryStack,
+  VictoryLine,
   VictoryArea
 } from "victory";
 
@@ -18,7 +20,8 @@ class Categories extends Component {
     categoryIds: null,
     isLoading: true,
     checkedCategories: {},
-    graphCumulative: false
+    graphCumulative: false,
+    graphType: "stack"
   };
 
   componentWillMount() {
@@ -85,17 +88,34 @@ class Categories extends Component {
     const axisColor = "red";
     const axisFontSize = 6;
 
+    const stackChart = (
+      <VictoryStack colorScale={categoryColors}>
+        {data.map((d, idx) => {
+          return <VictoryArea data={d} key={idx} interpolation={"basis"} />;
+        })}
+      </VictoryStack>
+    );
+
+    const lineChart = data.map((d, idx) => {
+      return (
+        <VictoryLine
+          data={d}
+          key={idx}
+          interpolation={"basis"}
+          style={{
+            data: { stroke: categoryColors[idx] }
+          }}
+        />
+      );
+    });
+
     return (
       <VictoryChart
         animate={{ duration: 500 }}
-        padding={{ top: 10, bottom: 50, left: 50, right: 10 }}
+        padding={{ top: 10, bottom: 50, left: 10, right: 10 }}
         height={graphHeight}
       >
-        <VictoryStack>
-          {data.map((d, idx) => {
-            return <VictoryArea data={d} key={idx} interpolation={"basis"} />;
-          })}
-        </VictoryStack>
+        {this.state.graphType === "stack" ? stackChart : lineChart}
 
         {/* X-axis */}
         <VictoryAxis
@@ -107,7 +127,6 @@ class Categories extends Component {
         {/* Y-axis */}
         <VictoryAxis
           dependentAxis
-          label="Total"
           tickFormat={t => `$${t.toLocaleString()}`}
           tickLabelComponent={<VictoryLabel dx={35} dy={-5} />}
           style={{
@@ -156,12 +175,15 @@ class Categories extends Component {
           <table>
             <thead>
               <tr>
-                <th />
                 <th>Categories</th>
               </tr>
             </thead>
             <tbody>
               {keys(categoryIds).map((id, idx) => {
+                const checkBoxStyling = checkedCategories[id]
+                  ? { background: categoryColors[idx], color: "black" }
+                  : { background: "lightgray", color: "gray" };
+
                 return (
                   <tr key={`name-${idx}`}>
                     <td>
@@ -172,10 +194,9 @@ class Categories extends Component {
                         checked={checkedCategories[id]}
                         onChange={this.handleCategoryCheckboxChange}
                       />
-                      <label htmlFor={`category-${id}`} />
-                    </td>
-                    <td className={style.categoryCol}>
-                      {categoryIds[id].name}
+                      <label htmlFor={`category-${id}`} style={checkBoxStyling}>
+                        {categoryIds[id].name}
+                      </label>
                     </td>
                   </tr>
                 );
@@ -190,6 +211,20 @@ class Categories extends Component {
             }}
           >
             Toggle Cumulative
+          </button>
+          <button
+            onClick={() => {
+              this.setState({ graphType: "stack" });
+            }}
+          >
+            Stack Chart
+          </button>
+          <button
+            onClick={() => {
+              this.setState({ graphType: "line" });
+            }}
+          >
+            Line Chart
           </button>
           {graph}
         </div>
