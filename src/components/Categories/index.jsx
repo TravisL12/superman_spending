@@ -42,12 +42,10 @@ class Categories extends Component {
   }
 
   sumTransactions = data => {
-    return (
-      data.Transactions.reduce((sum, t) => {
-        sum += t.amount;
-        return sum;
-      }, 0) / 100
-    );
+    return data.Transactions.reduce((sum, t) => {
+      sum += t.amount;
+      return sum;
+    }, 0);
   };
 
   calculateCategoryTotal = category => {
@@ -65,26 +63,11 @@ class Categories extends Component {
     });
   };
 
-  createCategoryRow = (categories, id) => {
-    return categories.map((cat, cidx) => {
-      let sum = 0;
-      if (this.state.checkedCategories[id]) {
-        const data = cat.categoryData[id];
-        sum = data ? this.sumTransactions(data) : 0;
-      }
-
-      return (
-        <td className={style.amountCol} key={`cat-${cidx}`}>
-          {currency(sum)}
-        </td>
-      );
-    });
-  };
-
   createRowData = (categories, id) => {
     return categories.reduce((result, cat, idx) => {
       let sum =
         this.state.graphCumulative && idx > 0 ? result.slice(-1)[0].y : 0;
+
       if (this.state.checkedCategories[id]) {
         const data = cat.categoryData[id];
         sum = data ? sum + this.sumTransactions(data) : sum;
@@ -97,7 +80,9 @@ class Categories extends Component {
 
   buildGraph = (categories, categoryIds) => {
     const data = keys(categoryIds).map((id, idx) => {
-      return this.createRowData(categories, id);
+      return this.createRowData(categories, id).map(({ x, y }) => {
+        return { x, y: y / 100 };
+      });
     });
 
     const graphHeight = 250;
@@ -107,7 +92,7 @@ class Categories extends Component {
     const stackChart = (
       <VictoryStack colorScale={categoryColors}>
         {data.map((d, idx) => {
-          return <VictoryArea data={d} key={idx} interpolation={"basis"} />;
+          return <VictoryArea data={d} key={idx} />;
         })}
       </VictoryStack>
     );
@@ -117,7 +102,6 @@ class Categories extends Component {
         <VictoryLine
           data={d}
           key={idx}
-          interpolation={"basis"}
           style={{
             data: { stroke: categoryColors[idx] }
           }}
@@ -248,7 +232,13 @@ class Categories extends Component {
                         {categoryIds[id].name}
                       </label>
                     </td>
-                    {this.createCategoryRow(categories, id)}
+                    {this.createRowData(categories, id).map(({ y }, cidx) => {
+                      return (
+                        <td className={style.amountCol} key={`cat-${cidx}`}>
+                          {currency(y)}
+                        </td>
+                      );
+                    })}
                   </tr>
                 );
               })}
