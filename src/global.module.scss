@@ -26,6 +26,10 @@ footer {
   height: $footer-height;
 }
 
+input[type="checkbox"] {
+  display: none;
+}
+
 ul,
 li {
   list-style: none;
@@ -76,10 +80,6 @@ tbody {
 }
 
 %checkboxLabel {
-  input[type="checkbox"] {
-    display: none;
-  }
-
   label {
     display: block;
     border: 1px solid $black;

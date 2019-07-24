@@ -2,8 +2,14 @@
 
 .categoryTransactions {
   display: flex;
+  flex-direction: column;
   justify-content: space-around;
-  flex-wrap: wrap;
+  margin-bottom: 50px;
+
+  .graph {
+    max-width: 100%;
+    flex: 1;
+  }
 
   table {
     border-spacing: 0;
@@ -21,7 +27,13 @@
     td,
     th {
       height: 25px;
-      @extend %checkboxLabel;
+
+      label {
+        display: block;
+        padding: 5px;
+        transition: 0.1s linear background;
+        cursor: pointer;
+      }
     }
   }
 }
