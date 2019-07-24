@@ -4,7 +4,7 @@ import { currency, formatDate } from "utilities/date-format-utils";
 import style from "./Categories.module.scss";
 import Loading from "components/Loading";
 import categoryColors from "utilities/categoryColors";
-import { values, keys } from "lodash";
+import { shuffle, values, keys } from "lodash";
 import {
   VictoryLabel,
   VictoryAxis,
@@ -13,6 +13,8 @@ import {
   VictoryLine,
   VictoryArea
 } from "victory";
+
+const colors = shuffle(categoryColors);
 
 class Categories extends Component {
   state = {
@@ -85,12 +87,12 @@ class Categories extends Component {
       });
     });
 
-    const graphHeight = 250;
-    const axisColor = "red";
+    const graphHeight = 150;
+    const axisColor = "black";
     const axisFontSize = 6;
 
     const stackChart = (
-      <VictoryStack colorScale={categoryColors}>
+      <VictoryStack colorScale={colors}>
         {data.map((d, idx) => {
           return <VictoryArea data={d} key={idx} />;
         })}
@@ -103,7 +105,7 @@ class Categories extends Component {
           data={d}
           key={idx}
           style={{
-            data: { stroke: categoryColors[idx] }
+            data: { stroke: colors[idx] }
           }}
         />
       );
@@ -112,7 +114,7 @@ class Categories extends Component {
     return (
       <VictoryChart
         animate={{ duration: 500 }}
-        padding={{ top: 10, bottom: 50, left: 10, right: 10 }}
+        padding={{ top: 10, bottom: 10, left: 10, right: 10 }}
         height={graphHeight}
       >
         {this.state.graphType === "stack" ? stackChart : lineChart}
@@ -120,7 +122,6 @@ class Categories extends Component {
         {/* X-axis */}
         <VictoryAxis
           style={{ tickLabels: { fontSize: axisFontSize } }}
-          label="Month"
           tickCount={categories.length}
         />
 
@@ -215,7 +216,7 @@ class Categories extends Component {
             <tbody>
               {keys(categoryIds).map((id, idx) => {
                 const checkBoxStyling = checkedCategories[id]
-                  ? { background: categoryColors[idx], color: "black" }
+                  ? { background: colors[idx], color: "black" }
                   : { background: "lightgray", color: "gray" };
 
                 return (

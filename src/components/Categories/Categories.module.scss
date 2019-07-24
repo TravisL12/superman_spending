@@ -4,9 +4,10 @@
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+  margin-bottom: 50px;
 
   .graph {
-    max-width: 1000px;
+    max-width: 100%;
     flex: 1;
   }
 
