@@ -5,6 +5,7 @@ import style from "./Categories.module.scss";
 import Loading from "components/Loading";
 import categoryColors from "utilities/categoryColors";
 import { shuffle, values, keys } from "lodash";
+import qs from "query-string";
 import {
   VictoryLabel,
   VictoryAxis,
@@ -19,7 +20,6 @@ const colors = shuffle(categoryColors);
 class Categories extends Component {
   state = {
     categories: null,
-    categoryIds: null,
     isLoading: true,
     checkedCategories: {},
     graphCumulative: false,
@@ -27,20 +27,19 @@ class Categories extends Component {
   };
 
   componentWillMount() {
-    AuthService.fetch("api/categories/compare").then(
-      ({ categories, category_ids }) => {
-        const checkedCategories = keys(category_ids).reduce((result, id) => {
-          result[id] = true;
-          return result;
-        }, {});
-        this.setState({
-          categories,
-          categoryIds: category_ids,
-          isLoading: false,
-          checkedCategories
-        });
-      }
-    );
+    AuthService.fetch(
+      `api/categories/compare?${qs.stringify({ monthsBack: 24 })}`
+    ).then(({ categories }) => {
+      const checkedCategories = keys(categories).reduce((result, id) => {
+        result[id] = true;
+        return result;
+      }, {});
+      this.setState({
+        categories,
+        isLoading: false,
+        checkedCategories
+      });
+    });
   }
 
   sumTransactions = data => {
@@ -66,11 +65,12 @@ class Categories extends Component {
   };
 
   createRowData = (categories, id) => {
-    return categories.reduce((result, cat, idx) => {
-      let sum =
-        this.state.graphCumulative && idx > 0 ? result.slice(-1)[0].y : 0;
+    const { graphCumulative, checkedCategories } = this.state;
 
-      if (this.state.checkedCategories[id]) {
+    return categories.reduce((result, cat, idx) => {
+      let sum = graphCumulative && idx > 0 ? result.slice(-1)[0].y : 0;
+
+      if (checkedCategories[id]) {
         const data = cat.categoryData[id];
         sum = data ? sum + this.sumTransactions(data) : sum;
       }
@@ -80,8 +80,8 @@ class Categories extends Component {
     }, []);
   };
 
-  buildGraph = (categories, categoryIds) => {
-    const data = keys(categoryIds).map((id, idx) => {
+  buildGraph = categories => {
+    const data = keys(categories).map((id, idx) => {
       return this.createRowData(categories, id).map(({ x, y }) => {
         return { x, y: y / 100 };
       });
@@ -159,16 +159,11 @@ class Categories extends Component {
   };
 
   render() {
-    const {
-      isLoading,
-      categories,
-      categoryIds,
-      checkedCategories
-    } = this.state;
+    const { isLoading, categories, checkedCategories } = this.state;
 
     if (isLoading) return <Loading />;
 
-    const graph = this.buildGraph(categories, categoryIds);
+    const graph = this.buildGraph(categories);
 
     return (
       <div className={style.categoryTransactions}>
@@ -214,7 +209,7 @@ class Categories extends Component {
               </tr>
             </thead>
             <tbody>
-              {keys(categoryIds).map((id, idx) => {
+              {keys(categories).map((id, idx) => {
                 const checkBoxStyling = checkedCategories[id]
                   ? { background: colors[idx], color: "black" }
                   : { background: "lightgray", color: "gray" };
@@ -230,7 +225,7 @@ class Categories extends Component {
                         onChange={this.handleCategoryCheckboxChange}
                       />
                       <label htmlFor={`category-${id}`} style={checkBoxStyling}>
-                        {categoryIds[id].name}
+                        {categories[id].name}
                       </label>
                     </td>
                     {this.createRowData(categories, id).map(({ y }, cidx) => {
