@@ -57,10 +57,16 @@ class Categories extends Component {
     }, 0);
   };
 
-  calculateCategoryTotal = category => {
-    const total = values(category.categoryData).reduce((sum, c) => {
-      if (this.state.checkedCategories[c.id]) {
-        sum += this.sumTransactions(c);
+  calculateCategoryTotal = (month, year) => {
+    const { categories, checkedCategories } = this.state;
+
+    const total = values(categories).reduce((sum, { id, Transactions }) => {
+      if (
+        checkedCategories[id] &&
+        Transactions[year] &&
+        Transactions[year][month + 1]
+      ) {
+        sum += this.sumTransactions(Transactions[year][month + 1]);
       }
 
       return sum;
@@ -236,33 +242,31 @@ class Categories extends Component {
                         {name}
                       </label>
                     </td>
-                    {dateRange.map(({ month, year }) => {
+                    {dateRange.map(({ month, year }, rIdx) => {
                       const sum =
                         checkedCategories[id] &&
                         Transactions[year] &&
-                        Transactions[year][month]
-                          ? this.sumTransactions(Transactions[year][month])
+                        Transactions[year][month + 1]
+                          ? this.sumTransactions(Transactions[year][month + 1])
                           : 0;
-                      return <td>{currency(sum)}</td>;
-                      /* {this.createRowData(categories, id).map(({ y }, cidx) => {
-                        return (
-                          <td className={style.amountCol} key={`cat-${cidx}`}>
-                            {currency(y)}
-                          </td>
-                        );
-                      })} */
+                      return (
+                        <td className={style.amountCol} key={`cat-${rIdx}`}>
+                          {currency(sum)}
+                        </td>
+                      );
                     })}
                   </tr>
                 );
               })}
               <tr>
-                {/* {categories.map((c, idx) => {
+                <td>{/* spacer for name column */}</td>
+                {dateRange.map(({ month, year }, idx) => {
                   return (
                     <td className={style.totalCol} key={idx}>
-                      {this.calculateCategoryTotal(c)}
+                      {this.calculateCategoryTotal(month, year)}
                     </td>
                   );
-                })} */}
+                })}
               </tr>
             </tbody>
           </table>
