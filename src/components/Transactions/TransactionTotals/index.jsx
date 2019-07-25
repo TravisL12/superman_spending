@@ -1,7 +1,11 @@
 import React from "react";
 import { isEmpty, sumBy } from "lodash";
 import style from "components/Transactions/TransactionsInputs.module.scss";
-import { dateRange, formatDate, currency } from "utilities/date-format-utils";
+import {
+  createDateRange,
+  formatDate,
+  currency
+} from "utilities/date-format-utils";
 import { CategoriesConsumer } from "providers/CategoriesProvider";
 import { qsToArray } from "utilities/query-string-utils";
 
@@ -21,7 +25,7 @@ function TransactionTotals({
 
   const { afterDate, beforeDate, categoryIds } = currentSearches;
 
-  const viewDates = dateRange(20);
+  const viewDates = createDateRange(20);
 
   return (
     <CategoriesConsumer>

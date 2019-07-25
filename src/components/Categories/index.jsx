@@ -1,6 +1,10 @@
 import React, { Component } from "react";
 import AuthService from "middleware/AuthService";
-import { currency, formatDate } from "utilities/date-format-utils";
+import {
+  createDateRange,
+  currency,
+  formatDate
+} from "utilities/date-format-utils";
 import style from "./Categories.module.scss";
 import Loading from "components/Loading";
 import categoryColors from "utilities/categoryColors";
@@ -23,12 +27,15 @@ class Categories extends Component {
     isLoading: true,
     checkedCategories: {},
     graphCumulative: false,
-    graphType: "stack"
+    graphType: "stack",
+    monthsBack: 12,
+    dateRange: null
   };
 
   componentWillMount() {
+    const { monthsBack } = this.state;
     AuthService.fetch(
-      `api/categories/compare?${qs.stringify({ monthsBack: 24 })}`
+      `api/categories/compare?${qs.stringify({ monthsBack })}`
     ).then(({ categories }) => {
       const checkedCategories = keys(categories).reduce((result, id) => {
         result[id] = true;
@@ -37,13 +44,14 @@ class Categories extends Component {
       this.setState({
         categories,
         isLoading: false,
-        checkedCategories
+        checkedCategories,
+        dateRange: createDateRange(monthsBack)
       });
     });
   }
 
   sumTransactions = data => {
-    return data.Transactions.reduce((sum, t) => {
+    return data.reduce((sum, t) => {
       sum += t.amount;
       return sum;
     }, 0);
@@ -159,11 +167,11 @@ class Categories extends Component {
   };
 
   render() {
-    const { isLoading, categories, checkedCategories } = this.state;
+    const { isLoading, categories, checkedCategories, dateRange } = this.state;
 
     if (isLoading) return <Loading />;
 
-    const graph = this.buildGraph(categories);
+    const graph = <p>graph</p>; //this.buildGraph(categories);
 
     return (
       <div className={style.categoryTransactions}>
@@ -196,10 +204,10 @@ class Categories extends Component {
             <thead>
               <tr>
                 <th>Categories</th>
-                {categories.map((c, idx) => {
+                {dateRange.map(({ month, year }, idx) => {
                   return (
                     <th key={idx}>
-                      {formatDate(c.month, c.year, {
+                      {formatDate(month, year, {
                         month: "short",
                         year: "numeric"
                       })}
@@ -209,7 +217,7 @@ class Categories extends Component {
               </tr>
             </thead>
             <tbody>
-              {keys(categories).map((id, idx) => {
+              {values(categories).map(({ id, name, Transactions }, idx) => {
                 const checkBoxStyling = checkedCategories[id]
                   ? { background: colors[idx], color: "black" }
                   : { background: "lightgray", color: "gray" };
@@ -225,28 +233,36 @@ class Categories extends Component {
                         onChange={this.handleCategoryCheckboxChange}
                       />
                       <label htmlFor={`category-${id}`} style={checkBoxStyling}>
-                        {categories[id].name}
+                        {name}
                       </label>
                     </td>
-                    {this.createRowData(categories, id).map(({ y }, cidx) => {
-                      return (
-                        <td className={style.amountCol} key={`cat-${cidx}`}>
-                          {currency(y)}
-                        </td>
-                      );
+                    {dateRange.map(({ month, year }) => {
+                      const sum =
+                        checkedCategories[id] &&
+                        Transactions[year] &&
+                        Transactions[year][month]
+                          ? this.sumTransactions(Transactions[year][month])
+                          : 0;
+                      return <td>{currency(sum)}</td>;
+                      /* {this.createRowData(categories, id).map(({ y }, cidx) => {
+                        return (
+                          <td className={style.amountCol} key={`cat-${cidx}`}>
+                            {currency(y)}
+                          </td>
+                        );
+                      })} */
                     })}
                   </tr>
                 );
               })}
               <tr>
-                <td />
-                {categories.map((c, idx) => {
+                {/* {categories.map((c, idx) => {
                   return (
                     <td className={style.totalCol} key={idx}>
                       {this.calculateCategoryTotal(c)}
                     </td>
                   );
-                })}
+                })} */}
               </tr>
             </tbody>
           </table>
