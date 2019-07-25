@@ -20,6 +20,7 @@ import {
 } from "victory";
 
 const colors = shuffle(categoryColors);
+const MONTHS_BACK = 12;
 
 class Categories extends Component {
   state = {
@@ -28,14 +29,12 @@ class Categories extends Component {
     checkedCategories: {},
     graphCumulative: false,
     graphType: "stack",
-    monthsBack: 12,
     dateRange: null
   };
 
   componentWillMount() {
-    const { monthsBack } = this.state;
     AuthService.fetch(
-      `api/categories/compare?${qs.stringify({ monthsBack })}`
+      `api/categories/compare?${qs.stringify({ monthsBack: MONTHS_BACK })}`
     ).then(({ categories }) => {
       const checkedCategories = keys(categories).reduce((result, id) => {
         result[id] = true;
@@ -45,7 +44,7 @@ class Categories extends Component {
         categories,
         isLoading: false,
         checkedCategories,
-        dateRange: createDateRange(monthsBack)
+        dateRange: createDateRange(MONTHS_BACK).reverse()
       });
     });
   }
