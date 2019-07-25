@@ -50,24 +50,29 @@ class Categories extends Component {
     });
   }
 
-  sumTransactions = data => {
-    return data.reduce((sum, t) => {
-      sum += t.amount;
-      return sum;
-    }, 0);
+  getTransactionSum = (year, month, id) => {
+    const { checkedCategories, categories } = this.state;
+    const { Transactions } = categories[id];
+
+    if (
+      checkedCategories[id] &&
+      Transactions[year] &&
+      Transactions[year][month + 1]
+    ) {
+      return Transactions[year][month + 1].reduce((sum, t) => {
+        sum += t.amount;
+        return sum;
+      }, 0);
+    } else {
+      return 0;
+    }
   };
 
   calculateCategoryTotal = (month, year) => {
-    const { categories, checkedCategories } = this.state;
+    const { categories } = this.state;
 
     const total = values(categories).reduce((sum, { id, Transactions }) => {
-      if (
-        checkedCategories[id] &&
-        Transactions[year] &&
-        Transactions[year][month + 1]
-      ) {
-        sum += this.sumTransactions(Transactions[year][month + 1]);
-      }
+      sum += this.getTransactionSum(year, month, id);
 
       return sum;
     }, 0);
@@ -78,38 +83,31 @@ class Categories extends Component {
     });
   };
 
-  createRowData = (categories, id) => {
-    const { graphCumulative, checkedCategories } = this.state;
+  // createRowData = (categories, id) => {
+  //   const { graphCumulative, checkedCategories } = this.state;
 
-    return categories.reduce((result, cat, idx) => {
-      let sum = graphCumulative && idx > 0 ? result.slice(-1)[0].y : 0;
+  //   return categories.reduce((result, cat, idx) => {
+  //     let sum = graphCumulative && idx > 0 ? result.slice(-1)[0].y : 0;
 
-      if (checkedCategories[id]) {
-        const data = cat.categoryData[id];
-        sum = data ? sum + this.sumTransactions(data) : sum;
-      }
+  //     if (checkedCategories[id]) {
+  //       const data = cat.categoryData[id];
+  //       sum = data ? sum + this.sumTransactions(data) : sum;
+  //     }
 
-      result.push({ x: idx, y: sum });
-      return result;
-    }, []);
-  };
+  //     result.push({ x: idx, y: sum });
+  //     return result;
+  //   }, []);
+  // };
 
   buildGraph = () => {
-    const { checkedCategories, dateRange, categories } = this.state;
+    const { dateRange, categories } = this.state;
     const data = values(categories).map(({ id, name, Transactions }, idx) => {
       return dateRange.map(({ month, year }, idx) => {
-        if (
-          checkedCategories[id] &&
-          Transactions[year] &&
-          Transactions[year][month + 1]
-        ) {
-          return {
-            x: idx,
-            y: this.sumTransactions(Transactions[year][month + 1]) / 100
-          };
-        } else {
-          return { x: idx, y: 0 };
-        }
+        const sum = this.getTransactionSum(year, month, id);
+        return {
+          x: idx,
+          y: sum / 100
+        };
       });
     });
 
@@ -255,12 +253,7 @@ class Categories extends Component {
                       </label>
                     </td>
                     {dateRange.map(({ month, year }, rIdx) => {
-                      const sum =
-                        checkedCategories[id] &&
-                        Transactions[year] &&
-                        Transactions[year][month + 1]
-                          ? this.sumTransactions(Transactions[year][month + 1])
-                          : 0;
+                      const sum = this.getTransactionSum(year, month, id);
                       return (
                         <td className={style.amountCol} key={`cat-${rIdx}`}>
                           {currency(sum)}
