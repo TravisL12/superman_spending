@@ -40,11 +40,12 @@ class Categories extends Component {
         result[id] = true;
         return result;
       }, {});
+
       this.setState({
         categories,
         isLoading: false,
         checkedCategories,
-        dateRange: createDateRange(MONTHS_BACK).reverse()
+        dateRange: createDateRange(MONTHS_BACK).reverse() // ascending date order (old -> new)
       });
     });
   }
@@ -93,10 +94,22 @@ class Categories extends Component {
     }, []);
   };
 
-  buildGraph = categories => {
-    const data = keys(categories).map((id, idx) => {
-      return this.createRowData(categories, id).map(({ x, y }) => {
-        return { x, y: y / 100 };
+  buildGraph = () => {
+    const { checkedCategories, dateRange, categories } = this.state;
+    const data = values(categories).map(({ id, name, Transactions }, idx) => {
+      return dateRange.map(({ month, year }, idx) => {
+        if (
+          checkedCategories[id] &&
+          Transactions[year] &&
+          Transactions[year][month + 1]
+        ) {
+          return {
+            x: idx,
+            y: this.sumTransactions(Transactions[year][month + 1]) / 100
+          };
+        } else {
+          return { x: idx, y: 0 };
+        }
       });
     });
 
@@ -176,7 +189,7 @@ class Categories extends Component {
 
     if (isLoading) return <Loading />;
 
-    const graph = <p>graph</p>; //this.buildGraph(categories);
+    const graph = this.buildGraph();
 
     return (
       <div className={style.categoryTransactions}>
