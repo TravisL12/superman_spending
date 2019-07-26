@@ -86,6 +86,18 @@ class Categories extends Component {
     });
   };
 
+  toggleAllCategories = value => {
+    const checkedCategories = keys(this.state.checkedCategories).reduce(
+      (result, id) => {
+        result[id] = value;
+        return result;
+      },
+      {}
+    );
+
+    this.setState({ checkedCategories });
+  };
+
   handleCategoryCheckboxChange = event => {
     const { target } = event;
     const checkboxVal = this.state.checkedCategories[target.value];
@@ -122,7 +134,22 @@ class Categories extends Component {
           <table>
             <thead>
               <tr>
-                <th />
+                <th>
+                  <button
+                    onClick={() => {
+                      this.toggleAllCategories(true);
+                    }}
+                  >
+                    On
+                  </button>
+                  <button
+                    onClick={() => {
+                      this.toggleAllCategories(false);
+                    }}
+                  >
+                    Off
+                  </button>
+                </th>
                 {dateRange.map(({ month, year }, idx) => {
                   return (
                     <th key={idx}>
