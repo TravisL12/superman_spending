@@ -27,12 +27,17 @@
     td,
     th {
       height: 25px;
+      padding: 0 10px;
 
       label {
         display: block;
         padding: 5px;
         transition: 0.1s linear background;
         cursor: pointer;
+      }
+
+      &:nth-child(even) {
+        background: $accentRowBlue;
       }
     }
   }

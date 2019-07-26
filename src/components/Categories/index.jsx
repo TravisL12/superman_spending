@@ -14,7 +14,7 @@ import { shuffle, values, keys } from "lodash";
 import qs from "query-string";
 
 const colors = shuffle(categoryColors);
-const MONTHS_BACK = 12 * 1;
+const MONTHS_BACK = 12 * 1.5;
 
 class Categories extends Component {
   state = {
@@ -122,7 +122,7 @@ class Categories extends Component {
           <table>
             <thead>
               <tr>
-                <th>Categories</th>
+                <th />
                 {dateRange.map(({ month, year }, idx) => {
                   return (
                     <th key={idx}>
