@@ -20,7 +20,7 @@ import {
 } from "victory";
 
 const colors = shuffle(categoryColors);
-const MONTHS_BACK = 12;
+const MONTHS_BACK = 12 * 1;
 
 class Categories extends Component {
   state = {
@@ -68,6 +68,19 @@ class Categories extends Component {
     }
   };
 
+  getMonthSums = categoryId => {
+    const { graphCumulative, dateRange } = this.state;
+
+    return dateRange.reduce((result, { month, year }, idx) => {
+      const monthSum = this.getTransactionSum(year, month, categoryId);
+      const sum =
+        graphCumulative && idx > 0 ? monthSum + result.slice(-1)[0] : monthSum;
+
+      result.push(sum);
+      return result;
+    }, []);
+  };
+
   calculateCategoryTotal = (month, year) => {
     const { categories } = this.state;
 
@@ -83,31 +96,11 @@ class Categories extends Component {
     });
   };
 
-  // createRowData = (categories, id) => {
-  //   const { graphCumulative, checkedCategories } = this.state;
-
-  //   return categories.reduce((result, cat, idx) => {
-  //     let sum = graphCumulative && idx > 0 ? result.slice(-1)[0].y : 0;
-
-  //     if (checkedCategories[id]) {
-  //       const data = cat.categoryData[id];
-  //       sum = data ? sum + this.sumTransactions(data) : sum;
-  //     }
-
-  //     result.push({ x: idx, y: sum });
-  //     return result;
-  //   }, []);
-  // };
-
   buildGraph = () => {
-    const { dateRange, categories } = this.state;
+    const { categories } = this.state;
     const data = values(categories).map(({ id, name, Transactions }, idx) => {
-      return dateRange.map(({ month, year }, idx) => {
-        const sum = this.getTransactionSum(year, month, id);
-        return {
-          x: idx,
-          y: sum / 100
-        };
+      return this.getMonthSums(id).map((sum, idx) => {
+        return { x: idx, y: sum / 100 };
       });
     });
 
@@ -252,11 +245,13 @@ class Categories extends Component {
                         {name}
                       </label>
                     </td>
-                    {dateRange.map(({ month, year }, rIdx) => {
-                      const sum = this.getTransactionSum(year, month, id);
+                    {this.getMonthSums(id).map((sum, sIdx) => {
                       return (
-                        <td className={style.amountCol} key={`cat-${rIdx}`}>
-                          {currency(sum)}
+                        <td className={style.amountCol} key={`cat-${sIdx}`}>
+                          {currency(sum, {
+                            rounded: true,
+                            minimumFractionDigits: 0
+                          })}
                         </td>
                       );
                     })}
