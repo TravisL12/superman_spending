@@ -1,30 +1,40 @@
 import React from "react";
+import Loading from "components/Loading";
 import { CategoriesConsumer } from "providers/CategoriesProvider";
 import { sortBy } from "lodash";
+import style from "./CategoryDropdown.module.scss";
 
 function CategoryDropdown({ onChange, selectedCategories }) {
   // Group all selected categories
   const updateSelection = ({ target: { value, name } }) => {
-    onChange({ target: { value: [...selectedCategories, value], name } });
+    onChange({
+      target: { value: [...selectedCategories, value], name: "categoryIds" }
+    });
   };
 
   return (
     <CategoriesConsumer>
       {({ categories, fetchCategories }) => {
-        if (!categories) fetchCategories();
+        if (!categories) {
+          fetchCategories();
+          return <Loading />;
+        }
 
         return (
-          <select
-            name={"categoryIds"}
-            value={selectedCategories}
-            onChange={updateSelection}
-          >
+          <div className={style.dropdown}>
             {sortBy(categories, "name").map((cat, idx) => (
-              <option key={idx} value={cat.id}>
-                {cat.name}
-              </option>
+              <div key={`category-${cat.id}`}>
+                <input
+                  id={cat.id}
+                  type="checkbox"
+                  value={cat.id}
+                  checked={selectedCategories.includes(String(cat.id))}
+                  onChange={updateSelection}
+                />
+                <label htmlFor={cat.id}>{cat.name}</label>
+              </div>
             ))}
-          </select>
+          </div>
         );
       }}
     </CategoriesConsumer>

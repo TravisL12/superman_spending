@@ -1,0 +1,11 @@
+@import "global.module.scss";
+
+.dropdown {
+  input[type="checkbox"] {
+    display: none;
+  }
+
+  input:checked + label {
+    background: red;
+  }
+}

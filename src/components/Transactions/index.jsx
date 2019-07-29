@@ -78,10 +78,8 @@ class Transactions extends Component {
       request.keywordSearches = searches;
     }
 
-    const categories = qsToArray(searchQueries.categoryIds);
-    if (categoryInput && !categories.includes(categoryInput)) {
-      categories.push(categoryInput);
-      request.categoryIds = categories;
+    if (categoryInput) {
+      request.categoryIds = categoryInput;
     }
 
     if (beforeDate) {
@@ -133,9 +131,7 @@ class Transactions extends Component {
             isLoading: false,
             searchInput: {
               keyword: "",
-              beforeDate: "",
-              afterDate: "",
-              categoryIds: ""
+              categoryIds: searchQueries.categoryIds || []
             },
             searchResults,
             transactions
@@ -169,6 +165,7 @@ class Transactions extends Component {
           <Search
             transactions={transactions}
             searchInput={searchInput}
+            searchQueries={searchQueries}
             onSearchChange={this.onSearchChange}
             submitSearch={this.submitSearch}
             resetSearch={this.resetSearch}

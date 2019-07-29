@@ -45,14 +45,14 @@ class Categories extends Component {
 
   getTransactionSum = (year, month, id) => {
     const { checkedCategories, categories } = this.state;
-    const { Transactions } = categories[id];
+    const { transactionTotals } = categories[id];
 
     if (
       checkedCategories[id] &&
-      Transactions[year] &&
-      Transactions[year][month]
+      transactionTotals[year] &&
+      transactionTotals[year][month]
     ) {
-      return Transactions[year][month];
+      return transactionTotals[year][month];
     } else {
       return 0;
     }
