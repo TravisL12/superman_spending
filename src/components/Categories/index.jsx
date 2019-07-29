@@ -50,12 +50,9 @@ class Categories extends Component {
     if (
       checkedCategories[id] &&
       Transactions[year] &&
-      Transactions[year][month + 1]
+      Transactions[year][month]
     ) {
-      return Transactions[year][month + 1].reduce((sum, t) => {
-        sum += t.amount;
-        return sum;
-      }, 0);
+      return Transactions[year][month];
     } else {
       return 0;
     }
