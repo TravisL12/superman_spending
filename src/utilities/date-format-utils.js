@@ -77,7 +77,7 @@ export function getToday() {
   };
 }
 
-export function dateRange(months) {
+export function createDateRange(months) {
   const { year, month } = getToday();
   return range(months).map(i => {
     const newDate = new Date(year, month - i);

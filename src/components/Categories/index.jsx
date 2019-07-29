@@ -1,62 +1,80 @@
 import React, { Component } from "react";
 import AuthService from "middleware/AuthService";
-import { currency, formatDate } from "utilities/date-format-utils";
+import {
+  createDateRange,
+  currency,
+  formatDate
+} from "utilities/date-format-utils";
+import CategoryGraph from "./CategoryGraph";
+import CategoryRow from "./CategoryRow";
 import style from "./Categories.module.scss";
 import Loading from "components/Loading";
 import categoryColors from "utilities/categoryColors";
 import { shuffle, values, keys } from "lodash";
-import {
-  VictoryLabel,
-  VictoryAxis,
-  VictoryChart,
-  VictoryStack,
-  VictoryLine,
-  VictoryArea
-} from "victory";
+import qs from "query-string";
 
 const colors = shuffle(categoryColors);
+const MONTHS_BACK = 12 * 1.5;
 
 class Categories extends Component {
   state = {
     categories: null,
-    categoryIds: null,
     isLoading: true,
     checkedCategories: {},
     graphCumulative: false,
-    graphType: "stack"
+    dateRange: null
   };
 
   componentWillMount() {
-    AuthService.fetch("api/categories/compare").then(
-      ({ categories, category_ids }) => {
-        const checkedCategories = keys(category_ids).reduce((result, id) => {
-          result[id] = true;
-          return result;
-        }, {});
-        this.setState({
-          categories,
-          categoryIds: category_ids,
-          isLoading: false,
-          checkedCategories
-        });
-      }
-    );
+    AuthService.fetch(
+      `api/categories/compare?${qs.stringify({ monthsBack: MONTHS_BACK })}`
+    ).then(({ categories }) => {
+      const checkedCategories = keys(categories).reduce((result, id) => {
+        result[id] = true;
+        return result;
+      }, {});
+
+      this.setState({
+        categories,
+        isLoading: false,
+        checkedCategories,
+        dateRange: createDateRange(MONTHS_BACK).reverse() // ascending date order (old -> new)
+      });
+    });
   }
 
-  sumTransactions = data => {
-    return data.Transactions.reduce((sum, t) => {
-      sum += t.amount;
-      return sum;
-    }, 0);
+  getTransactionSum = (year, month, id) => {
+    const { checkedCategories, categories } = this.state;
+    const { Transactions } = categories[id];
+
+    if (
+      checkedCategories[id] &&
+      Transactions[year] &&
+      Transactions[year][month]
+    ) {
+      return Transactions[year][month];
+    } else {
+      return 0;
+    }
   };
 
-  calculateCategoryTotal = category => {
-    const total = values(category.categoryData).reduce((sum, c) => {
-      if (this.state.checkedCategories[c.id]) {
-        sum += this.sumTransactions(c);
-      }
+  getMonthSums = categoryId => {
+    const { graphCumulative, dateRange } = this.state;
 
-      return sum;
+    return dateRange.reduce((result, { month, year }, idx) => {
+      const monthSum = this.getTransactionSum(year, month, categoryId);
+      const sum =
+        graphCumulative && idx > 0 ? monthSum + result.slice(-1)[0] : monthSum;
+
+      return [...result, sum];
+    }, []);
+  };
+
+  calculateCategoryTotal = (month, year) => {
+    const { categories } = this.state;
+
+    const total = values(categories).reduce((sum, { id }) => {
+      return sum + this.getTransactionSum(year, month, id);
     }, 0);
 
     return currency(total, {
@@ -65,86 +83,16 @@ class Categories extends Component {
     });
   };
 
-  createRowData = (categories, id) => {
-    return categories.reduce((result, cat, idx) => {
-      let sum =
-        this.state.graphCumulative && idx > 0 ? result.slice(-1)[0].y : 0;
-
-      if (this.state.checkedCategories[id]) {
-        const data = cat.categoryData[id];
-        sum = data ? sum + this.sumTransactions(data) : sum;
-      }
-
-      result.push({ x: idx, y: sum });
-      return result;
-    }, []);
-  };
-
-  buildGraph = (categories, categoryIds) => {
-    const data = keys(categoryIds).map((id, idx) => {
-      return this.createRowData(categories, id).map(({ x, y }) => {
-        return { x, y: y / 100 };
-      });
-    });
-
-    const graphHeight = 150;
-    const axisColor = "black";
-    const axisFontSize = 6;
-
-    const stackChart = (
-      <VictoryStack colorScale={colors}>
-        {data.map((d, idx) => {
-          return <VictoryArea data={d} key={idx} />;
-        })}
-      </VictoryStack>
+  toggleAllCategories = value => {
+    const checkedCategories = keys(this.state.checkedCategories).reduce(
+      (result, id) => {
+        result[id] = value;
+        return result;
+      },
+      {}
     );
 
-    const lineChart = data.map((d, idx) => {
-      return (
-        <VictoryLine
-          data={d}
-          key={idx}
-          style={{
-            data: { stroke: colors[idx] }
-          }}
-        />
-      );
-    });
-
-    return (
-      <VictoryChart
-        animate={{ duration: 500 }}
-        padding={{ top: 10, bottom: 10, left: 10, right: 10 }}
-        height={graphHeight}
-      >
-        {this.state.graphType === "stack" ? stackChart : lineChart}
-
-        {/* X-axis */}
-        <VictoryAxis
-          style={{ tickLabels: { fontSize: axisFontSize } }}
-          tickCount={categories.length}
-        />
-
-        {/* Y-axis */}
-        <VictoryAxis
-          dependentAxis
-          tickFormat={t => `$${t.toLocaleString()}`}
-          tickLabelComponent={<VictoryLabel dx={35} dy={-5} />}
-          style={{
-            axis: { stroke: 0 },
-            tickLabels: {
-              fill: axisColor,
-              fontSize: axisFontSize,
-              fontWeight: 600
-            },
-            grid: {
-              strokeDasharray: "15, 5",
-              stroke: axisColor
-            }
-          }}
-        />
-      </VictoryChart>
-    );
+    this.setState({ checkedCategories });
   };
 
   handleCategoryCheckboxChange = event => {
@@ -159,16 +107,9 @@ class Categories extends Component {
   };
 
   render() {
-    const {
-      isLoading,
-      categories,
-      categoryIds,
-      checkedCategories
-    } = this.state;
+    const { isLoading, categories, checkedCategories, dateRange } = this.state;
 
     if (isLoading) return <Loading />;
-
-    const graph = this.buildGraph(categories, categoryIds);
 
     return (
       <div className={style.categoryTransactions}>
@@ -180,31 +121,36 @@ class Categories extends Component {
           >
             Toggle Cumulative
           </button>
-          <button
-            onClick={() => {
-              this.setState({ graphType: "stack" });
-            }}
-          >
-            Stack Chart
-          </button>
-          <button
-            onClick={() => {
-              this.setState({ graphType: "line" });
-            }}
-          >
-            Line Chart
-          </button>
-          {graph}
+          <CategoryGraph
+            categories={categories}
+            colors={colors}
+            getMonthSums={this.getMonthSums}
+          />
         </div>
         <div className={style.table}>
           <table>
             <thead>
               <tr>
-                <th>Categories</th>
-                {categories.map((c, idx) => {
+                <th>
+                  <button
+                    onClick={() => {
+                      this.toggleAllCategories(true);
+                    }}
+                  >
+                    On
+                  </button>
+                  <button
+                    onClick={() => {
+                      this.toggleAllCategories(false);
+                    }}
+                  >
+                    Off
+                  </button>
+                </th>
+                {dateRange.map(({ month, year }, idx) => {
                   return (
                     <th key={idx}>
-                      {formatDate(c.month, c.year, {
+                      {formatDate(month, year, {
                         month: "short",
                         year: "numeric"
                       })}
@@ -214,41 +160,24 @@ class Categories extends Component {
               </tr>
             </thead>
             <tbody>
-              {keys(categoryIds).map((id, idx) => {
-                const checkBoxStyling = checkedCategories[id]
-                  ? { background: colors[idx], color: "black" }
-                  : { background: "lightgray", color: "gray" };
-
+              {values(categories).map((category, idx) => {
                 return (
-                  <tr key={`name-${idx}`}>
-                    <td>
-                      <input
-                        type="checkbox"
-                        id={`category-${id}`}
-                        value={id}
-                        checked={checkedCategories[id]}
-                        onChange={this.handleCategoryCheckboxChange}
-                      />
-                      <label htmlFor={`category-${id}`} style={checkBoxStyling}>
-                        {categoryIds[id].name}
-                      </label>
-                    </td>
-                    {this.createRowData(categories, id).map(({ y }, cidx) => {
-                      return (
-                        <td className={style.amountCol} key={`cat-${cidx}`}>
-                          {currency(y)}
-                        </td>
-                      );
-                    })}
-                  </tr>
+                  <CategoryRow
+                    checkedCategories={checkedCategories}
+                    color={colors[idx]}
+                    category={category}
+                    getMonthSums={this.getMonthSums}
+                    onCheckboxChange={this.handleCategoryCheckboxChange}
+                    key={idx}
+                  />
                 );
               })}
               <tr>
-                <td />
-                {categories.map((c, idx) => {
+                <td>{/* spacer for name column */}</td>
+                {dateRange.map(({ month, year }, idx) => {
                   return (
                     <td className={style.totalCol} key={idx}>
-                      {this.calculateCategoryTotal(c)}
+                      {this.calculateCategoryTotal(month, year)}
                     </td>
                   );
                 })}
