@@ -70,7 +70,7 @@ class Categories extends Component {
     }, []);
   };
 
-  calculateCategoryTotal = (month, year) => {
+  getCategorySums = (month, year) => {
     const { categories } = this.state;
 
     const total = values(categories).reduce((sum, { id }) => {
@@ -111,10 +111,8 @@ class Categories extends Component {
 
     if (isLoading) return <Loading />;
 
-    const graphData = values(categories).map(({ id, name }, idx) => {
-      return this.getMonthSums(id).map((sum, idx) => {
-        return { x: idx, y: sum };
-      });
+    const summedCategories = values(categories).map(({ id, name }, idx) => {
+      return { id, name, sum: this.getMonthSums(id) };
     });
 
     return (
@@ -128,7 +126,7 @@ class Categories extends Component {
             Toggle Cumulative
           </button>
           <CategoryGraph
-            data={graphData}
+            data={summedCategories}
             dateRange={dateRange}
             colors={colors}
           />
@@ -166,13 +164,12 @@ class Categories extends Component {
               </tr>
             </thead>
             <tbody>
-              {values(categories).map((category, idx) => {
+              {summedCategories.map((category, idx) => {
                 return (
                   <CategoryRow
                     checkedCategories={checkedCategories}
                     color={colors[idx]}
                     category={category}
-                    getMonthSums={this.getMonthSums}
                     onCheckboxChange={this.handleCategoryCheckboxChange}
                     key={idx}
                   />
@@ -183,7 +180,7 @@ class Categories extends Component {
                 {dateRange.map(({ month, year }, idx) => {
                   return (
                     <td className={style.totalCol} key={idx}>
-                      {this.calculateCategoryTotal(month, year)}
+                      {this.getCategorySums(month, year)}
                     </td>
                   );
                 })}

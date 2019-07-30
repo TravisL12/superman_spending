@@ -24,7 +24,11 @@ function CategoryGraph({ data, colors, dateRange }) {
 
   const stackChart = (
     <VictoryStack colorScale={colors}>
-      {data.map((d, idx) => {
+      {data.map(({ sum }, idx) => {
+        const d = sum.map((s, idx) => {
+          return { x: idx, y: s };
+        });
+
         return (
           <VictoryArea
             labelComponent={<VictoryTooltip />}
