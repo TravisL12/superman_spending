@@ -37,6 +37,17 @@ class Transactions extends Component {
     this.fetch(query, { page });
   }
 
+  removeCategorySearch = removeId => {
+    const categoryIds = this.state.searchQueries.categoryIds.filter(id => {
+      return id !== removeId;
+    });
+
+    this.fetch({
+      ...this.state.searchQueries,
+      categoryIds
+    });
+  };
+
   removeSearch = keyword => {
     if (["afterDate", "beforeDate"].includes(keyword)) {
       this.fetch({
@@ -131,6 +142,8 @@ class Transactions extends Component {
             isLoading: false,
             searchInput: {
               keyword: "",
+              beforeDate: "",
+              afterDate: "",
               categoryIds: searchQueries.categoryIds || []
             },
             searchResults,
@@ -174,6 +187,7 @@ class Transactions extends Component {
         <div className={style.searchTotals}>
           <Totals
             removeSearch={this.removeSearch}
+            removeCategorySearch={this.removeCategorySearch}
             searchResults={searchResults}
             currentSearches={searchQueries}
           />
