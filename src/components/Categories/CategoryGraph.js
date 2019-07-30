@@ -5,7 +5,8 @@ import {
   VictoryChart,
   VictoryStack,
   VictoryLine,
-  VictoryArea
+  VictoryArea,
+  VictoryTooltip
 } from "victory";
 import { currency, formatDate } from "utilities/date-format-utils";
 
@@ -24,7 +25,44 @@ function CategoryGraph({ data, colors, dateRange }) {
   const stackChart = (
     <VictoryStack colorScale={colors}>
       {data.map((d, idx) => {
-        return <VictoryArea data={d} key={idx} />;
+        return (
+          <VictoryArea
+            labelComponent={<VictoryTooltip />}
+            data={d}
+            key={idx}
+            events={[
+              {
+                target: "data",
+                eventHandlers: {
+                  onMouseOver: () => {
+                    return [
+                      {
+                        target: "data",
+                        mutation: () => ({ style: { fill: "gold" } })
+                      },
+                      {
+                        target: "labels",
+                        mutation: () => ({ active: true })
+                      }
+                    ];
+                  },
+                  onMouseOut: () => {
+                    return [
+                      {
+                        target: "data",
+                        mutation: () => {}
+                      },
+                      {
+                        target: "labels",
+                        mutation: () => ({ active: false })
+                      }
+                    ];
+                  }
+                }
+              }
+            ]}
+          />
+        );
       })}
     </VictoryStack>
   );

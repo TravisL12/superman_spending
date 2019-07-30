@@ -111,7 +111,7 @@ class Categories extends Component {
 
     if (isLoading) return <Loading />;
 
-    const graphData = values(categories).map(({ id }, idx) => {
+    const graphData = values(categories).map(({ id, name }, idx) => {
       return this.getMonthSums(id).map((sum, idx) => {
         return { x: idx, y: sum };
       });
