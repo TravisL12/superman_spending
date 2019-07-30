@@ -45,14 +45,14 @@ class Categories extends Component {
 
   getTransactionSum = (year, month, id) => {
     const { checkedCategories, categories } = this.state;
-    const { Transactions } = categories[id];
+    const { transactionTotals } = categories[id];
 
     if (
       checkedCategories[id] &&
-      Transactions[year] &&
-      Transactions[year][month]
+      transactionTotals[year] &&
+      transactionTotals[year][month]
     ) {
-      return Transactions[year][month];
+      return transactionTotals[year][month];
     } else {
       return 0;
     }
@@ -70,7 +70,7 @@ class Categories extends Component {
     }, []);
   };
 
-  calculateCategoryTotal = (month, year) => {
+  getCategorySums = (month, year) => {
     const { categories } = this.state;
 
     const total = values(categories).reduce((sum, { id }) => {
@@ -111,6 +111,10 @@ class Categories extends Component {
 
     if (isLoading) return <Loading />;
 
+    const summedCategories = values(categories).map(({ id, name }, idx) => {
+      return { id, name, sum: this.getMonthSums(id) };
+    });
+
     return (
       <div className={style.categoryTransactions}>
         <div className={style.graph}>
@@ -122,9 +126,9 @@ class Categories extends Component {
             Toggle Cumulative
           </button>
           <CategoryGraph
-            categories={categories}
+            data={summedCategories}
+            dateRange={dateRange}
             colors={colors}
-            getMonthSums={this.getMonthSums}
           />
         </div>
         <div className={style.table}>
@@ -160,13 +164,12 @@ class Categories extends Component {
               </tr>
             </thead>
             <tbody>
-              {values(categories).map((category, idx) => {
+              {summedCategories.map((category, idx) => {
                 return (
                   <CategoryRow
                     checkedCategories={checkedCategories}
                     color={colors[idx]}
                     category={category}
-                    getMonthSums={this.getMonthSums}
                     onCheckboxChange={this.handleCategoryCheckboxChange}
                     key={idx}
                   />
@@ -177,7 +180,7 @@ class Categories extends Component {
                 {dateRange.map(({ month, year }, idx) => {
                   return (
                     <td className={style.totalCol} key={idx}>
-                      {this.calculateCategoryTotal(month, year)}
+                      {this.getCategorySums(month, year)}
                     </td>
                   );
                 })}

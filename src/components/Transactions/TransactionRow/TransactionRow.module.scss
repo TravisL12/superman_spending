@@ -18,5 +18,26 @@
 .checkBox {
   width: 50px;
 
-  @extend %checkboxLabel;
+  input[type="checkbox"] {
+    display: none;
+  }
+
+  label {
+    display: block;
+    border: 1px solid $black;
+    background: transparent;
+    box-sizing: border-box;
+    width: 20px;
+    height: 20px;
+    transition: 0.1s linear background;
+    cursor: pointer;
+
+    &:hover {
+      background: $accentBlue;
+    }
+  }
+
+  input:checked + label {
+    background: red;
+  }
 }

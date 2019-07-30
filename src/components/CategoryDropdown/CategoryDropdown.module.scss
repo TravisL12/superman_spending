@@ -1,0 +1,22 @@
+@import "global.module.scss";
+
+.dropdown {
+  background-color: white;
+  padding: 2px;
+  height: 100px;
+  overflow: scroll;
+
+  label {
+    display: block;
+    padding: 4px 2px;
+    margin-bottom: 1px;
+  }
+
+  input[type="checkbox"] {
+    display: none;
+  }
+
+  input:checked + label {
+    background: $blue;
+  }
+}

@@ -37,6 +37,17 @@ class Transactions extends Component {
     this.fetch(query, { page });
   }
 
+  removeCategorySearch = removeId => {
+    const categoryIds = this.state.searchQueries.categoryIds.filter(id => {
+      return id !== removeId;
+    });
+
+    this.fetch({
+      ...this.state.searchQueries,
+      categoryIds
+    });
+  };
+
   removeSearch = keyword => {
     if (["afterDate", "beforeDate"].includes(keyword)) {
       this.fetch({
@@ -78,10 +89,8 @@ class Transactions extends Component {
       request.keywordSearches = searches;
     }
 
-    const categories = qsToArray(searchQueries.categoryIds);
-    if (categoryInput && !categories.includes(categoryInput)) {
-      categories.push(categoryInput);
-      request.categoryIds = categories;
+    if (categoryInput) {
+      request.categoryIds = categoryInput;
     }
 
     if (beforeDate) {
@@ -135,7 +144,7 @@ class Transactions extends Component {
               keyword: "",
               beforeDate: "",
               afterDate: "",
-              categoryIds: ""
+              categoryIds: searchQueries.categoryIds || []
             },
             searchResults,
             transactions
@@ -169,6 +178,7 @@ class Transactions extends Component {
           <Search
             transactions={transactions}
             searchInput={searchInput}
+            searchQueries={searchQueries}
             onSearchChange={this.onSearchChange}
             submitSearch={this.submitSearch}
             resetSearch={this.resetSearch}
@@ -177,6 +187,7 @@ class Transactions extends Component {
         <div className={style.searchTotals}>
           <Totals
             removeSearch={this.removeSearch}
+            removeCategorySearch={this.removeCategorySearch}
             searchResults={searchResults}
             currentSearches={searchQueries}
           />

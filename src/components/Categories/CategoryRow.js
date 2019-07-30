@@ -3,11 +3,10 @@ import { currency } from "utilities/date-format-utils";
 import style from "./Categories.module.scss";
 
 function CategoryRow({
-  category: { id, name },
+  category: { id, name, sum },
   checkedCategories,
   color,
-  onCheckboxChange,
-  getMonthSums
+  onCheckboxChange
 }) {
   const checkBoxStyling = checkedCategories[id]
     ? { background: color, color: "black" }
@@ -27,10 +26,10 @@ function CategoryRow({
           {name}
         </label>
       </td>
-      {getMonthSums(id).map((sum, sIdx) => {
+      {sum.map((s, sIdx) => {
         return (
           <td className={style.amountCol} key={`cat-${sIdx}`}>
-            {currency(sum, {
+            {currency(s, {
               rounded: true,
               minimumFractionDigits: 0
             })}

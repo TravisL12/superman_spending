@@ -6,13 +6,15 @@ import {
   formatDate,
   currency
 } from "utilities/date-format-utils";
+import Loading from "components/Loading";
 import { CategoriesConsumer } from "providers/CategoriesProvider";
 import { qsToArray } from "utilities/query-string-utils";
 
 function TransactionTotals({
   searchResults = [],
   removeSearch,
-  currentSearches
+  currentSearches,
+  removeCategorySearch
 }) {
   const totals = searchResults.reduce(
     (result, payee) => {
@@ -25,12 +27,15 @@ function TransactionTotals({
 
   const { afterDate, beforeDate, categoryIds } = currentSearches;
 
-  const viewDates = createDateRange(20);
+  const viewDates = createDateRange(10);
 
   return (
     <CategoriesConsumer>
       {({ categories, fetchCategories }) => {
-        if (!categories) fetchCategories();
+        if (!categories) {
+          fetchCategories();
+          return <Loading />;
+        }
 
         return (
           <>
@@ -51,11 +56,13 @@ function TransactionTotals({
                   </li>
                 )}
                 {qsToArray(categoryIds).map((id, idx) => {
-                  const category = categories.filter(cat => cat.id === +id)[0];
+                  const category = categories.find(cat => cat.id === +id);
 
                   return (
                     <li key={idx}>
-                      <button>X</button>
+                      <button onClick={() => removeCategorySearch(id)}>
+                        X
+                      </button>
                       {category.name}
                     </li>
                   );
