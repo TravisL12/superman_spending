@@ -111,6 +111,12 @@ class Categories extends Component {
 
     if (isLoading) return <Loading />;
 
+    const graphData = values(categories).map(({ id }, idx) => {
+      return this.getMonthSums(id).map((sum, idx) => {
+        return { x: idx, y: sum };
+      });
+    });
+
     return (
       <div className={style.categoryTransactions}>
         <div className={style.graph}>
@@ -122,9 +128,9 @@ class Categories extends Component {
             Toggle Cumulative
           </button>
           <CategoryGraph
-            categories={categories}
+            data={graphData}
+            dateRange={dateRange}
             colors={colors}
-            getMonthSums={this.getMonthSums}
           />
         </div>
         <div className={style.table}>

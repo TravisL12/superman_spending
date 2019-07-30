@@ -7,24 +7,19 @@ import {
   VictoryLine,
   VictoryArea
 } from "victory";
-import { values } from "lodash";
+import { currency, formatDate } from "utilities/date-format-utils";
 
 const config = {
   animate: { duration: 500 },
-  padding: { top: 10, bottom: 10, left: 10, right: 10 },
+  padding: { top: 10, bottom: 25, left: 10, right: 10 },
   height: 150,
   axisColor: "black",
   axisFontSize: 6
 };
 
-function CategoryGraph({ categories, colors, getMonthSums }) {
+function CategoryGraph({ data, colors, dateRange }) {
   const [graphType, setGraphType] = useState("stack");
-
-  const data = values(categories).map(({ id }, idx) => {
-    return getMonthSums(id).map((sum, idx) => {
-      return { x: idx, y: sum / 100 };
-    });
-  });
+  const categoryCount = data.length;
 
   const stackChart = (
     <VictoryStack colorScale={colors}>
@@ -71,14 +66,29 @@ function CategoryGraph({ categories, colors, getMonthSums }) {
 
         {/* X-axis */}
         <VictoryAxis
-          style={{ tickLabels: { fontSize: config.axisFontSize } }}
-          tickCount={categories.length}
+          crossAxis={false}
+          tickCount={categoryCount}
+          tickFormat={t => {
+            const { year, month } = dateRange[t];
+            return formatDate(month, year, {
+              month: "short",
+              year: "numeric"
+            });
+          }}
+          tickLabelComponent={<VictoryLabel dx={1} dy={-2} angle={-90} />}
+          style={{
+            tickLabels: { fontSize: 4 },
+            grid: {
+              strokeDasharray: "3, 15",
+              stroke: config.axisColor
+            }
+          }}
         />
 
         {/* Y-axis */}
         <VictoryAxis
           dependentAxis
-          tickFormat={t => `$${t.toLocaleString()}`}
+          tickFormat={t => currency(t, { minimumFractionDigits: 0 })}
           tickLabelComponent={<VictoryLabel dx={35} dy={-5} />}
           style={{
             axis: { stroke: 0 },
