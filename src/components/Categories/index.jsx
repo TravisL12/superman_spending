@@ -14,7 +14,7 @@ import { shuffle, values, keys } from "lodash";
 import qs from "query-string";
 
 const colors = shuffle(categoryColors);
-const MONTHS_BACK = 12 * 1.5;
+const MONTHS_BACK = 12 * 2;
 
 class Categories extends Component {
   state = {
