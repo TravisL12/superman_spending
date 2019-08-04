@@ -1,12 +1,9 @@
 import React, { Component } from "react";
 import AuthService from "middleware/AuthService";
-import {
-  createDateRange,
-  currency,
-  formatDate
-} from "utilities/date-format-utils";
+import { createDateRange, currency } from "utilities/date-format-utils";
 import CategoryGraph from "./CategoryGraph";
-import CategoryRow from "./CategoryRow";
+import CategorySearch from "./CategorySearch";
+import CategoryTable from "./CategoryTable";
 import style from "./Categories.module.scss";
 import Loading from "components/Loading";
 import categoryColors from "utilities/categoryColors";
@@ -18,6 +15,7 @@ const MONTHS_BACK = 12 * 2;
 
 class Categories extends Component {
   state = {
+    searches: null,
     categories: null,
     isLoading: true,
     checkedCategories: {},
@@ -25,21 +23,22 @@ class Categories extends Component {
     dateRange: null
   };
 
-  componentWillMount() {
-    AuthService.fetch(
+  async componentWillMount() {
+    const data = await AuthService.fetch(
       `api/categories/compare?${qs.stringify({ monthsBack: MONTHS_BACK })}`
-    ).then(({ categories }) => {
-      const checkedCategories = keys(categories).reduce((result, id) => {
-        result[id] = true;
-        return result;
-      }, {});
+    );
 
-      this.setState({
-        categories,
-        isLoading: false,
-        checkedCategories,
-        dateRange: createDateRange(MONTHS_BACK).reverse() // ascending date order (old -> new)
-      });
+    const { categories } = data;
+    const checkedCategories = keys(categories).reduce((result, id) => {
+      result[id] = true;
+      return result;
+    }, {});
+
+    this.setState({
+      categories,
+      isLoading: false,
+      checkedCategories,
+      dateRange: createDateRange(MONTHS_BACK).reverse() // ascending date order (old -> new)
     });
   }
 
@@ -106,6 +105,10 @@ class Categories extends Component {
     });
   };
 
+  toggleCumulative = () => {
+    this.setState({ graphCumulative: !this.state.graphCumulative });
+  };
+
   render() {
     const { isLoading, categories, checkedCategories, dateRange } = this.state;
 
@@ -117,77 +120,22 @@ class Categories extends Component {
 
     return (
       <div className={style.categoryTransactions}>
-        <div className={style.graph}>
-          <button
-            onClick={() => {
-              this.setState({ graphCumulative: !this.state.graphCumulative });
-            }}
-          >
-            Toggle Cumulative
-          </button>
-          <CategoryGraph
-            data={summedCategories}
-            dateRange={dateRange}
-            colors={colors}
-          />
-        </div>
-        <div className={style.table}>
-          <table>
-            <thead>
-              <tr>
-                <th className={style.categoryColumn}>
-                  <button
-                    onClick={() => {
-                      this.toggleAllCategories(true);
-                    }}
-                  >
-                    On
-                  </button>
-                  <button
-                    onClick={() => {
-                      this.toggleAllCategories(false);
-                    }}
-                  >
-                    Off
-                  </button>
-                </th>
-                {dateRange.map(({ month, year }, idx) => {
-                  return (
-                    <th key={idx}>
-                      {formatDate(month, year, {
-                        month: "short",
-                        year: "numeric"
-                      })}
-                    </th>
-                  );
-                })}
-              </tr>
-            </thead>
-            <tbody>
-              {summedCategories.map((category, idx) => {
-                return (
-                  <CategoryRow
-                    checkedCategories={checkedCategories}
-                    color={colors[idx]}
-                    category={category}
-                    onCheckboxChange={this.handleCategoryCheckboxChange}
-                    key={idx}
-                  />
-                );
-              })}
-              <tr>
-                <td>{/* spacer for name column */}</td>
-                {dateRange.map(({ month, year }, idx) => {
-                  return (
-                    <td className={style.totalCol} key={idx}>
-                      {this.getCategorySums(month, year)}
-                    </td>
-                  );
-                })}
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <CategoryGraph
+          data={summedCategories}
+          dateRange={dateRange}
+          colors={colors}
+          toggleCumulative={this.toggleCumulative}
+        />
+        <CategorySearch />
+        <CategoryTable
+          checkedCategories={checkedCategories}
+          colors={colors}
+          dateRange={dateRange}
+          getCategorySums={this.getCategorySums}
+          handleCategoryCheckboxChange={this.handleCategoryCheckboxChange}
+          summedCategories={summedCategories}
+          toggleAllCategories={this.toggleAllCategories}
+        />
       </div>
     );
   }

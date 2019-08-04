@@ -9,6 +9,7 @@ import {
   VictoryTooltip
 } from "victory";
 import { currency, formatDate } from "utilities/date-format-utils";
+import style from "./Categories.module.scss";
 
 const config = {
   animate: { duration: 500 },
@@ -18,7 +19,7 @@ const config = {
   axisFontSize: 6
 };
 
-function CategoryGraph({ data, colors, dateRange }) {
+function CategoryGraph({ data, colors, dateRange, toggleCumulative }) {
   const [graphType, setGraphType] = useState("stack");
   const categoryCount = data.length;
 
@@ -86,7 +87,8 @@ function CategoryGraph({ data, colors, dateRange }) {
   });
 
   return (
-    <>
+    <div className={style.graph}>
+      <button onClick={toggleCumulative}>Toggle Cumulative</button>
       <button
         onClick={() => {
           setGraphType("stack");
@@ -148,7 +150,7 @@ function CategoryGraph({ data, colors, dateRange }) {
           }}
         />
       </VictoryChart>
-    </>
+    </div>
   );
 }
 

@@ -76,3 +76,16 @@
 .categoryCol {
   text-align: left;
 }
+
+.searchInput {
+  margin-bottom: 25px;
+  text-align: center;
+
+  input {
+    height: 60px;
+    width: calc(100% - 100px);
+    padding: 6px 10px;
+    box-sizing: border-box;
+    font-size: 42px;
+  }
+}
