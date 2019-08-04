@@ -135,7 +135,7 @@ class Categories extends Component {
           <table>
             <thead>
               <tr>
-                <th>
+                <th className={style.categoryColumn}>
                   <button
                     onClick={() => {
                       this.toggleAllCategories(true);

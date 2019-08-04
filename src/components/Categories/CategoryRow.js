@@ -14,7 +14,7 @@ function CategoryRow({
 
   return (
     <tr>
-      <td>
+      <td className={style.categoryColumn}>
         <input
           type="checkbox"
           id={`category-${id}`}

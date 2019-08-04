@@ -11,6 +11,11 @@
     flex: 1;
   }
 
+  .table {
+    width: 100%;
+    overflow-x: scroll;
+  }
+
   table {
     border-spacing: 0;
     font-size: 14px;
@@ -22,6 +27,11 @@
       &:nth-child(2) {
         text-align: left;
       }
+    }
+
+    .categoryColumn {
+      position: sticky;
+      left: 0;
     }
 
     td,
