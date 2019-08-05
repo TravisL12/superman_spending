@@ -85,7 +85,22 @@
     height: 60px;
     width: calc(100% - 100px);
     padding: 6px 10px;
+    border: none;
+    border-radius: 3px;
     box-sizing: border-box;
     font-size: 42px;
+
+    background: #ffffff;
+
+    background: linear-gradient(
+      135deg,
+      $searchInputBlue 0%,
+      $accentRowBlue 20%,
+      $searchInputBlue 80%
+    );
+    box-shadow: 0 0 10px 0px $searchInputBlue;
+    &:focus {
+      outline: none;
+    }
   }
 }

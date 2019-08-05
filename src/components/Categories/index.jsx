@@ -18,9 +18,10 @@ class Categories extends Component {
     searches: null,
     categories: null,
     isLoading: true,
-    checkedCategories: {},
+    checkedRows: {},
     graphCumulative: false,
-    dateRange: null
+    dateRange: null,
+    searchResults: {}
   };
 
   async componentWillMount() {
@@ -29,7 +30,7 @@ class Categories extends Component {
     );
 
     const { categories } = data;
-    const checkedCategories = keys(categories).reduce((result, id) => {
+    const checkedRows = keys(categories).reduce((result, id) => {
       result[id] = true;
       return result;
     }, {});
@@ -37,17 +38,17 @@ class Categories extends Component {
     this.setState({
       categories,
       isLoading: false,
-      checkedCategories,
+      checkedRows,
       dateRange: createDateRange(MONTHS_BACK).reverse() // ascending date order (old -> new)
     });
   }
 
   getTransactionSum = (year, month, id) => {
-    const { checkedCategories, categories } = this.state;
+    const { checkedRows, categories } = this.state;
     const { transactionTotals } = categories[id];
 
     if (
-      checkedCategories[id] &&
+      checkedRows[id] &&
       transactionTotals[year] &&
       transactionTotals[year][month]
     ) {
@@ -83,25 +84,22 @@ class Categories extends Component {
   };
 
   toggleAllCategories = value => {
-    const checkedCategories = keys(this.state.checkedCategories).reduce(
-      (result, id) => {
-        result[id] = value;
-        return result;
-      },
-      {}
-    );
+    const checkedRows = keys(this.state.checkedRows).reduce((result, id) => {
+      result[id] = value;
+      return result;
+    }, {});
 
-    this.setState({ checkedCategories });
+    this.setState({ checkedRows });
   };
 
   handleCategoryCheckboxChange = event => {
     const { target } = event;
-    const checkboxVal = this.state.checkedCategories[target.value];
-    const checkedCategories = this.state.checkedCategories;
-    checkedCategories[target.value] = !checkboxVal;
+    const checkboxVal = this.state.checkedRows[target.value];
+    const checkedRows = this.state.checkedRows;
+    checkedRows[target.value] = !checkboxVal;
 
     this.setState({
-      checkedCategories
+      checkedRows
     });
   };
 
@@ -109,10 +107,22 @@ class Categories extends Component {
     this.setState({ graphCumulative: !this.state.graphCumulative });
   };
 
+  getSearchResults = searchResults => {
+    this.setState({ searchResults });
+  };
+
   render() {
-    const { isLoading, categories, checkedCategories, dateRange } = this.state;
+    const {
+      isLoading,
+      categories,
+      checkedRows,
+      dateRange,
+      searchResults
+    } = this.state;
 
     if (isLoading) return <Loading />;
+    console.log(searchResults, "searchResults");
+    console.log(categories, "categories");
 
     const summedCategories = values(categories).map(({ id, name }, idx) => {
       return { id, name, sum: this.getMonthSums(id) };
@@ -126,9 +136,9 @@ class Categories extends Component {
           colors={colors}
           toggleCumulative={this.toggleCumulative}
         />
-        <CategorySearch />
+        <CategorySearch getSearchResults={this.getSearchResults} />
         <CategoryTable
-          checkedCategories={checkedCategories}
+          checkedRows={checkedRows}
           colors={colors}
           dateRange={dateRange}
           getCategorySums={this.getCategorySums}

@@ -7,7 +7,7 @@ function CategorySearch({
   colors,
   dateRange,
   summedCategories,
-  checkedCategories,
+  checkedRows,
   handleCategoryCheckboxChange,
   toggleAllCategories,
   getCategorySums
@@ -49,7 +49,7 @@ function CategorySearch({
           {summedCategories.map((category, idx) => {
             return (
               <CategoryRow
-                checkedCategories={checkedCategories}
+                checked={checkedRows[category.id]}
                 color={colors[idx]}
                 category={category}
                 onCheckboxChange={handleCategoryCheckboxChange}

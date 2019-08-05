@@ -3,9 +3,8 @@ import style from "./Categories.module.scss";
 import AuthService from "middleware/AuthService";
 import qs from "query-string";
 
-function CategorySearch() {
+function CategorySearch({ getSearchResults }) {
   const [searchInput, setSearchInput] = useState("");
-  const [results, setResults] = useState({});
 
   const fetch = e => {
     e.preventDefault();
@@ -14,8 +13,10 @@ function CategorySearch() {
     const query = qs.stringify({ keywordSearches: searchInput });
 
     AuthService.fetch(`api/transactions/list/0?${query}`).then(
-      ({ transactions, searchResults }) => {
-        setResults(searchResults);
+      ({ searchResults }) => {
+        const { grouped: transactionTotals, name } = searchResults[0];
+        getSearchResults({ id: name, name, transactionTotals });
+        setSearchInput("");
       }
     );
   };
@@ -25,7 +26,7 @@ function CategorySearch() {
       <form onSubmit={fetch}>
         <input
           type="text"
-          placeholder="Search for Stuff"
+          placeholder="Search Spending"
           value={searchInput}
           onChange={event => setSearchInput(event.target.value)}
         />
