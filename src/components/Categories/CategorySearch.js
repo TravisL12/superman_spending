@@ -14,8 +14,8 @@ function CategorySearch({ getSearchResults }) {
 
     AuthService.fetch(`api/transactions/list/0?${query}`).then(
       ({ searchResults }) => {
-        const { grouped: transactionTotals, name } = searchResults[0];
-        getSearchResults({ id: name, name, transactionTotals });
+        const { transactionTotals, name } = searchResults[0];
+        getSearchResults({ [name]: { id: name, name, transactionTotals } });
         setSearchInput("");
       }
     );

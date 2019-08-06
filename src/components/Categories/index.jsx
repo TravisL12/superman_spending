@@ -20,8 +20,7 @@ class Categories extends Component {
     isLoading: true,
     checkedRows: {},
     graphCumulative: false,
-    dateRange: null,
-    searchResults: {}
+    dateRange: null
   };
 
   async componentWillMount() {
@@ -108,21 +107,21 @@ class Categories extends Component {
   };
 
   getSearchResults = searchResults => {
-    this.setState({ searchResults });
+    const checkResultRows = keys(searchResults).reduce((result, row) => {
+      result[row] = true;
+      return result;
+    }, {});
+
+    this.setState({
+      checkedRows: { ...checkResultRows, ...this.state.checkedRows },
+      categories: { ...searchResults, ...this.state.categories }
+    });
   };
 
   render() {
-    const {
-      isLoading,
-      categories,
-      checkedRows,
-      dateRange,
-      searchResults
-    } = this.state;
+    const { isLoading, categories, checkedRows, dateRange } = this.state;
 
     if (isLoading) return <Loading />;
-    console.log(searchResults, "searchResults");
-    console.log(categories, "categories");
 
     const summedCategories = values(categories).map(({ id, name }, idx) => {
       return { id, name, sum: this.getMonthSums(id) };
