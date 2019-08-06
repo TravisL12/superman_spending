@@ -114,7 +114,7 @@ class Categories extends Component {
 
     this.setState({
       checkedRows: { ...checkResultRows, ...this.state.checkedRows },
-      categories: { ...searchResults, ...this.state.categories }
+      categories: { ...this.state.categories, ...searchResults }
     });
   };
 
