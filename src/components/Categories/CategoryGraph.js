@@ -29,48 +29,48 @@ function CategoryGraph({ data, colors, dateRange, toggleCumulative }) {
     });
   });
 
+  const eventHandlers = {
+    onMouseOver: () => {
+      return [
+        {
+          target: "data",
+          mutation: () => ({ style: { fill: "gold" } })
+        },
+        {
+          target: "labels",
+          mutation: () => ({ active: true })
+        }
+      ];
+    },
+    onMouseOut: () => {
+      return [
+        {
+          target: "data",
+          mutation: () => {}
+        },
+        {
+          target: "labels",
+          mutation: () => ({ active: false })
+        }
+      ];
+    }
+  };
+
   const stackChart = (
     <VictoryStack colorScale={colors}>
-      {graphData.map((d, idx) => {
-        return (
-          <VictoryArea
-            labelComponent={<VictoryTooltip />}
-            data={d}
-            key={idx}
-            events={[
-              {
-                target: "data",
-                eventHandlers: {
-                  onMouseOver: () => {
-                    return [
-                      {
-                        target: "data",
-                        mutation: () => ({ style: { fill: "gold" } })
-                      },
-                      {
-                        target: "labels",
-                        mutation: () => ({ active: true })
-                      }
-                    ];
-                  },
-                  onMouseOut: () => {
-                    return [
-                      {
-                        target: "data",
-                        mutation: () => {}
-                      },
-                      {
-                        target: "labels",
-                        mutation: () => ({ active: false })
-                      }
-                    ];
-                  }
-                }
-              }
-            ]}
-          />
-        );
-      })}
+      {graphData.map((d, idx) => (
+        <VictoryArea
+          labelComponent={<VictoryTooltip />}
+          data={d}
+          key={idx}
+          events={[
+            {
+              target: "data",
+              eventHandlers
+            }
+          ]}
+        />
+      ))}
     </VictoryStack>
   );
 
