@@ -5,6 +5,7 @@ import {
   titleCase,
   cleanDescription
 } from "utilities/date-format-utils";
+import CategoryDropdown from "components/CategoryInputs/dropdown";
 import style from "./TransactionRow.module.scss";
 
 function displayPayeeDescription({ payee, description }) {
@@ -39,7 +40,13 @@ const TransactionRow = memo(({ transaction, onCheckboxChange }) => {
       </td>
       <td className={style.amountCol}>{currency(transaction.amount)}</td>
       <td>{formatFullDate(new Date(transaction.date))}</td>
-      <td className={style.categoryCol}>{transaction.Category.name}</td>
+      {/* <td className={style.categoryCol}>{transaction.Category.name}</td> */}
+      <td>
+        <CategoryDropdown
+          onChange={() => {}}
+          selectedCategory={transaction.Category}
+        />
+      </td>
       <td className={style.categoryCol}>{transaction.Subcategory.name}</td>
     </tr>
   );
