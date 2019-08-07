@@ -23,7 +23,16 @@ function displayPayeeDescription({ payee, description }) {
   );
 }
 
-const TransactionRow = memo(({ transaction, onCheckboxChange }) => {
+const TransactionRow = memo(({ transaction, onCheckboxChange, isChecked }) => {
+  const cat = isChecked ? (
+    <CategoryDropdown
+      onChange={() => {}}
+      selectedCategory={transaction.Category}
+    />
+  ) : (
+    transaction.Category.name
+  );
+
   return (
     <tr>
       <td className={style.checkBox}>
@@ -40,13 +49,7 @@ const TransactionRow = memo(({ transaction, onCheckboxChange }) => {
       </td>
       <td className={style.amountCol}>{currency(transaction.amount)}</td>
       <td>{formatFullDate(new Date(transaction.date))}</td>
-      {/* <td className={style.categoryCol}>{transaction.Category.name}</td> */}
-      <td>
-        <CategoryDropdown
-          onChange={() => {}}
-          selectedCategory={transaction.Category}
-        />
-      </td>
+      <td className={style.categoryCol}>{cat}</td>
       <td className={style.categoryCol}>{transaction.Subcategory.name}</td>
     </tr>
   );

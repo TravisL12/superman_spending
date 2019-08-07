@@ -167,7 +167,8 @@ class Transactions extends Component {
       searchInput,
       searchResults,
       transactions,
-      searchQueries
+      searchQueries,
+      checkedIds
     } = this.state;
 
     if (isLoading) return <Loading />;
@@ -211,6 +212,7 @@ class Transactions extends Component {
                   key={idx}
                   onCheckboxChange={this.updateCheckedRow}
                   transaction={transaction}
+                  isChecked={checkedIds.includes(String(transaction.id))}
                 />
               );
             })}
