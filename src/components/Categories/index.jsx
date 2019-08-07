@@ -135,7 +135,10 @@ class Categories extends Component {
           colors={colors}
           toggleCumulative={this.toggleCumulative}
         />
-        <CategorySearch getSearchResults={this.getSearchResults} />
+        <CategorySearch
+          {...this.props}
+          getSearchResults={this.getSearchResults}
+        />
         <CategoryTable
           checkedRows={checkedRows}
           colors={colors}
