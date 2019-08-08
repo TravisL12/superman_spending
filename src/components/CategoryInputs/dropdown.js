@@ -3,10 +3,9 @@ import Loading from "components/Loading";
 import { CategoriesConsumer } from "providers/CategoriesProvider";
 import { sortBy } from "lodash";
 
-function CategoryDropdown({ onChange, selectedCategory }) {
-  // Group all selected categories
-  const updateSelection = ({ target: { value, name } }) => {
-    onChange({ target: { value: [...selectedCategory, value], name } });
+function CategoryDropdown({ onChange, selectedCategory, transactionId }) {
+  const updateSelection = ({ target: { value } }) => {
+    onChange({ target: { value, transactionId } });
   };
 
   return (

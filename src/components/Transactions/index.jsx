@@ -112,6 +112,19 @@ class Transactions extends Component {
     this.fetch();
   };
 
+  updateCategory = ({ target }) => {
+    AuthService.fetch(`api/categories/update/${target.transactionId}`, {
+      method: "POST",
+      body: JSON.stringify({
+        category_id: target.value
+      })
+    }).then(() => {
+      this.setState({ checkedIds: [] }, () => {
+        this.fetch(this.state.searchQueries);
+      });
+    });
+  };
+
   updateCheckedRow = ({ target: { value } }) => {
     this.setState(oldState => {
       return oldState.checkedIds.includes(value)
@@ -213,6 +226,7 @@ class Transactions extends Component {
                   onCheckboxChange={this.updateCheckedRow}
                   transaction={transaction}
                   isChecked={checkedIds.includes(String(transaction.id))}
+                  updateCategory={this.updateCategory}
                 />
               );
             })}

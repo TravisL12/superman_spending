@@ -23,36 +23,42 @@ function displayPayeeDescription({ payee, description }) {
   );
 }
 
-const TransactionRow = memo(({ transaction, onCheckboxChange, isChecked }) => {
-  const cat = isChecked ? (
-    <CategoryDropdown
-      onChange={() => {}}
-      selectedCategory={transaction.Category}
-    />
-  ) : (
-    transaction.Category.name
-  );
+const TransactionRow = memo(
+  ({ transaction, onCheckboxChange, isChecked, updateCategory }) => {
+    const { Category, id, amount, date, Subcategory } = transaction;
 
-  return (
-    <tr>
-      <td className={style.checkBox}>
-        <input
-          id={transaction.id}
-          type="checkbox"
-          value={transaction.id}
-          onChange={onCheckboxChange}
-        />
-        <label htmlFor={transaction.id} />
-      </td>
-      <td className={style.descriptionCol}>
-        {displayPayeeDescription(transaction)}
-      </td>
-      <td className={style.amountCol}>{currency(transaction.amount)}</td>
-      <td>{formatFullDate(new Date(transaction.date))}</td>
-      <td className={style.categoryCol}>{cat}</td>
-      <td className={style.categoryCol}>{transaction.Subcategory.name}</td>
-    </tr>
-  );
-});
+    const categoryColumn = isChecked ? (
+      <CategoryDropdown
+        transactionId={id}
+        onChange={updateCategory}
+        selectedCategory={Category}
+      />
+    ) : (
+      Category.name
+    );
+
+    return (
+      <tr>
+        <td className={style.checkBox}>
+          <input
+            id={id}
+            type="checkbox"
+            value={id}
+            checked={isChecked}
+            onChange={onCheckboxChange}
+          />
+          <label htmlFor={id} />
+        </td>
+        <td className={style.descriptionCol}>
+          {displayPayeeDescription(transaction)}
+        </td>
+        <td className={style.amountCol}>{currency(amount)}</td>
+        <td>{formatFullDate(new Date(date))}</td>
+        <td className={style.categoryCol}>{categoryColumn}</td>
+        <td className={style.categoryCol}>{Subcategory.name}</td>
+      </tr>
+    );
+  }
+);
 
 export default TransactionRow;
