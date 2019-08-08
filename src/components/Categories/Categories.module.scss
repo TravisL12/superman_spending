@@ -6,20 +6,19 @@
   justify-content: space-around;
   margin-bottom: 50px;
 
+  .categoryGraph {
+    display: flex;
+    justify-content: space-around;
+  }
+
   .graph {
     max-width: 100%;
     flex: 1;
   }
 
-  .table {
-    width: 100%;
-    overflow-x: scroll;
-  }
-
   table {
     border-spacing: 0;
     font-size: 14px;
-    width: 100%;
 
     th {
       text-align: right;
@@ -27,11 +26,6 @@
       &:nth-child(2) {
         text-align: left;
       }
-    }
-
-    .categoryColumn {
-      position: sticky;
-      left: 0;
     }
 
     td,

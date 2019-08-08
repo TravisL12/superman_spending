@@ -1,9 +1,10 @@
 import React from "react";
 import { currency } from "utilities/date-format-utils";
 import style from "./Categories.module.scss";
+import { sum } from "lodash";
 
 function CategoryRow({
-  category: { id, name, sum },
+  category: { id, name, sum: categorySum },
   checked,
   color,
   onCheckboxChange
@@ -26,16 +27,8 @@ function CategoryRow({
           {name}
         </label>
       </td>
-      {sum.map((s, sIdx) => {
-        return (
-          <td className={style.amountCol} key={`cat-${sIdx}`}>
-            {currency(s, {
-              rounded: true,
-              minimumFractionDigits: 0
-            })}
-          </td>
-        );
-      })}
+
+      <td className={style.amountCol}>{currency(sum(categorySum))}</td>
     </tr>
   );
 }

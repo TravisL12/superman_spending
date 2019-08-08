@@ -1,6 +1,5 @@
 import React from "react";
 import style from "./Categories.module.scss";
-import { formatDate } from "utilities/date-format-utils";
 import CategoryRow from "./CategoryRow";
 
 function CategorySearch({
@@ -33,16 +32,6 @@ function CategorySearch({
                 Off
               </button>
             </th>
-            {dateRange.map(({ month, year }, idx) => {
-              return (
-                <th key={idx}>
-                  {formatDate(month, year, {
-                    month: "short",
-                    year: "numeric"
-                  })}
-                </th>
-              );
-            })}
           </tr>
         </thead>
         <tbody>
@@ -57,16 +46,6 @@ function CategorySearch({
               />
             );
           })}
-          <tr>
-            <td>{/* spacer for name column */}</td>
-            {dateRange.map(({ month, year }, idx) => {
-              return (
-                <td className={style.totalCol} key={idx}>
-                  {getCategorySums(month, year)}
-                </td>
-              );
-            })}
-          </tr>
         </tbody>
       </table>
     </div>

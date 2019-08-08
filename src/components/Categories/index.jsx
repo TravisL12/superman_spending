@@ -129,24 +129,28 @@ class Categories extends Component {
 
     return (
       <div className={style.categoryTransactions}>
-        <CategoryGraph
-          data={summedCategories}
-          dateRange={dateRange}
-          colors={colors}
-          toggleCumulative={this.toggleCumulative}
-        />
+        <div className={style.categoryGraph}>
+          <CategoryTable
+            checkedRows={checkedRows}
+            colors={colors}
+            dateRange={dateRange}
+            getCategorySums={this.getCategorySums}
+            handleCategoryCheckboxChange={this.handleCategoryCheckboxChange}
+            summedCategories={summedCategories}
+            toggleAllCategories={this.toggleAllCategories}
+          />
+          <div className={style.graph}>
+            <CategoryGraph
+              data={summedCategories}
+              dateRange={dateRange}
+              colors={colors}
+              toggleCumulative={this.toggleCumulative}
+            />
+          </div>
+        </div>
         <CategorySearch
           {...this.props}
           getSearchResults={this.getSearchResults}
-        />
-        <CategoryTable
-          checkedRows={checkedRows}
-          colors={colors}
-          dateRange={dateRange}
-          getCategorySums={this.getCategorySums}
-          handleCategoryCheckboxChange={this.handleCategoryCheckboxChange}
-          summedCategories={summedCategories}
-          toggleAllCategories={this.toggleAllCategories}
         />
       </div>
     );

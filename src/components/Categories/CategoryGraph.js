@@ -14,7 +14,7 @@ import style from "./Categories.module.scss";
 const config = {
   animate: { duration: 500 },
   padding: { top: 10, bottom: 25, left: 10, right: 10 },
-  height: 150,
+  height: 220,
   axisColor: "black",
   axisFontSize: 6
 };
@@ -123,11 +123,7 @@ function CategoryGraph({ data, colors, dateRange, toggleCumulative }) {
           }}
           tickLabelComponent={<VictoryLabel dx={1} dy={-2} angle={-90} />}
           style={{
-            tickLabels: { fontSize: 4 },
-            grid: {
-              strokeDasharray: "3, 15",
-              stroke: config.axisColor
-            }
+            tickLabels: { fontSize: 4 }
           }}
         />
 
