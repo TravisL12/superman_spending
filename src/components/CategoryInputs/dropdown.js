@@ -8,6 +8,8 @@ function CategoryDropdown({ onChange, selectedCategory, transactionId }) {
     onChange({ target: { value, transactionId } });
   };
 
+  const id = selectedCategory ? selectedCategory.id : 0;
+
   return (
     <CategoriesConsumer>
       {({ categories }) => {
@@ -16,11 +18,7 @@ function CategoryDropdown({ onChange, selectedCategory, transactionId }) {
         }
 
         return (
-          <select
-            name={"categoryIds"}
-            value={selectedCategory.id}
-            onChange={updateSelection}
-          >
+          <select name={"categoryIds"} value={id} onChange={updateSelection}>
             {sortBy(categories, "name").map((cat, idx) => (
               <option key={idx} value={cat.id}>
                 {cat.name}
