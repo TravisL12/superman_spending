@@ -4,11 +4,11 @@ import style from "./Categories.module.scss";
 
 function CategoryRow({
   category: { id, name, sum },
-  checkedCategories,
+  checked,
   color,
   onCheckboxChange
 }) {
-  const checkBoxStyling = checkedCategories[id]
+  const checkBoxStyling = checked
     ? { background: color, color: "black" }
     : { background: "lightgray", color: "gray" };
 
@@ -19,7 +19,7 @@ function CategoryRow({
           type="checkbox"
           id={`category-${id}`}
           value={id}
-          checked={checkedCategories[id]}
+          checked={checked}
           onChange={onCheckboxChange}
         />
         <label htmlFor={`category-${id}`} style={checkBoxStyling}>
