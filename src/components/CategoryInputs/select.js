@@ -2,11 +2,11 @@ import React from "react";
 import Loading from "components/Loading";
 import { CategoriesConsumer } from "providers/CategoriesProvider";
 import { sortBy } from "lodash";
-import style from "./CategoryDropdown.module.scss";
+import style from "./CategoryInputs.module.scss";
 
-function CategoryDropdown({ onChange, selectedCategories }) {
+function CategorySelect({ onChange, selectedCategories }) {
   // Group all selected categories
-  const updateSelection = ({ target: { value, name } }) => {
+  const updateSelection = ({ target: { value } }) => {
     onChange({
       target: { value: [...selectedCategories, value], name: "categoryIds" }
     });
@@ -22,7 +22,7 @@ function CategoryDropdown({ onChange, selectedCategories }) {
 
         return (
           <div className={style.dropdown}>
-            {sortBy(categories, "name").map((cat, idx) => (
+            {sortBy(categories, "name").map(cat => (
               <div key={`category-${cat.id}`}>
                 <input
                   id={cat.id}
@@ -41,4 +41,4 @@ function CategoryDropdown({ onChange, selectedCategories }) {
   );
 }
 
-export default CategoryDropdown;
+export default CategorySelect;

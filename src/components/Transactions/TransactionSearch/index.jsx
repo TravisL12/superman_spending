@@ -1,5 +1,5 @@
 import React from "react";
-import CategoryDropdown from "components/CategoryDropdown";
+import CategorySelect from "components/CategoryInputs/select";
 import style from "components/Transactions/TransactionsInputs.module.scss";
 
 function TransactionSearch({
@@ -45,7 +45,7 @@ function TransactionSearch({
           />
         </div>
         <div className={style.input}>
-          <CategoryDropdown
+          <CategorySelect
             onChange={onSearchChange}
             selectedCategories={searchInput.categoryIds}
           />

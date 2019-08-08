@@ -8,6 +8,7 @@ import Search from "./TransactionSearch";
 import Totals from "./TransactionTotals";
 import Row from "./TransactionRow";
 import style from "./Transactions.module.scss";
+import CategoryDropdown from "components/CategoryInputs/dropdown";
 import { qsToArray, filterOutValue } from "utilities/query-string-utils";
 
 class Transactions extends Component {
@@ -112,6 +113,22 @@ class Transactions extends Component {
     this.fetch();
   };
 
+  updateCategory = ({ target }) => {
+    const path = target.transactionId ? `/${target.transactionId}` : "";
+    const body = target.transactionId
+      ? { category_id: target.value }
+      : { id: this.state.checkedIds, category_id: target.value };
+
+    AuthService.fetch(`api/categories/update${path}`, {
+      method: "POST",
+      body: JSON.stringify(body)
+    }).then(() => {
+      this.setState({ checkedIds: [] }, () => {
+        this.fetch(this.state.searchQueries);
+      });
+    });
+  };
+
   updateCheckedRow = ({ target: { value } }) => {
     this.setState(oldState => {
       return oldState.checkedIds.includes(value)
@@ -167,10 +184,18 @@ class Transactions extends Component {
       searchInput,
       searchResults,
       transactions,
-      searchQueries
+      searchQueries,
+      checkedIds
     } = this.state;
 
     if (isLoading) return <Loading />;
+
+    const categoryColumn =
+      checkedIds.length > 1 ? (
+        <CategoryDropdown onChange={this.updateCategory} />
+      ) : (
+        "Category"
+      );
 
     return (
       <div className={style.transactionsList}>
@@ -200,7 +225,7 @@ class Transactions extends Component {
               <th>Description</th>
               <th>Amount</th>
               <th>Date</th>
-              <th>Category</th>
+              <th>{categoryColumn}</th>
               <th>Subcategory</th>
             </tr>
           </thead>
@@ -211,6 +236,8 @@ class Transactions extends Component {
                   key={idx}
                   onCheckboxChange={this.updateCheckedRow}
                   transaction={transaction}
+                  isChecked={checkedIds.includes(String(transaction.id))}
+                  updateCategory={this.updateCategory}
                 />
               );
             })}
