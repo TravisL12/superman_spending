@@ -108,19 +108,13 @@ class Categories extends Component {
     if (isLoading) return <Loading />;
 
     // Show all categories (checked & unchecked)
-    const tableCategories = values(categories).map(
-      ({ id, name, total, transactionTotals, checked }, idx) => {
-        return {
-          id,
-          name,
-          total,
-          transactionTotals,
-          checked,
-          sum: this.getMonthSums(id),
-          color: colors[idx]
-        };
-      }
-    );
+    const tableCategories = values(categories).map((category, idx) => {
+      return {
+        ...category,
+        sum: this.getMonthSums(category.id),
+        color: colors[idx]
+      };
+    });
 
     // Only graph the checked categories
     const graphCategories = tableCategories.filter(({ checked }) => checked);
