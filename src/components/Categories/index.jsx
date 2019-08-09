@@ -8,11 +8,13 @@ import TransactionTable from "components/Transactions/TransactionTable";
 import style from "./Categories.module.scss";
 import Loading from "components/Loading";
 import categoryColors from "utilities/categoryColors";
-import { get, isEmpty, shuffle, values } from "lodash";
+import { get, isEmpty, values } from "lodash";
 import qs from "query-string";
 
-const colors = shuffle(categoryColors);
-const MONTHS_BACK = 12 * 2;
+const offset = 4;
+const colors = categoryColors.slice(offset, 20 + offset);
+const MONTHS_BACK = 12 * 3; // display this many months back
+const AMOUNT_THRESHOLD = MONTHS_BACK * 100 * 100; // must be higher than this to be checked on load
 
 const toggleCategories = (value, categories) => {
   return values(categories).reduce((result, category) => {
@@ -38,7 +40,7 @@ class Categories extends Component {
     );
 
     const categories = values(data.categories).reduce((result, category) => {
-      category.checked = category.total > MONTHS_BACK * 10000;
+      category.checked = category.total > AMOUNT_THRESHOLD;
       result[category.id] = category;
       return result;
     }, {});

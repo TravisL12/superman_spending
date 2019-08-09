@@ -13,10 +13,10 @@ function CategorySearch({ getSearchResults, history }) {
 
     AuthService.fetch(`api/transactions/list/0?${query}`).then(
       ({ searchResults, transactions }) => {
-        const { transactionTotals, name } = searchResults[0];
+        const { transactionTotals, name, sum: total } = searchResults[0];
         getSearchResults(
           {
-            [name]: { id: name, name, transactionTotals, checked: true }
+            [name]: { id: name, name, transactionTotals, total, checked: true }
           },
           transactions
         );
