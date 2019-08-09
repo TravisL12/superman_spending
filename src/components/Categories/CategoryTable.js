@@ -4,7 +4,6 @@ import CategoryRow from "./CategoryRow";
 
 function CategoryTable({
   summedCategories,
-  checkedRows,
   handleCategoryCheckboxChange,
   toggleAllCategories
 }) {
@@ -35,7 +34,7 @@ function CategoryTable({
           {summedCategories.map((category, idx) => {
             return (
               <CategoryRow
-                checked={checkedRows[category.id]}
+                checked={category.checked}
                 color={category.color}
                 category={category}
                 onCheckboxChange={handleCategoryCheckboxChange}

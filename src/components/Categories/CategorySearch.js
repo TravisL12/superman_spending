@@ -16,7 +16,7 @@ function CategorySearch({ getSearchResults, history }) {
         const { transactionTotals, name } = searchResults[0];
         getSearchResults(
           {
-            [name]: { id: name, name, transactionTotals }
+            [name]: { id: name, name, transactionTotals, checked: true }
           },
           transactions
         );
