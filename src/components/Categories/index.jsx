@@ -15,7 +15,7 @@ const colors = shuffle(categoryColors);
 const MONTHS_BACK = 12 * 2;
 
 const toggleCategories = (value, categories) => {
-  return categories.reduce((result, category) => {
+  return values(categories).reduce((result, category) => {
     category.checked = value;
     result[category.id] = category;
     return result;
@@ -69,8 +69,7 @@ class Categories extends Component {
     this.setState({ categories });
   };
 
-  handleCategoryCheckboxChange = event => {
-    const { target } = event;
+  handleCategoryCheckboxChange = ({ target }) => {
     const categories = values(this.state.categories).reduce(
       (result, category) => {
         if (String(target.value) === String(category.id)) {
@@ -123,15 +122,15 @@ class Categories extends Component {
       <div className={style.categoryTransactions}>
         <div className={style.categoryGraph}>
           <CategoryTable
-            handleCategoryCheckboxChange={this.handleCategoryCheckboxChange}
-            summedCategories={tableCategories}
+            categories={tableCategories}
             toggleAllCategories={this.toggleAllCategories}
+            handleCategoryCheckboxChange={this.handleCategoryCheckboxChange}
           />
           <div className={style.graph}>
             <CategoryGraph
-              data={graphCategories}
-              dateRange={dateRange}
+              categories={graphCategories}
               toggleCumulative={this.toggleCumulative}
+              dateRange={dateRange}
             />
           </div>
         </div>

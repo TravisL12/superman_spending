@@ -47,8 +47,8 @@ function TransactionTable({
 
 TransactionTable.defaultProps = {
   checkedIds: [],
-  updateCheckedRow: () => {},
-  updateCategory: () => {}
+  updateCheckedRow: undefined,
+  updateCategory: undefined
 };
 
 export default TransactionTable;

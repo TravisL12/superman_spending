@@ -44,6 +44,12 @@
         padding: 5px;
         transition: 0.1s linear background;
         cursor: pointer;
+        background: lightgray;
+        color: gray;
+      }
+
+      input[type="checkbox"]:checked + label {
+        color: black;
       }
 
       &:nth-child(even) {

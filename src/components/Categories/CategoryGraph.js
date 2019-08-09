@@ -19,10 +19,9 @@ const config = {
   axisFontSize: 6
 };
 
-function CategoryGraph({ data, dateRange, toggleCumulative }) {
+function CategoryGraph({ categories, dateRange, toggleCumulative }) {
   const [graphType, setGraphType] = useState("stack");
-  const categoryCount = data.length;
-  const graphData = data.map(({ sum, color }) => {
+  const graphData = categories.map(({ sum, color }) => {
     return sum.map((s, idx) => {
       return { x: idx, y: s, color };
     });
@@ -121,7 +120,7 @@ function CategoryGraph({ data, dateRange, toggleCumulative }) {
         {/* X-axis */}
         <VictoryAxis
           crossAxis={false}
-          tickCount={categoryCount}
+          tickCount={categories.length}
           tickFormat={t => {
             const { year, month } = dateRange[t];
             return formatDate(month, year, {
