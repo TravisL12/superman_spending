@@ -12,7 +12,7 @@ import { get, isEmpty, values } from "lodash";
 import qs from "query-string";
 
 const offset = 4;
-const colors = categoryColors.slice(offset, 20 + offset);
+const colors = categoryColors.slice(offset, 30 + offset);
 const MONTHS_BACK = 12 * 3; // display this many months back
 const AMOUNT_THRESHOLD = MONTHS_BACK * 100 * 100; // must be higher than this to be checked on load
 
