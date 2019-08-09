@@ -2,14 +2,12 @@ import React from "react";
 import style from "./Categories.module.scss";
 import CategoryRow from "./CategoryRow";
 
-function CategorySearch({
+function CategoryTable({
   colors,
-  dateRange,
   summedCategories,
   checkedRows,
   handleCategoryCheckboxChange,
-  toggleAllCategories,
-  getCategorySums
+  toggleAllCategories
 }) {
   return (
     <div className={style.table}>
@@ -52,4 +50,4 @@ function CategorySearch({
   );
 }
 
-export default CategorySearch;
+export default CategoryTable;

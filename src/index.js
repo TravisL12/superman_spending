@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter, Route, withRouter } from "react-router-dom";
+import { Redirect, BrowserRouter, Route, withRouter } from "react-router-dom";
 import withAuth from "middleware/withAuth";
 import CategoriesProvider from "providers/CategoriesProvider";
 
@@ -12,6 +12,7 @@ import Categories from "components/Categories/";
 import Transactions from "components/Transactions/";
 
 import styles from "index.module.scss";
+import { getToday } from "./utilities/date-format-utils";
 
 const WrappedHeader = withRouter(Header);
 
@@ -21,6 +22,22 @@ ReactDOM.render(
       <div className={styles.app}>
         <div className={styles.appContainer}>
           <Route path="/" component={WrappedHeader} />
+          <Route
+            path="/"
+            exact
+            render={() => {
+              const { year, month } = getToday();
+              return <Redirect to={`/calendar/${year}/${month}`} />;
+            }}
+          />
+          <Route
+            path="/calendar"
+            exact
+            render={() => {
+              const { year, month } = getToday();
+              return <Redirect to={`/calendar/${year}/${month + 1}`} />;
+            }}
+          />
           <Route path="/calendar" component={withAuth(Calendar)} />
           <Route exact path="/categories" component={withAuth(Categories)} />
           <Route

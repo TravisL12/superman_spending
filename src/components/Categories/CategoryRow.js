@@ -1,5 +1,5 @@
 import React from "react";
-import { currency } from "utilities/date-format-utils";
+import { currencyRounded } from "utilities/date-format-utils";
 import style from "./Categories.module.scss";
 import { sum } from "lodash";
 
@@ -28,7 +28,7 @@ function CategoryRow({
         </label>
       </td>
 
-      <td className={style.amountCol}>{currency(sum(categorySum))}</td>
+      <td className={style.amountCol}>{currencyRounded(sum(categorySum))}</td>
     </tr>
   );
 }

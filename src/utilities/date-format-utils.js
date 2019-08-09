@@ -16,6 +16,13 @@ export function currency(amount, options = {}) {
   return localeAmount.toLocaleString("en-US", localeOptions);
 }
 
+export function currencyRounded(amount) {
+  return currency(amount, {
+    minimumFractionDigits: 0,
+    rounded: true
+  });
+}
+
 function localDateString(date, options) {
   options.timeZone = "UTC";
   return date.toLocaleDateString("en-US", options);

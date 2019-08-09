@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import AuthService from "middleware/AuthService";
-import { createDateRange, currency } from "utilities/date-format-utils";
+import { createDateRange } from "utilities/date-format-utils";
 import CategoryGraph from "./CategoryGraph";
 import CategorySearch from "./CategorySearch";
 import CategoryTable from "./CategoryTable";
@@ -12,6 +12,13 @@ import qs from "query-string";
 
 const colors = shuffle(categoryColors);
 const MONTHS_BACK = 12 * 2;
+
+const toggleCategories = (value, rows) => {
+  return keys(rows).reduce((result, id) => {
+    result[id] = value;
+    return result;
+  }, {});
+};
 
 class Categories extends Component {
   state = {
@@ -69,25 +76,8 @@ class Categories extends Component {
     }, []);
   };
 
-  getCategorySums = (month, year) => {
-    const { categories } = this.state;
-
-    const total = values(categories).reduce((sum, { id }) => {
-      return sum + this.getTransactionSum(year, month, id);
-    }, 0);
-
-    return currency(total, {
-      minimumFractionDigits: 0,
-      rounded: true
-    });
-  };
-
   toggleAllCategories = value => {
-    const checkedRows = keys(this.state.checkedRows).reduce((result, id) => {
-      result[id] = value;
-      return result;
-    }, {});
-
+    const checkedRows = toggleCategories(value, this.state.checkedRows);
     this.setState({ checkedRows });
   };
 
@@ -111,9 +101,10 @@ class Categories extends Component {
       result[row] = true;
       return result;
     }, {});
+    const checkCategoryRows = toggleCategories(false, this.state.checkedRows);
 
     this.setState({
-      checkedRows: { ...checkResultRows, ...this.state.checkedRows },
+      checkedRows: { ...checkResultRows, ...checkCategoryRows },
       categories: { ...this.state.categories, ...searchResults }
     });
   };
@@ -133,8 +124,6 @@ class Categories extends Component {
           <CategoryTable
             checkedRows={checkedRows}
             colors={colors}
-            dateRange={dateRange}
-            getCategorySums={this.getCategorySums}
             handleCategoryCheckboxChange={this.handleCategoryCheckboxChange}
             summedCategories={summedCategories}
             toggleAllCategories={this.toggleAllCategories}

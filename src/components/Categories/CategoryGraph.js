@@ -8,7 +8,7 @@ import {
   VictoryArea,
   VictoryTooltip
 } from "victory";
-import { currency, formatDate } from "utilities/date-format-utils";
+import { currencyRounded, formatDate } from "utilities/date-format-utils";
 import style from "./Categories.module.scss";
 
 const config = {
@@ -82,6 +82,12 @@ function CategoryGraph({ data, colors, dateRange, toggleCumulative }) {
         style={{
           data: { stroke: colors[idx] }
         }}
+        events={[
+          {
+            target: "data",
+            eventHandlers
+          }
+        ]}
       />
     );
   });
@@ -130,7 +136,7 @@ function CategoryGraph({ data, colors, dateRange, toggleCumulative }) {
         {/* Y-axis */}
         <VictoryAxis
           dependentAxis
-          tickFormat={t => currency(t, { minimumFractionDigits: 0 })}
+          tickFormat={t => currencyRounded(t)}
           tickLabelComponent={<VictoryLabel dx={35} dy={-5} />}
           style={{
             axis: { stroke: 0 },
