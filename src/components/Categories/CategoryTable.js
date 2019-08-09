@@ -3,7 +3,6 @@ import style from "./Categories.module.scss";
 import CategoryRow from "./CategoryRow";
 
 function CategoryTable({
-  colors,
   summedCategories,
   checkedRows,
   handleCategoryCheckboxChange,
@@ -37,7 +36,7 @@ function CategoryTable({
             return (
               <CategoryRow
                 checked={checkedRows[category.id]}
-                color={colors[idx]}
+                color={category.color}
                 category={category}
                 onCheckboxChange={handleCategoryCheckboxChange}
                 key={idx}

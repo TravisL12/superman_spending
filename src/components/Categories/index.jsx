@@ -8,7 +8,7 @@ import TransactionTable from "components/Transactions/TransactionTable";
 import style from "./Categories.module.scss";
 import Loading from "components/Loading";
 import categoryColors from "utilities/categoryColors";
-import { isEmpty, shuffle, values, keys, sortBy } from "lodash";
+import { isEmpty, shuffle, values, keys } from "lodash";
 import qs from "query-string";
 
 const colors = shuffle(categoryColors);
@@ -26,7 +26,7 @@ class Categories extends Component {
     searches: null,
     categories: null,
     isLoading: true,
-    checkedRows: {},
+    checkedCategories: {},
     graphCumulative: false,
     dateRange: null,
     transactions: []
@@ -38,25 +38,25 @@ class Categories extends Component {
     );
 
     const { categories } = data;
-    const checkedRows = keys(categories).reduce((result, id) => {
-      result[id] = true;
+    const checkedCategories = keys(categories).reduce((result, id) => {
+      result[id] = categories[id].total > MONTHS_BACK * 10000;
       return result;
     }, {});
 
     this.setState({
       categories,
       isLoading: false,
-      checkedRows,
+      checkedCategories,
       dateRange: createDateRange(MONTHS_BACK).reverse() // ascending date order (old -> new)
     });
   }
 
   getTransactionSum = (year, month, id) => {
-    const { checkedRows, categories } = this.state;
+    const { checkedCategories, categories } = this.state;
     const { transactionTotals } = categories[id];
 
     if (
-      checkedRows[id] &&
+      checkedCategories[id] &&
       transactionTotals[year] &&
       transactionTotals[year][month]
     ) {
@@ -79,18 +79,21 @@ class Categories extends Component {
   };
 
   toggleAllCategories = value => {
-    const checkedRows = toggleCategories(value, this.state.checkedRows);
-    this.setState({ checkedRows });
+    const checkedCategories = toggleCategories(
+      value,
+      this.state.checkedCategories
+    );
+    this.setState({ checkedCategories });
   };
 
   handleCategoryCheckboxChange = event => {
     const { target } = event;
-    const checkboxVal = this.state.checkedRows[target.value];
-    const checkedRows = this.state.checkedRows;
-    checkedRows[target.value] = !checkboxVal;
+    const checkboxVal = this.state.checkedCategories[target.value];
+    const checkedCategories = this.state.checkedCategories;
+    checkedCategories[target.value] = !checkboxVal;
 
     this.setState({
-      checkedRows
+      checkedCategories
     });
   };
 
@@ -99,16 +102,17 @@ class Categories extends Component {
   };
 
   getSearchResults = (searchResults, transactions) => {
-    console.log(searchResults);
-
     const checkResultRows = keys(searchResults).reduce((result, row) => {
       result[row] = true;
       return result;
     }, {});
-    const checkCategoryRows = toggleCategories(false, this.state.checkedRows);
+    const checkCategoryRows = toggleCategories(
+      false,
+      this.state.checkedCategories
+    );
 
     this.setState({
-      checkedRows: { ...checkResultRows, ...checkCategoryRows },
+      checkedCategories: { ...checkResultRows, ...checkCategoryRows },
       categories: { ...this.state.categories, ...searchResults },
       transactions: [...this.state.transactions, ...transactions].sort(
         (a, b) => new Date(b.date) - new Date(a.date)
@@ -120,7 +124,7 @@ class Categories extends Component {
     const {
       isLoading,
       categories,
-      checkedRows,
+      checkedCategories,
       dateRange,
       transactions
     } = this.state;
@@ -128,24 +132,26 @@ class Categories extends Component {
     if (isLoading) return <Loading />;
 
     const summedCategories = values(categories).map(({ id, name }, idx) => {
-      return { id, name, sum: this.getMonthSums(id) };
+      return { id, name, sum: this.getMonthSums(id), color: colors[idx] };
     });
+
+    const graphCategories = summedCategories.filter(
+      ({ id }) => checkedCategories[id]
+    );
 
     return (
       <div className={style.categoryTransactions}>
         <div className={style.categoryGraph}>
           <CategoryTable
-            checkedRows={checkedRows}
-            colors={colors}
+            checkedRows={checkedCategories}
             handleCategoryCheckboxChange={this.handleCategoryCheckboxChange}
             summedCategories={summedCategories}
             toggleAllCategories={this.toggleAllCategories}
           />
           <div className={style.graph}>
             <CategoryGraph
-              data={summedCategories}
+              data={graphCategories}
               dateRange={dateRange}
-              colors={colors}
               toggleCumulative={this.toggleCumulative}
             />
           </div>

@@ -19,13 +19,12 @@ const config = {
   axisFontSize: 6
 };
 
-function CategoryGraph({ data, colors, dateRange, toggleCumulative }) {
+function CategoryGraph({ data, dateRange, toggleCumulative }) {
   const [graphType, setGraphType] = useState("stack");
   const categoryCount = data.length;
-
-  const graphData = data.map(({ sum }, idx) => {
+  const graphData = data.map(({ sum, color }) => {
     return sum.map((s, idx) => {
-      return { x: idx, y: s };
+      return { x: idx, y: s, color };
     });
   });
 
@@ -57,12 +56,15 @@ function CategoryGraph({ data, colors, dateRange, toggleCumulative }) {
   };
 
   const stackChart = (
-    <VictoryStack colorScale={colors}>
+    <VictoryStack>
       {graphData.map((d, idx) => (
         <VictoryArea
           labelComponent={<VictoryTooltip />}
           data={d}
           key={idx}
+          style={{
+            data: { fill: d.color }
+          }}
           events={[
             {
               target: "data",
@@ -80,7 +82,7 @@ function CategoryGraph({ data, colors, dateRange, toggleCumulative }) {
         data={d}
         key={idx}
         style={{
-          data: { stroke: colors[idx] }
+          data: { stroke: d.color }
         }}
         events={[
           {
