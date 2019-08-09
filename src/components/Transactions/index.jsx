@@ -6,9 +6,8 @@ import AuthService from "middleware/AuthService";
 import Loading from "components/Loading";
 import Search from "./TransactionSearch";
 import Totals from "./TransactionTotals";
-import Row from "./TransactionRow";
+import Table from "./TransactionTable";
 import style from "./Transactions.module.scss";
-import CategoryDropdown from "components/CategoryInputs/dropdown";
 import { qsToArray, filterOutValue } from "utilities/query-string-utils";
 
 class Transactions extends Component {
@@ -190,13 +189,6 @@ class Transactions extends Component {
 
     if (isLoading) return <Loading />;
 
-    const categoryColumn =
-      checkedIds.length > 1 ? (
-        <CategoryDropdown onChange={this.updateCategory} />
-      ) : (
-        "Category"
-      );
-
     return (
       <div className={style.transactionsList}>
         <div className={style.searchImport}>
@@ -218,31 +210,12 @@ class Transactions extends Component {
           />
         </div>
 
-        <table className={style.transactionTable}>
-          <thead>
-            <tr>
-              <th />
-              <th>Description</th>
-              <th>Amount</th>
-              <th>Date</th>
-              <th>{categoryColumn}</th>
-              <th>Subcategory</th>
-            </tr>
-          </thead>
-          <tbody>
-            {transactions.map((transaction, idx) => {
-              return (
-                <Row
-                  key={idx}
-                  onCheckboxChange={this.updateCheckedRow}
-                  transaction={transaction}
-                  isChecked={checkedIds.includes(String(transaction.id))}
-                  updateCategory={this.updateCategory}
-                />
-              );
-            })}
-          </tbody>
-        </table>
+        <Table
+          checkedIds={checkedIds}
+          transactions={transactions}
+          updateCheckedRow={this.updateCheckedRow}
+          updateCategory={this.updateCategory}
+        />
       </div>
     );
   }

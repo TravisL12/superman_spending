@@ -4,10 +4,11 @@ import { createDateRange } from "utilities/date-format-utils";
 import CategoryGraph from "./CategoryGraph";
 import CategorySearch from "./CategorySearch";
 import CategoryTable from "./CategoryTable";
+import TransactionTable from "components/Transactions/TransactionTable";
 import style from "./Categories.module.scss";
 import Loading from "components/Loading";
 import categoryColors from "utilities/categoryColors";
-import { shuffle, values, keys } from "lodash";
+import { isEmpty, shuffle, values, keys, sortBy } from "lodash";
 import qs from "query-string";
 
 const colors = shuffle(categoryColors);
@@ -27,7 +28,8 @@ class Categories extends Component {
     isLoading: true,
     checkedRows: {},
     graphCumulative: false,
-    dateRange: null
+    dateRange: null,
+    transactions: []
   };
 
   async componentWillMount() {
@@ -96,7 +98,9 @@ class Categories extends Component {
     this.setState({ graphCumulative: !this.state.graphCumulative });
   };
 
-  getSearchResults = searchResults => {
+  getSearchResults = (searchResults, transactions) => {
+    console.log(searchResults);
+
     const checkResultRows = keys(searchResults).reduce((result, row) => {
       result[row] = true;
       return result;
@@ -105,12 +109,21 @@ class Categories extends Component {
 
     this.setState({
       checkedRows: { ...checkResultRows, ...checkCategoryRows },
-      categories: { ...this.state.categories, ...searchResults }
+      categories: { ...this.state.categories, ...searchResults },
+      transactions: [...this.state.transactions, ...transactions].sort(
+        (a, b) => new Date(b.date) - new Date(a.date)
+      )
     });
   };
 
   render() {
-    const { isLoading, categories, checkedRows, dateRange } = this.state;
+    const {
+      isLoading,
+      categories,
+      checkedRows,
+      dateRange,
+      transactions
+    } = this.state;
 
     if (isLoading) return <Loading />;
 
@@ -141,6 +154,9 @@ class Categories extends Component {
           {...this.props}
           getSearchResults={this.getSearchResults}
         />
+        {!isEmpty(transactions) && (
+          <TransactionTable transactions={transactions} />
+        )}
       </div>
     );
   }
