@@ -15,8 +15,12 @@ const config = {
   animate: { duration: 500 },
   padding: { top: 10, bottom: 25, left: 10, right: 10 },
   height: 220,
-  axisColor: "black",
-  axisFontSize: 6
+  axis: {
+    color: "black",
+    fontSize: 6,
+    x: { dx: 1, dy: -2, angle: -90 },
+    y: { dx: 35, dy: -5 }
+  }
 };
 
 function CategoryGraph({ categories, dateRange, toggleCumulative }) {
@@ -123,7 +127,7 @@ function CategoryGraph({ categories, dateRange, toggleCumulative }) {
               year: "numeric"
             });
           }}
-          tickLabelComponent={<VictoryLabel dx={1} dy={-2} angle={-90} />}
+          tickLabelComponent={<VictoryLabel {...config.axis.x} />}
           style={{
             tickLabels: { fontSize: 4 }
           }}
@@ -133,17 +137,17 @@ function CategoryGraph({ categories, dateRange, toggleCumulative }) {
         <VictoryAxis
           dependentAxis
           tickFormat={t => currencyRounded(t)}
-          tickLabelComponent={<VictoryLabel dx={35} dy={-5} />}
+          tickLabelComponent={<VictoryLabel {...config.axis.y} />}
           style={{
             axis: { stroke: 0 },
             tickLabels: {
               fill: config.axisColor,
-              fontSize: config.axisFontSize,
+              fontSize: config.axis.fontSize,
               fontWeight: 600
             },
             grid: {
               strokeDasharray: "15, 5",
-              stroke: config.axisColor
+              stroke: config.axis.color
             }
           }}
         />
