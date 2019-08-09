@@ -95,9 +95,10 @@ class Categories extends Component {
 
     this.setState({
       categories: { ...categories, ...searchResults },
-      searchTransactions: [...this.state.transactions, ...transactions].sort(
-        (a, b) => new Date(b.date) - new Date(a.date)
-      )
+      searchTransactions: [
+        ...this.state.searchTransactions,
+        ...transactions
+      ].sort((a, b) => new Date(b.date) - new Date(a.date))
     });
   };
 
@@ -106,8 +107,7 @@ class Categories extends Component {
 
     if (isLoading) return <Loading />;
 
-    // Show all categories (checked & unchecked)
-    const tableCategories = values(categories).map((category, idx) => {
+    const categoryCollection = values(categories).map((category, idx) => {
       return {
         ...category,
         sum: this.getMonthSums(category.id),
@@ -115,20 +115,17 @@ class Categories extends Component {
       };
     });
 
-    // Only graph the checked categories
-    const graphCategories = tableCategories.filter(({ checked }) => checked);
-
     return (
       <div className={style.categoryTransactions}>
         <div className={style.categoryGraph}>
           <CategoryTable
-            categories={tableCategories}
+            categories={categoryCollection}
             toggleAllCategories={this.toggleAllCategories}
             handleCategoryCheckboxChange={this.handleCategoryCheckboxChange}
           />
           <div className={style.graph}>
             <CategoryGraph
-              categories={graphCategories}
+              categories={categoryCollection}
               toggleCumulative={this.toggleCumulative}
               dateRange={dateRange}
             />

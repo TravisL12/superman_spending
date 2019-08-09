@@ -21,10 +21,14 @@ const config = {
 
 function CategoryGraph({ categories, dateRange, toggleCumulative }) {
   const [graphType, setGraphType] = useState("stack");
-  const graphData = categories.map(({ sum, color }) => {
-    return sum.map((s, idx) => {
-      return { x: idx, y: s, color };
-    });
+  const colors = categories.map(({ color }) => color);
+  const graphData = categories.map(({ checked, sum, color }) => {
+    return {
+      data: sum.map((s, idx) => {
+        return { x: idx, y: checked ? s : 0 };
+      }),
+      color
+    };
   });
 
   const eventHandlers = {
@@ -55,15 +59,12 @@ function CategoryGraph({ categories, dateRange, toggleCumulative }) {
   };
 
   const stackChart = (
-    <VictoryStack>
-      {graphData.map((d, idx) => (
+    <VictoryStack colorScale={colors}>
+      {graphData.map(({ data }, idx) => (
         <VictoryArea
           labelComponent={<VictoryTooltip />}
-          data={d}
+          data={data}
           key={idx}
-          style={{
-            data: { fill: d.color }
-          }}
           events={[
             {
               target: "data",
@@ -75,20 +76,14 @@ function CategoryGraph({ categories, dateRange, toggleCumulative }) {
     </VictoryStack>
   );
 
-  const lineChart = graphData.map((d, idx) => {
+  const lineChart = graphData.map(({ data, color }, idx) => {
     return (
       <VictoryLine
-        data={d}
+        data={data}
         key={idx}
         style={{
-          data: { stroke: d.color }
+          data: { stroke: color }
         }}
-        events={[
-          {
-            target: "data",
-            eventHandlers
-          }
-        ]}
       />
     );
   });
