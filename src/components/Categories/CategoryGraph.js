@@ -8,25 +8,31 @@ import {
   VictoryArea,
   VictoryTooltip
 } from "victory";
-import { currency, formatDate } from "utilities/date-format-utils";
+import { currencyRounded, formatDate } from "utilities/date-format-utils";
 import style from "./Categories.module.scss";
 
 const config = {
   animate: { duration: 500 },
   padding: { top: 10, bottom: 25, left: 10, right: 10 },
-  height: 150,
-  axisColor: "black",
-  axisFontSize: 6
+  height: 220,
+  axis: {
+    color: "black",
+    fontSize: 6,
+    x: { dx: 1, dy: -2, angle: -90 },
+    y: { dx: 35, dy: -5 }
+  }
 };
 
-function CategoryGraph({ data, colors, dateRange, toggleCumulative }) {
+function CategoryGraph({ categories, dateRange, toggleCumulative }) {
   const [graphType, setGraphType] = useState("stack");
-  const categoryCount = data.length;
-
-  const graphData = data.map(({ sum }, idx) => {
-    return sum.map((s, idx) => {
-      return { x: idx, y: s };
-    });
+  const colors = categories.map(({ color }) => color);
+  const graphData = categories.map(({ checked, sum, color }) => {
+    return {
+      data: sum.map((s, idx) => {
+        return { x: idx, y: checked ? s : 0 };
+      }),
+      color
+    };
   });
 
   const eventHandlers = {
@@ -58,10 +64,10 @@ function CategoryGraph({ data, colors, dateRange, toggleCumulative }) {
 
   const stackChart = (
     <VictoryStack colorScale={colors}>
-      {graphData.map((d, idx) => (
+      {graphData.map(({ data }, idx) => (
         <VictoryArea
           labelComponent={<VictoryTooltip />}
-          data={d}
+          data={data}
           key={idx}
           events={[
             {
@@ -74,13 +80,13 @@ function CategoryGraph({ data, colors, dateRange, toggleCumulative }) {
     </VictoryStack>
   );
 
-  const lineChart = graphData.map((d, idx) => {
+  const lineChart = graphData.map(({ data, color }, idx) => {
     return (
       <VictoryLine
-        data={d}
+        data={data}
         key={idx}
         style={{
-          data: { stroke: colors[idx] }
+          data: { stroke: color }
         }}
       />
     );
@@ -113,7 +119,7 @@ function CategoryGraph({ data, colors, dateRange, toggleCumulative }) {
         {/* X-axis */}
         <VictoryAxis
           crossAxis={false}
-          tickCount={categoryCount}
+          tickCount={categories.length}
           tickFormat={t => {
             const { year, month } = dateRange[t];
             return formatDate(month, year, {
@@ -121,31 +127,27 @@ function CategoryGraph({ data, colors, dateRange, toggleCumulative }) {
               year: "numeric"
             });
           }}
-          tickLabelComponent={<VictoryLabel dx={1} dy={-2} angle={-90} />}
+          tickLabelComponent={<VictoryLabel {...config.axis.x} />}
           style={{
-            tickLabels: { fontSize: 4 },
-            grid: {
-              strokeDasharray: "3, 15",
-              stroke: config.axisColor
-            }
+            tickLabels: { fontSize: 4 }
           }}
         />
 
         {/* Y-axis */}
         <VictoryAxis
           dependentAxis
-          tickFormat={t => currency(t, { minimumFractionDigits: 0 })}
-          tickLabelComponent={<VictoryLabel dx={35} dy={-5} />}
+          tickFormat={t => currencyRounded(t)}
+          tickLabelComponent={<VictoryLabel {...config.axis.y} />}
           style={{
             axis: { stroke: 0 },
             tickLabels: {
               fill: config.axisColor,
-              fontSize: config.axisFontSize,
+              fontSize: config.axis.fontSize,
               fontWeight: 600
             },
             grid: {
               strokeDasharray: "15, 5",
-              stroke: config.axisColor
+              stroke: config.axis.color
             }
           }}
         />

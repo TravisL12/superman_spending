@@ -12,9 +12,14 @@ function CategorySearch({ getSearchResults, history }) {
     const query = qs.stringify({ keywordSearches: search });
 
     AuthService.fetch(`api/transactions/list/0?${query}`).then(
-      ({ searchResults }) => {
-        const { transactionTotals, name } = searchResults[0];
-        getSearchResults({ [name]: { id: name, name, transactionTotals } });
+      ({ searchResults, transactions }) => {
+        const { transactionTotals, name, sum: total } = searchResults[0];
+        getSearchResults(
+          {
+            [name]: { id: name, name, transactionTotals, total, checked: true }
+          },
+          transactions
+        );
         setSearchInput("");
         history.push({
           search: qs.stringify({ keywordSearches: search })

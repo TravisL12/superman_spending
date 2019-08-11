@@ -1,26 +1,37 @@
 import React, { Component } from "react";
 import AuthService from "middleware/AuthService";
-import { createDateRange, currency } from "utilities/date-format-utils";
+import { createDateRange } from "utilities/date-format-utils";
 import CategoryGraph from "./CategoryGraph";
 import CategorySearch from "./CategorySearch";
 import CategoryTable from "./CategoryTable";
+import TransactionTable from "components/Transactions/TransactionTable";
 import style from "./Categories.module.scss";
 import Loading from "components/Loading";
 import categoryColors from "utilities/categoryColors";
-import { shuffle, values, keys } from "lodash";
+import { get, isEmpty, values } from "lodash";
 import qs from "query-string";
 
-const colors = shuffle(categoryColors);
-const MONTHS_BACK = 12 * 2;
+const offset = 4;
+const colors = categoryColors.slice(offset, 30 + offset);
+const MONTHS_BACK = 12 * 3; // display this many months back
+const AMOUNT_THRESHOLD = MONTHS_BACK * 100 * 100; // must be higher than this to be checked on load
+
+const toggleCategories = (value, categories) => {
+  return values(categories).reduce((result, category) => {
+    category.checked = value;
+    result[category.id] = category;
+    return result;
+  }, {});
+};
 
 class Categories extends Component {
   state = {
     searches: null,
     categories: null,
     isLoading: true,
-    checkedRows: {},
     graphCumulative: false,
-    dateRange: null
+    dateRange: null,
+    searchTransactions: []
   };
 
   async componentWillMount() {
@@ -28,40 +39,26 @@ class Categories extends Component {
       `api/categories/compare?${qs.stringify({ monthsBack: MONTHS_BACK })}`
     );
 
-    const { categories } = data;
-    const checkedRows = keys(categories).reduce((result, id) => {
-      result[id] = true;
+    const categories = values(data.categories).reduce((result, category) => {
+      category.checked = category.total > AMOUNT_THRESHOLD;
+      result[category.id] = category;
       return result;
     }, {});
 
     this.setState({
       categories,
       isLoading: false,
-      checkedRows,
       dateRange: createDateRange(MONTHS_BACK).reverse() // ascending date order (old -> new)
     });
   }
 
-  getTransactionSum = (year, month, id) => {
-    const { checkedRows, categories } = this.state;
-    const { transactionTotals } = categories[id];
-
-    if (
-      checkedRows[id] &&
-      transactionTotals[year] &&
-      transactionTotals[year][month]
-    ) {
-      return transactionTotals[year][month];
-    } else {
-      return 0;
-    }
-  };
-
   getMonthSums = categoryId => {
-    const { graphCumulative, dateRange } = this.state;
+    const { graphCumulative, dateRange, categories } = this.state;
+    const { transactionTotals } = categories[categoryId];
 
     return dateRange.reduce((result, { month, year }, idx) => {
-      const monthSum = this.getTransactionSum(year, month, categoryId);
+      const monthSum = get(transactionTotals, [year, month], 0);
+
       const sum =
         graphCumulative && idx > 0 ? monthSum + result.slice(-1)[0] : monthSum;
 
@@ -69,36 +66,25 @@ class Categories extends Component {
     }, []);
   };
 
-  getCategorySums = (month, year) => {
-    const { categories } = this.state;
-
-    const total = values(categories).reduce((sum, { id }) => {
-      return sum + this.getTransactionSum(year, month, id);
-    }, 0);
-
-    return currency(total, {
-      minimumFractionDigits: 0,
-      rounded: true
-    });
-  };
-
   toggleAllCategories = value => {
-    const checkedRows = keys(this.state.checkedRows).reduce((result, id) => {
-      result[id] = value;
-      return result;
-    }, {});
-
-    this.setState({ checkedRows });
+    const categories = toggleCategories(value, this.state.categories);
+    this.setState({ categories });
   };
 
-  handleCategoryCheckboxChange = event => {
-    const { target } = event;
-    const checkboxVal = this.state.checkedRows[target.value];
-    const checkedRows = this.state.checkedRows;
-    checkedRows[target.value] = !checkboxVal;
+  handleCategoryCheckboxChange = ({ target }) => {
+    const categories = values(this.state.categories).reduce(
+      (result, category) => {
+        if (String(target.value) === String(category.id)) {
+          category.checked = !category.checked;
+        }
+        result[category.id] = category;
+        return result;
+      },
+      {}
+    );
 
     this.setState({
-      checkedRows
+      categories
     });
   };
 
@@ -106,48 +92,54 @@ class Categories extends Component {
     this.setState({ graphCumulative: !this.state.graphCumulative });
   };
 
-  getSearchResults = searchResults => {
-    const checkResultRows = keys(searchResults).reduce((result, row) => {
-      result[row] = true;
-      return result;
-    }, {});
+  getSearchResults = (searchResults, transactions) => {
+    const categories = toggleCategories(false, this.state.categories);
 
     this.setState({
-      checkedRows: { ...checkResultRows, ...this.state.checkedRows },
-      categories: { ...this.state.categories, ...searchResults }
+      categories: { ...categories, ...searchResults },
+      searchTransactions: [
+        ...this.state.searchTransactions,
+        ...transactions
+      ].sort((a, b) => new Date(b.date) - new Date(a.date))
     });
   };
 
   render() {
-    const { isLoading, categories, checkedRows, dateRange } = this.state;
+    const { isLoading, categories, dateRange, searchTransactions } = this.state;
 
     if (isLoading) return <Loading />;
 
-    const summedCategories = values(categories).map(({ id, name }, idx) => {
-      return { id, name, sum: this.getMonthSums(id) };
+    const categoryCollection = values(categories).map((category, idx) => {
+      return {
+        ...category,
+        sum: this.getMonthSums(category.id),
+        color: colors[idx]
+      };
     });
 
     return (
       <div className={style.categoryTransactions}>
-        <CategoryGraph
-          data={summedCategories}
-          dateRange={dateRange}
-          colors={colors}
-          toggleCumulative={this.toggleCumulative}
-        />
+        <div className={style.categoryGraph}>
+          <CategoryTable
+            categories={categoryCollection}
+            toggleAllCategories={this.toggleAllCategories}
+            handleCategoryCheckboxChange={this.handleCategoryCheckboxChange}
+          />
+          <div className={style.graph}>
+            <CategoryGraph
+              categories={categoryCollection}
+              toggleCumulative={this.toggleCumulative}
+              dateRange={dateRange}
+            />
+          </div>
+        </div>
         <CategorySearch
           {...this.props}
           getSearchResults={this.getSearchResults}
         />
-        <CategoryTable
-          checkedRows={checkedRows}
-          colors={colors}
-          dateRange={dateRange}
-          getCategorySums={this.getCategorySums}
-          handleCategoryCheckboxChange={this.handleCategoryCheckboxChange}
-          summedCategories={summedCategories}
-          toggleAllCategories={this.toggleAllCategories}
-        />
+        {!isEmpty(searchTransactions) && (
+          <TransactionTable transactions={searchTransactions} />
+        )}
       </div>
     );
   }

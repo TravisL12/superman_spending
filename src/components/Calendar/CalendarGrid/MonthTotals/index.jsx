@@ -1,5 +1,9 @@
 import React, { Component } from "react";
-import { titleCase, currency } from "utilities/date-format-utils";
+import {
+  titleCase,
+  currency,
+  currencyRounded
+} from "utilities/date-format-utils";
 import style from "./MonthTotals.module.scss";
 
 class MonthTotals extends Component {
@@ -30,23 +34,13 @@ class MonthTotals extends Component {
           return (
             <li key={idx}>
               <span className={style.name}>{data.name}</span>
-              <span className={style.sum}>
-                {currency(data.sum, {
-                  minimumFractionDigits: 0,
-                  rounded: true
-                })}
-              </span>
+              <span className={style.sum}>{currencyRounded(data.sum)}</span>
             </li>
           );
         })}
         <li className={style.categoryTotal}>
           <span className={style.name}>Total</span>
-          <span className={style.sum}>
-            {currency(categoryTotal, {
-              minimumFractionDigits: 0,
-              rounded: true
-            })}
-          </span>
+          <span className={style.sum}>{currencyRounded(categoryTotal)}</span>
         </li>
       </ul>
     );

@@ -1,14 +1,9 @@
 export default [
-  "#FF0000", // Red
   "#FFA500", // Orange
   "#FFFF00", // Yellow
   "#008000", // Green
-  "#0000FF", // Blue
-  "#800080", // Purple
-  "#000000", // Black
   "#7FFFD4", // Aquamarine
   "#FFE4C4", // Bisque
-  "#8A2BE2", // Blue Violet
   "#A52A2A", // Brown
   "#DEB887", // Burly Wood
   "#5F9EA0", // Cadet Blue
@@ -17,28 +12,20 @@ export default [
   "#FF7F50", // Coral
   "#6495ED", // Corn Flower Blue
   "#DC143C", // Crimson
-  "#00008B", // Dark Blue
   "#008B8B", // Dark Cyan
   "#B8860B", // Dark Goldenrod
   "#A9A9A9", // Dark Gray
-  "#006400", // Dark Green
   "#BDB76B", // Dark Khaki
-  "#BD008B", // Dark Magenta
   "#556B2F", // Dark Olive Green
   "#FF8C00", // Dark Orange
   "#9932CC", // Dark Orchid
-  "#8B0000", // Dark Red
   "#E9967A", // Dark Salmon
   "#8FBC8F", // Dark Sea Green
-  "#483D8B", // Dark Slate Blue
-  "#2F4F4F", // Dark Slate Gray
   "#00CED1", // Dark Turquoise
-  "#9400D3", // Dark Violet
   "#FF1493", // Deep Pink
   "#00BFFF", // Deep Sky Blue
   "#696969", // Dim Gray
   "#1E90FF", // Dodger Blue
-  "#B22222", // Fire Brick
   "#228B22", // Forest Green
   "#FFD700", // Gold
   "#DAA520", // Goldenrod
@@ -46,7 +33,6 @@ export default [
   "#ADFF2F", // Green Yellow
   "#FF69B4", // Hot Pink
   "#CD5C5C", // Indian Red
-  "#4B0082", // Indigo
   "#F0E68C", // Khaki
   "#E6E6FA", // Lavender
   "#FFF0F5", // Lavender Blush
@@ -68,7 +54,6 @@ export default [
   "#FF00FF", // Magenta
   "#800000", // Maroon
   "#66CDAA", // Medium Aquamarine
-  "#0000CD", // Medium Blue
   "#BA55D3", // Medium Orchid
   "#9370DB", // Medium Purple
   "#3CB371", // Medium Sea Green
@@ -76,8 +61,6 @@ export default [
   "#00FA9A", // Medium Spring Green
   "#48D1CC", // Medium Turquoise
   "#C71585", // Medium Violet Red
-  "#191970", // Midnight Blue
-  "#000080", // Navy
   "#808000", // Olive
   "#6B8E23", // Olive Drab
   "#FF4500", // Orange Red
@@ -97,7 +80,6 @@ export default [
   "#A0522D", // Sienna
   "#C0C0C0", // Silver
   "#87CEEB", // Sky Blue
-  "#6A5ACD", // Slate Blue
   "#708090", // Slate Gray
   "#00FF7F", // Spring Green
   "#4682B4", // Steel Blue

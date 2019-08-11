@@ -6,20 +6,20 @@
   justify-content: space-around;
   margin-bottom: 50px;
 
+  .categoryGraph {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+  }
+
   .graph {
     max-width: 100%;
     flex: 1;
   }
 
-  .table {
-    width: 100%;
-    overflow-x: scroll;
-  }
-
   table {
     border-spacing: 0;
     font-size: 14px;
-    width: 100%;
 
     th {
       text-align: right;
@@ -27,11 +27,6 @@
       &:nth-child(2) {
         text-align: left;
       }
-    }
-
-    .categoryColumn {
-      position: sticky;
-      left: 0;
     }
 
     td,
@@ -49,6 +44,12 @@
         padding: 5px;
         transition: 0.1s linear background;
         cursor: pointer;
+        background: lightgray;
+        color: gray;
+      }
+
+      input[type="checkbox"]:checked + label {
+        color: black;
       }
 
       &:nth-child(even) {
