@@ -1,6 +1,6 @@
 import React from "react";
-import Loading from "components/Loading";
-import { CategoriesConsumer } from "providers/CategoriesProvider";
+import Loading from "../Loading";
+import { CategoriesConsumer } from "../../providers/CategoriesProvider";
 import { sortBy } from "lodash";
 
 function CategoryDropdown({ onChange, selectedCategory, transactionId }) {

@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from "react";
-import AuthService from "middleware/AuthService";
+import AuthService from "../middleware/AuthService";
 
 const { Provider, Consumer } = createContext();
 

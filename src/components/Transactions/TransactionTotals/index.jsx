@@ -1,20 +1,20 @@
 import React from "react";
 import { isEmpty, sumBy } from "lodash";
-import style from "components/Transactions/TransactionsInputs.module.scss";
+import style from "../TransactionsInputs.module.scss";
 import {
   createDateRange,
   formatDate,
-  currency
-} from "utilities/date-format-utils";
-import Loading from "components/Loading";
-import { CategoriesConsumer } from "providers/CategoriesProvider";
-import { qsToArray } from "utilities/query-string-utils";
+  currency,
+} from "../../../utilities/date-format-utils";
+import Loading from "../../Loading";
+import { CategoriesConsumer } from "../../../providers/CategoriesProvider";
+import { qsToArray } from "../../../utilities/query-string-utils";
 
 function TransactionTotals({
   searchResults = [],
   removeSearch,
   currentSearches,
-  removeCategorySearch
+  removeCategorySearch,
 }) {
   const totals = searchResults.reduce(
     (result, payee) => {
@@ -56,7 +56,7 @@ function TransactionTotals({
                   </li>
                 )}
                 {qsToArray(categoryIds).map((id, idx) => {
-                  const category = categories.find(cat => cat.id === +id);
+                  const category = categories.find((cat) => cat.id === +id);
 
                   return (
                     <li key={idx}>
@@ -82,7 +82,7 @@ function TransactionTotals({
                       <th key={idx}>
                         {formatDate(month, year, {
                           month: "short",
-                          year: "numeric"
+                          year: "numeric",
                         })}
                       </th>
                     ))}

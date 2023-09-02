@@ -1,6 +1,6 @@
 import React from "react";
-import Loading from "components/Loading";
-import { CategoriesConsumer } from "providers/CategoriesProvider";
+import Loading from "../Loading";
+import { CategoriesConsumer } from "../../providers/CategoriesProvider";
 import { sortBy } from "lodash";
 import style from "./CategoryInputs.module.scss";
 
@@ -8,7 +8,7 @@ function CategorySelect({ onChange, selectedCategories }) {
   // Group all selected categories
   const updateSelection = ({ target: { value } }) => {
     onChange({
-      target: { value: [...selectedCategories, value], name: "categoryIds" }
+      target: { value: [...selectedCategories, value], name: "categoryIds" },
     });
   };
 
@@ -22,7 +22,7 @@ function CategorySelect({ onChange, selectedCategories }) {
 
         return (
           <div className={style.dropdown}>
-            {sortBy(categories, "name").map(cat => (
+            {sortBy(categories, "name").map((cat) => (
               <div key={`category-${cat.id}`}>
                 <input
                   id={cat.id}

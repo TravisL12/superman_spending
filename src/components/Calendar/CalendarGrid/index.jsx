@@ -6,8 +6,8 @@ import {
   currency,
   formatDate,
   daysOfWeek,
-  getToday
-} from "utilities/date-format-utils";
+  getToday,
+} from "../../../utilities/date-format-utils";
 import style from "./CalendarGrid.module.scss";
 import MonthTotals from "./MonthTotals";
 import DayTotals from "./DayTotals";
@@ -18,9 +18,9 @@ function CalendarGrid(props) {
 
   const {
     match: {
-      params: { year, month }
+      params: { year, month },
     },
-    transactionData
+    transactionData,
   } = props;
   const categoryData = orderBy(values(props.categoryData), ["sum"], ["desc"]);
   const payeeData = orderBy(values(transactionData.payees), ["sum"], ["desc"]);
@@ -107,7 +107,7 @@ function CalendarGrid(props) {
 
       {/* Calendar of Days */}
       <div className={style.monthGrid}>
-        {daysOfWeek.map(dow => {
+        {daysOfWeek.map((dow) => {
           return (
             <span key={dow} className={style.dow}>
               {dow}

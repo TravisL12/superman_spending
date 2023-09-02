@@ -1,6 +1,6 @@
 import React from "react";
-import AuthService from "middleware/AuthService";
-import styles from "components/Login/Login.module.scss";
+import AuthService from "../../middleware/AuthService";
+import styles from "../Login/Login.module.scss";
 
 function Logout(props) {
   const handleLogout = () => {

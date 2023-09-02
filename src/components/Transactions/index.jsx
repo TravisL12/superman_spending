@@ -2,13 +2,13 @@ import React, { Component } from "react";
 import { isEqual, isEmpty } from "lodash";
 import qs from "query-string";
 
-import AuthService from "middleware/AuthService";
-import Loading from "components/Loading";
+import AuthService from "../../middleware/AuthService";
+import Loading from "../Loading";
 import Search from "./TransactionSearch";
 import Totals from "./TransactionTotals";
 import Table from "./TransactionTable";
 import style from "./Transactions.module.scss";
-import { qsToArray, filterOutValue } from "utilities/query-string-utils";
+import { qsToArray, filterOutValue } from "../../utilities/query-string-utils";
 
 class Transactions extends Component {
   state = {
@@ -16,18 +16,18 @@ class Transactions extends Component {
       keywordSearches: undefined,
       beforeDate: undefined,
       afterDate: undefined,
-      categoryIds: undefined
+      categoryIds: undefined,
     },
     isLoading: true,
     searchInput: {
       keyword: "",
       beforeDate: "",
       afterDate: "",
-      categoryIds: ""
+      categoryIds: "",
     },
     searchResults: [],
     transactions: [],
-    checkedIds: []
+    checkedIds: [],
   };
 
   componentWillMount() {
@@ -37,22 +37,22 @@ class Transactions extends Component {
     this.fetch(query, { page });
   }
 
-  removeCategorySearch = removeId => {
-    const categoryIds = this.state.searchQueries.categoryIds.filter(id => {
+  removeCategorySearch = (removeId) => {
+    const categoryIds = this.state.searchQueries.categoryIds.filter((id) => {
       return id !== removeId;
     });
 
     this.fetch({
       ...this.state.searchQueries,
-      categoryIds
+      categoryIds,
     });
   };
 
-  removeSearch = keyword => {
+  removeSearch = (keyword) => {
     if (["afterDate", "beforeDate"].includes(keyword)) {
       this.fetch({
         ...this.state.searchQueries,
-        [keyword]: undefined
+        [keyword]: undefined,
       });
 
       return;
@@ -65,11 +65,11 @@ class Transactions extends Component {
 
     this.fetch({
       ...this.state.searchQueries,
-      keywordSearches
+      keywordSearches,
     });
   };
 
-  submitSearch = event => {
+  submitSearch = (event) => {
     event.preventDefault();
     const searchQueries = qs.parse(this.props.history.location.search);
     const {
@@ -77,8 +77,8 @@ class Transactions extends Component {
         keyword: keywordInput,
         beforeDate,
         afterDate,
-        categoryIds: categoryInput
-      }
+        categoryIds: categoryInput,
+      },
     } = this.state;
 
     const request = { ...searchQueries };
@@ -120,7 +120,7 @@ class Transactions extends Component {
 
     AuthService.fetch(`api/categories/update${path}`, {
       method: "POST",
-      body: JSON.stringify(body)
+      body: JSON.stringify(body),
     }).then(() => {
       this.setState({ checkedIds: [] }, () => {
         this.fetch(this.state.searchQueries);
@@ -129,18 +129,18 @@ class Transactions extends Component {
   };
 
   updateCheckedRow = ({ target: { value } }) => {
-    this.setState(oldState => {
+    this.setState((oldState) => {
       return oldState.checkedIds.includes(value)
-        ? { checkedIds: oldState.checkedIds.filter(id => id !== value) }
+        ? { checkedIds: oldState.checkedIds.filter((id) => id !== value) }
         : { checkedIds: [...oldState.checkedIds, value] };
     });
   };
 
   onSearchChange = ({ target }) => {
-    this.setState(oldState => {
+    this.setState((oldState) => {
       const searchInput = {
         ...oldState.searchInput,
-        [target.name]: target.value
+        [target.name]: target.value,
       };
 
       return { searchInput };
@@ -160,10 +160,10 @@ class Transactions extends Component {
               keyword: "",
               beforeDate: "",
               afterDate: "",
-              categoryIds: searchQueries.categoryIds || []
+              categoryIds: searchQueries.categoryIds || [],
             },
             searchResults,
-            transactions
+            transactions,
           },
           this.updateLocation
         );
@@ -173,7 +173,7 @@ class Transactions extends Component {
 
   updateLocation = () => {
     this.props.history.push({
-      search: qs.stringify(this.state.searchQueries)
+      search: qs.stringify(this.state.searchQueries),
     });
   };
 
@@ -184,7 +184,7 @@ class Transactions extends Component {
       searchResults,
       transactions,
       searchQueries,
-      checkedIds
+      checkedIds,
     } = this.state;
 
     if (isLoading) return <Loading />;

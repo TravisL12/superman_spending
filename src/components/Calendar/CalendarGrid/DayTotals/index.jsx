@@ -1,6 +1,9 @@
 import React from "react";
 import { sortBy } from "lodash";
-import { cleanDescription, currency } from "utilities/date-format-utils";
+import {
+  cleanDescription,
+  currency,
+} from "../../../../utilities/date-format-utils";
 import style from "../MonthTotals/MonthTotals.module.scss";
 
 function DayTotals({ transactions, close }) {

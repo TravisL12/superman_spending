@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import style from "./Categories.module.scss";
-import AuthService from "middleware/AuthService";
+import AuthService from "../../middleware/AuthService";
 import qs from "query-string";
 
 function CategorySearch({ getSearchResults, history }) {
   const [searchInput, setSearchInput] = useState("");
 
-  const fetch = search => {
+  const fetch = (search) => {
     if (!search) return;
 
     const query = qs.stringify({ keywordSearches: search });
@@ -16,13 +16,13 @@ function CategorySearch({ getSearchResults, history }) {
         const { transactionTotals, name, sum: total } = searchResults[0];
         getSearchResults(
           {
-            [name]: { id: name, name, transactionTotals, total, checked: true }
+            [name]: { id: name, name, transactionTotals, total, checked: true },
           },
           transactions
         );
         setSearchInput("");
         history.push({
-          search: qs.stringify({ keywordSearches: search })
+          search: qs.stringify({ keywordSearches: search }),
         });
       }
     );
@@ -31,7 +31,7 @@ function CategorySearch({ getSearchResults, history }) {
   return (
     <div className={style.searchInput}>
       <form
-        onSubmit={e => {
+        onSubmit={(e) => {
           e.preventDefault();
           fetch(searchInput);
         }}
@@ -40,7 +40,7 @@ function CategorySearch({ getSearchResults, history }) {
           type="text"
           placeholder="Search Spending"
           value={searchInput}
-          onChange={event => setSearchInput(event.target.value)}
+          onChange={(event) => setSearchInput(event.target.value)}
         />
       </form>
     </div>

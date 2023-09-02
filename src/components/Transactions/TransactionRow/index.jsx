@@ -3,9 +3,9 @@ import {
   currency,
   formatFullDate,
   titleCase,
-  cleanDescription
-} from "utilities/date-format-utils";
-import CategoryDropdown from "components/CategoryInputs/dropdown";
+  cleanDescription,
+} from "../../../utilities/date-format-utils";
+import CategoryDropdown from "../../CategoryInputs/dropdown";
 import style from "./TransactionRow.module.scss";
 
 function displayPayeeDescription({ payee, description }) {

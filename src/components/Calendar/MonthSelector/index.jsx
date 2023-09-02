@@ -1,9 +1,9 @@
 import React, { Component, Fragment } from "react";
-import AuthService from "middleware/AuthService";
-import { formatDate } from "utilities/date-format-utils";
-import CalendarGrid from "components/Calendar/CalendarGrid";
-import Loading from "components/Loading";
-import style from "components/Calendar/Calendar.module.scss";
+import AuthService from "../../../middleware/AuthService";
+import { formatDate } from "../../../utilities/date-format-utils";
+import CalendarGrid from "../CalendarGrid";
+import Loading from "../../Loading";
+import style from "../Calendar.module.scss";
 import { Route, NavLink } from "react-router-dom";
 
 class MonthSelector extends Component {
@@ -11,7 +11,7 @@ class MonthSelector extends Component {
     year: this.props.match.params.year,
     transactionData: null,
     categoryData: null,
-    isLoading: true
+    isLoading: true,
   };
 
   componentWillReceiveProps(newProps) {
@@ -37,7 +37,7 @@ class MonthSelector extends Component {
           year,
           transactionData: transactions[year],
           categoryData: categories[year],
-          isLoading: false
+          isLoading: false,
         });
       }
     );
@@ -52,9 +52,9 @@ class MonthSelector extends Component {
     return (
       <Fragment>
         <div className={style.months}>
-          {monthInts.map(monthInt => {
+          {monthInts.map((monthInt) => {
             const formattedDate = formatDate(monthInt - 1, year, {
-              month: "long"
+              month: "long",
             });
             const key = `month-${monthInt}`;
 
@@ -85,7 +85,7 @@ class MonthSelector extends Component {
         <Route
           exact
           path={`${this.props.match.path}/:month`}
-          render={props => {
+          render={(props) => {
             const { month } = props.match.params;
 
             return (

@@ -1,11 +1,11 @@
 import React from "react";
 import style from "./Categories.module.scss";
-import { currencyRounded } from "utilities/date-format-utils";
+import { currencyRounded } from "../../utilities/date-format-utils";
 
 function CategoryTable({
   categories,
   handleCategoryCheckboxChange,
-  toggleAllCategories
+  toggleAllCategories,
 }) {
   return (
     <div className={style.table}>

@@ -1,13 +1,13 @@
 import React, { Component } from "react";
-import AuthService from "middleware/AuthService";
-import { createDateRange } from "utilities/date-format-utils";
+import AuthService from "../../middleware/AuthService";
+import { createDateRange } from "../../utilities/date-format-utils";
 import CategoryGraph from "./CategoryGraph";
 import CategorySearch from "./CategorySearch";
 import CategoryTable from "./CategoryTable";
-import TransactionTable from "components/Transactions/TransactionTable";
+import TransactionTable from "../Transactions/TransactionTable";
 import style from "./Categories.module.scss";
-import Loading from "components/Loading";
-import categoryColors from "utilities/categoryColors";
+import Loading from "../Loading";
+import categoryColors from "../../utilities/categoryColors";
 import { get, isEmpty, values } from "lodash";
 import qs from "query-string";
 
@@ -31,7 +31,7 @@ class Categories extends Component {
     isLoading: true,
     graphCumulative: false,
     dateRange: null,
-    searchTransactions: []
+    searchTransactions: [],
   };
 
   async componentWillMount() {
@@ -48,11 +48,11 @@ class Categories extends Component {
     this.setState({
       categories,
       isLoading: false,
-      dateRange: createDateRange(MONTHS_BACK).reverse() // ascending date order (old -> new)
+      dateRange: createDateRange(MONTHS_BACK).reverse(), // ascending date order (old -> new)
     });
   }
 
-  getMonthSums = categoryId => {
+  getMonthSums = (categoryId) => {
     const { graphCumulative, dateRange, categories } = this.state;
     const { transactionTotals } = categories[categoryId];
 
@@ -66,7 +66,7 @@ class Categories extends Component {
     }, []);
   };
 
-  toggleAllCategories = value => {
+  toggleAllCategories = (value) => {
     const categories = toggleCategories(value, this.state.categories);
     this.setState({ categories });
   };
@@ -84,7 +84,7 @@ class Categories extends Component {
     );
 
     this.setState({
-      categories
+      categories,
     });
   };
 
@@ -99,8 +99,8 @@ class Categories extends Component {
       categories: { ...categories, ...searchResults },
       searchTransactions: [
         ...this.state.searchTransactions,
-        ...transactions
-      ].sort((a, b) => new Date(b.date) - new Date(a.date))
+        ...transactions,
+      ].sort((a, b) => new Date(b.date) - new Date(a.date)),
     });
   };
 
@@ -113,7 +113,7 @@ class Categories extends Component {
       return {
         ...category,
         sum: this.getMonthSums(category.id),
-        color: colors[idx]
+        color: colors[idx],
       };
     });
 

@@ -1,13 +1,13 @@
 import React from "react";
 import Row from "./TransactionRow";
-import CategoryDropdown from "components/CategoryInputs/dropdown";
+import CategoryDropdown from "../CategoryInputs/dropdown";
 import style from "./Transactions.module.scss";
 
 function TransactionTable({
   checkedIds,
   transactions,
   updateCheckedRow,
-  updateCategory
+  updateCategory,
 }) {
   const categoryColumn =
     checkedIds.length > 1 ? (
@@ -48,7 +48,7 @@ function TransactionTable({
 TransactionTable.defaultProps = {
   checkedIds: [],
   updateCheckedRow: undefined,
-  updateCategory: undefined
+  updateCategory: undefined,
 };
 
 export default TransactionTable;

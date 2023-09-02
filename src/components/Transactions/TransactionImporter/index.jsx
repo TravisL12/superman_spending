@@ -1,18 +1,18 @@
 import React, { Component } from "react";
-import style from "components/Transactions/TransactionsInputs.module.scss";
-import AuthService from "middleware/AuthService";
+import style from "../TransactionsInputs.module.scss";
+import AuthService from "../../../middleware/AuthService";
 
 class TransactionImporter extends Component {
   state = {
     selectedFile: null,
     isUploading: false,
-    uploadComplete: false
+    uploadComplete: false,
   };
 
-  selectFile = event => {
+  selectFile = (event) => {
     this.setState({
       selectedFile: event.target.files[0],
-      uploadComplete: false
+      uploadComplete: false,
     });
   };
 
@@ -27,15 +27,15 @@ class TransactionImporter extends Component {
       "api/transactions/import",
       {
         method: "POST",
-        body
+        body,
       },
       isMultiPart
-    ).then(response => {
+    ).then((response) => {
       this.setState(
         {
           selectedFile: null,
           isUploading: false,
-          uploadComplete: true
+          uploadComplete: true,
         },
         this.props.callback
       );

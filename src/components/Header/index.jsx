@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import TransactionImporter from "components/Transactions/TransactionImporter";
-import LogoutButton from "components/LogoutButton";
-import AuthService from "middleware/AuthService";
+import TransactionImporter from "../Transactions/TransactionImporter";
+import LogoutButton from "../LogoutButton";
+import AuthService from "../../middleware/AuthService";
 import { NavLink } from "react-router-dom";
 import styles from "./Header.module.scss";
 

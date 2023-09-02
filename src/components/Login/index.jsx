@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import AuthService from "middleware/AuthService";
+import AuthService from "../../middleware/AuthService";
 import styles from "./Login.module.scss";
 
 class Login extends Component {
@@ -7,20 +7,20 @@ class Login extends Component {
     if (AuthService.loggedIn()) this.props.history.replace("/calendar");
   }
 
-  handleChange = e => {
+  handleChange = (e) => {
     this.setState({
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
-  handleFormSubmit = e => {
+  handleFormSubmit = (e) => {
     e.preventDefault();
 
     AuthService.login(this.state.email, this.state.password)
-      .then(res => {
+      .then((res) => {
         this.props.history.replace("/calendar");
       })
-      .catch(err => {
+      .catch((err) => {
         alert(err);
       });
   };

@@ -1,17 +1,17 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Redirect, BrowserRouter, Route, withRouter } from "react-router-dom";
-import withAuth from "middleware/withAuth";
-import CategoriesProvider from "providers/CategoriesProvider";
+import withAuth from "./middleware/withAuth";
+import CategoriesProvider from "./providers/CategoriesProvider";
 
 // Absolute paths set in .env file (NODE_PATH=src)
-import Header from "components/Header/";
-import Login from "components/Login/";
-import Calendar from "components/Calendar/";
-import Categories from "components/Categories/";
-import Transactions from "components/Transactions/";
+import Header from "./components/Header/";
+import Login from "./components/Login/";
+import Calendar from "./components/Calendar/";
+import Categories from "./components/Categories/";
+import Transactions from "./components/Transactions/";
 
-import styles from "index.module.scss";
+import styles from "./index.module.scss";
 import { getToday } from "./utilities/date-format-utils";
 
 const WrappedHeader = withRouter(Header);

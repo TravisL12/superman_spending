@@ -2,13 +2,13 @@ import React, { Component } from "react";
 import {
   titleCase,
   currency,
-  currencyRounded
-} from "utilities/date-format-utils";
+  currencyRounded,
+} from "../../../../utilities/date-format-utils";
 import style from "./MonthTotals.module.scss";
 
 class MonthTotals extends Component {
   state = {
-    currentColumn: "categories"
+    currentColumn: "categories",
   };
 
   showCategories = () => {
@@ -63,7 +63,7 @@ class MonthTotals extends Component {
 
     const columnList = {
       categories: categoryList,
-      payees: payeeList
+      payees: payeeList,
     };
 
     return (

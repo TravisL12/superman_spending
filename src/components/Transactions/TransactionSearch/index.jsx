@@ -1,6 +1,6 @@
 import React from "react";
-import CategorySelect from "components/CategoryInputs/select";
-import style from "components/Transactions/TransactionsInputs.module.scss";
+import CategorySelect from "../../CategoryInputs/select";
+import style from "../TransactionsInputs.module.scss";
 
 function TransactionSearch({
   transactions,
@@ -8,7 +8,7 @@ function TransactionSearch({
   dateInput,
   onSearchChange,
   submitSearch,
-  resetSearch
+  resetSearch,
 }) {
   return (
     <div className={style.searchContainer}>

@@ -1,15 +1,15 @@
 import React, { Component } from "react";
 import { Route, NavLink } from "react-router-dom";
 
-import AuthService from "middleware/AuthService";
-import style from "components/Calendar/Calendar.module.scss";
-import MonthSelector from "components/Calendar/MonthSelector";
-import Loading from "components/Loading";
+import AuthService from "../../middleware/AuthService";
+import style from "./Calendar.module.scss";
+import MonthSelector from "./MonthSelector";
+import Loading from "../Loading";
 
 class Calendar extends Component {
   state = {
     years: [],
-    isLoading: true
+    isLoading: true,
   };
 
   componentWillMount() {
@@ -27,7 +27,7 @@ class Calendar extends Component {
     return (
       <div className={style.calendar}>
         <div className={style.years}>
-          {years.map(year => {
+          {years.map((year) => {
             return (
               <NavLink
                 className={style.itemContainer}
